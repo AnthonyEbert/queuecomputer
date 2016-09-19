@@ -14,5 +14,6 @@ Imports:
     dplyr
 RoxygenNote: 5.0.1.9000
 Suggests: knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr
