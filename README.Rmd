@@ -11,3 +11,8 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 ```
+
+
+```{r messages = FALSE, error = FALSE}
+library(queuecomputer)
+```
