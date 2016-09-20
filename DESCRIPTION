@@ -1,7 +1,7 @@
 Package: queuecomputer
 Title: Computes the output times for queues with arbitrary arrival and service times
 Version: 0.0.0.9000
-Authors@R: person("Anthony", "Ebert"   , email = "ac.ebert@qut.edu.au", role = c("aut", "cre"))
+Authors@R: person("Anthony", "Ebert"   , email = "anthonyebert@gmail.com", role = c("aut", "cre"))
 Description: Computes the output times for queues with arbitrary arrival and service times. 
     The package is referred to as "queuecomputer" rather than "queuesimulator" since the 
     emphasis in this package is computing *deterministically* the output times for 

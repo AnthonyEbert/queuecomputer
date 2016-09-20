@@ -52,8 +52,11 @@ queue_step <- function(arrival_df, Number_of_queues = stats::stepfun(1,c(1,1)), 
   n <- Number_of_queues(0)
   starttime <- 0
 
+  # Pre-compute knots
+  pc_knots <- stats::knots(Number_of_queues)
+
   for(i in 1:dim(arrival_df)[1]){
-    newstarttime <- stats::knots(Number_of_queues)[findInterval(n_max(input = output_df[!is.na(output_df)], n = n),stats::knots(Number_of_queues))]
+    newstarttime <- pc_knots[findInterval(n_max(input = output_df[!is.na(output_df)], n = n),pc_knots)]
     starttime <- max(starttime,newstarttime)
     n <- Number_of_queues(max(n_max(input = output_df, n = n), arrival_df$times[i], starttime))
     output_df[i] <- max(n_max(input = output_df, n = n), arrival_df$times[i], starttime) + service[i]

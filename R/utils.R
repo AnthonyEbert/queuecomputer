@@ -11,7 +11,8 @@
 #' n_max(c(3,1,7),2)
 #' @seealso wait_step
 #' @export
-n_max <- function(input,n){
+n_max <- function(input, n, tail_variable = 1000){
+  input <- tail(input[!is.na(input)], tail_variable)
   for(i in 1:n){
     output <- suppressWarnings(max(input, na.rm = TRUE))
     input[which.max(input)] <- NA
