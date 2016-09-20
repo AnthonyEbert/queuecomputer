@@ -56,10 +56,10 @@ queue_step <- function(arrival_df, Number_of_queues = stats::stepfun(1,c(1,1)), 
   pc_knots <- stats::knots(Number_of_queues)
 
   for(i in 1:dim(arrival_df)[1]){
-    newstarttime <- pc_knots[findInterval(n_max(input = output_df[!is.na(output_df)], n = n),pc_knots)]
+    newstarttime <- pc_knots[findInterval(n_max(input = output_df[1:i], n = n),pc_knots)]
     starttime <- max(starttime,newstarttime)
-    n <- Number_of_queues(max(n_max(input = output_df, n = n), arrival_df$times[i], starttime))
-    output_df[i] <- max(n_max(input = output_df, n = n), arrival_df$times[i], starttime) + service[i]
+    n <- Number_of_queues(max(n_max(input = output_df[1:i], n = n), arrival_df$times[i], starttime))
+    output_df[i] <- max(n_max(input = output_df[1:i], n = n), arrival_df$times[i], starttime) + service[i]
   }
 
   # Put order back to original ordering
