@@ -1,21 +1,7 @@
 
 
 
-#' Return \code{n}th maximum of vector
-#'
-#' @param input A vector of numbers.
-#' @param n An integer.
-#' @return \code{n} th maximum of \code{input}
-#' @examples
-#' n_max(c(3,1,7),2)
-#' @seealso wait_step
-n_max <- function(input,n){
-  for(i in 1:n){
-    output <- suppressWarnings(max(input, na.rm = TRUE))
-    input[which.max(input)] <- NA
-  }
-  return(output)
-}
+
 
 #' Compute the vector of response times from a queue with a vector of arrival times and service times.
 #'
@@ -53,7 +39,8 @@ n_max <- function(input,n){
 #'     Number_of_queues = stepfun(c(15,30,50), c(1,3,1,10)), service = service)$times[ord])
 #' @seealso wait_step, lag_step
 #' @references Sutton, C., & Jordan, M. I. (2011). Bayesian inference for queueing networks and modeling of internet services. The Annals of Applied Statistics, 254-282, page 258.
-queue_step <- function(arrival_df, Number_of_queues = stepfun(1,c(1,1)), service){
+#' @export
+queue_step <- function(arrival_df, Number_of_queues = stats::stepfun(1,c(1,1)), service){
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -66,7 +53,7 @@ queue_step <- function(arrival_df, Number_of_queues = stepfun(1,c(1,1)), service
   starttime <- 0
 
   for(i in 1:dim(arrival_df)[1]){
-    newstarttime <- knots(Number_of_queues)[findInterval(n_max(input = output_df[!is.na(output_df)], n = n),knots(Number_of_queues))]
+    newstarttime <- stats::knots(Number_of_queues)[findInterval(n_max(input = output_df[!is.na(output_df)], n = n),stats::knots(Number_of_queues))]
     starttime <- max(starttime,newstarttime)
     n <- Number_of_queues(max(n_max(input = output_df, n = n), arrival_df$times[i], starttime))
     output_df[i] <- max(n_max(input = output_df, n = n), arrival_df$times[i], starttime) + service[i]
@@ -99,10 +86,12 @@ queue_step <- function(arrival_df, Number_of_queues = stepfun(1,c(1,1)), service
 #' cbind(queue_step(arrival_df = arrival_df, service = service,
 #'     Number_of_queues = stepfun(1,c(100,100))), lag_step(arrival_df = arrival_df, service = service))
 #' @seealso queue_step
+#' @export
 lag_step <- function(arrival_df, service){
 
   # Add service time to arrival_vector
   output_df <- data.frame(ID = arrival_df$ID, times = arrival_df$times + service)
+  return(output_df)
 }
 
 #' Compute maximum time from two vectors of arrival times.
@@ -132,6 +121,7 @@ lag_step <- function(arrival_df, service){
 #'
 #'# Find the time when customers can leave with their bags.
 #'wait_step(arrival_df1 = arrivals, arrival_df2 = arrivals2)
+#' @export
 wait_step <- function(arrival_df1, arrival_df2){
   mat <- cbind(arrival_df1$times,arrival_df2$times)
   output_df <- data.frame(ID = arrival_df1$ID, times = apply(mat, 1, max))

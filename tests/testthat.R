@@ -1,8 +1,8 @@
+
 library(testthat)
 library(queuecomputer)
-library(session)
 
-test_check("queuecomputer")
+# test_check("queuecomputer")
 
 #Deterministic check -----------------------------------
 
@@ -12,7 +12,9 @@ test_check("queuecomputer")
 
 ##New data -------------------------
 
-restore.session(file = "tests/20161909testdata.rda")
+# session::restore.session(file = "20161909testdata.rda")
+
+base::load(file = "testdataframe.RData")
 
 set.seed(700)
 
@@ -24,6 +26,8 @@ ord <- order(arrivals$times)
 firstqueue <- queue_step(arrival_df = arrivals, Number_of_queues = stepfun(c(15,30,50), c(1,3,1,10)), service = service)
 
 newdataframe <- data.frame(arrivals[ord, ], service[ord], firstqueue$times[ord])
+
+# save(testdataframe, file = "tests/testdataframe.RData")
 
 test_that("test that deterministic queue simulation departure times haven't changed", {
   expect_equal(newdataframe$times, testdataframe$times)

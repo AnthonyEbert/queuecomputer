@@ -4,7 +4,7 @@
 \alias{queue_step}
 \title{Compute the vector of response times from a queue with a vector of arrival times and service times.}
 \usage{
-queue_step(arrival_df, Number_of_queues = stepfun(1, c(1, 1)), service)
+queue_step(arrival_df, Number_of_queues = stats::stepfun(1, c(1, 1)), service)
 }
 \arguments{
 \item{arrival_df}{A dataframe with column names ID and times . The ID column is a key
