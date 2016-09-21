@@ -37,13 +37,14 @@ There is already a lot of queueing simulation packages out there including the f
 * [liqueueR](https://cran.r-project.org/web/packages/liqueueR/index.html),
 * [queueing](https://cran.r-project.org/web/packages/queueing/index.html) & 
 * [rstackdeque](https://cran.r-project.org/web/packages/rstackdeque/index.html). 
+* [simmer](http://r-simmer.org/)
 
-So what does this package do differently to the others? The focus of this package is on queue computation rather than queue simulation. Real world queues have all sorts of strange arrival and service distributions so this can make the job of queue simulation difficult. However once
+So what does this package do differently to the others? The focus of this package is on queue computation rather than queue simulation. Existing queue simulation software are highly constrained in arrival distributions, this package decouples sampling and queue computation to free the user to specify any sampling distribution. Queue simulation is difficult. However once
 
 1. The arrival times $t^a$ and service times $s$ are known for all customers and,
 2. the number of servers is specified
 
-then the departure times $t^d$ for all customers can be computed exactly. The computation of departure times for a single-server FIFO (first-in-first-out) queue is simple and efficient: 
+then the departure times $t^d$ for all customers can be computed exactly. The computation of departure times for a single-server FIFO (first-in-first-out) queue is simple and efficient (for any sample of $t^a$): 
 
 $$ t^d_k = \text{max}(t^d_{k-1}, t^a_k) + s_k $$
 
