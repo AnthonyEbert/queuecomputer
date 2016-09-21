@@ -77,3 +77,44 @@ reduce_bags <- function(bagdataset, number_of_passengers){
   names(reduced_df) <- c("ID", "times")
   return(reduced_df)
 }
+
+#' Return next available time for server given current departure times.
+#'
+#' @param sf A step function with heights either 0 or 1.
+#' @param time the time in question.
+#' @return Next available time for server in question.
+#' @export
+next_function <- function(sf,time){
+  output <- switch(sf(time) + 1, c(knots(sf),Inf)[findInterval(time,knots(sf)) + 1] , time)
+  return(output)
+}
+
+#' Makes it easier to input number of servers into queue_step.
+#'
+#' @param x numeric vector giving the knots or jump locations of the step function for stepfun().
+#' @param y numeric vector giving the knots or jump locations of the step function for stepfun(). Must be integers.
+#' @return List of height 1 step functions for input into queue_step.
+#' @seealso queue_step()
+#' @export
+server_split <- function(x, y){
+  plateaus <- y
+  max_plat <- max(plateaus)
+  num_plat <- length(plateaus)
+
+  output <- list()
+
+  intermediate_plateaus <- plateaus
+  newplat <- matrix(NA,nrow=max_plat, ncol = num_plat)
+  for(i in 1:max_plat){
+    for(j in 1:num_plat){
+      if(intermediate_plateaus[j] == 0){
+        newplat[i,j] <- 0
+      }else{
+        newplat[i,j] <- 1
+        intermediate_plateaus[j] <- intermediate_plateaus[j] - 1
+      }
+    }
+    output[[i]] <- stats::stepfun(x,newplat[i,])
+  }
+  return(output)
+}

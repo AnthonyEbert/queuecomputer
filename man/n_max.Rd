@@ -4,7 +4,7 @@
 \alias{n_max}
 \title{Return \code{n}th maximum of vector}
 \usage{
-n_max(input, n)
+n_max(input, n, tail_variable = 500)
 }
 \arguments{
 \item{input}{A vector of numbers.}

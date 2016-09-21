@@ -23,13 +23,14 @@ There is already a lot of queueing simulation packages out there including the f
 -   [liqueueR](https://cran.r-project.org/web/packages/liqueueR/index.html),
 -   [queueing](https://cran.r-project.org/web/packages/queueing/index.html) &
 -   [rstackdeque](https://cran.r-project.org/web/packages/rstackdeque/index.html).
+-   [simmer](http://r-simmer.org/)
 
-So what does this package do differently to the others? The focus of this package is on queue computation rather than queue simulation. Real world queues have all sorts of strange arrival and service distributions so this can make the job of queue simulation difficult. However once
+So what does this package do differently to the others? The focus of this package is on queue computation rather than queue simulation. Existing queue simulation software are highly constrained in arrival distributions, this package decouples sampling and queue computation to free the user to specify any sampling distribution. Queue simulation is difficult. However once
 
 1.  The arrival times \(t^a\) and service times \(s\) are known for all customers and,
 2.  the number of servers is specified
 
-then the departure times \(t^d\) for all customers can be computed exactly. The computation of departure times for a single-server FIFO (first-in-first-out) queue is simple and efficient:
+then the departure times \(t^d\) for all customers can be computed exactly. The computation of departure times for a single-server FIFO (first-in-first-out) queue is simple and efficient (for any sample of \(t^a\)):
 
 \[ t^d_k = \text{max}(t^d_{k-1}, t^a_k) + s_k \]
 
@@ -44,11 +45,14 @@ for a queue with \(n\) servers. This simple, but unreported extension to Sutton 
 This package was inspired by the problem of modelling passenger flows through an international airport terminal. Batch arrivals (planes) happen throughout the day at predetermined times at different parts of the airport. A completely flexible queueing computation engine is needed to allow for the complex arrival and service distributions. An efficient computation engine is needed to allow for Bayesian sampling of the parameters to return posteriors for the queue parameters.
 
 ``` r
+set.seed(700)
 arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
 service <- rlnorm(100)
+server_list <- server_split(c(15,30,50),c(1,3,1,10))
+
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
-    Number_of_queues = stepfun(c(15,30,50), c(1,3,1,10)), service = service)
+    server_list = server_list, service = service)
 
 curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
     xlab = "time", ylab = "Number of customers")
@@ -62,6 +66,32 @@ legend(100,40, legend = c("Customer input - arrivals",
 ```
 
 ![](README-unnamed-chunk-4-1.png)
+
+``` r
+
+#plot densities --------------
+plot(density(arrival_df$times, from = 0, adjust = 0.5))
+lines(density(firstqueue$times, from = 0, adjust = 0.5), col = "red")
+lines(density(secondqueue$times, from = 0, adjust = 0.5), col = "blue")
+```
+
+![](README-unnamed-chunk-4-2.png)
+
+``` r
+
+#queue lengths ------------
+plot(ecdf(arrival_df$times)(c(1:200))*100 - ecdf(firstqueue$times)(c(1:200))*100, type = "s", 
+  xlab = "time", ylab = "queue length")
+```
+
+![](README-unnamed-chunk-4-3.png)
+
+``` r
+plot(ecdf(arrival_df$times)(c(1:200))*100 - ecdf(secondqueue$times)(c(1:200))*100, type = "s", 
+  xlab = "time", ylab = "queue length")
+```
+
+![](README-unnamed-chunk-4-4.png)
 
 References
 ==========

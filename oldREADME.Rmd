@@ -62,14 +62,11 @@ This package was inspired by the problem of modelling passenger flows through an
 
 
 ```{r}
-set.seed(700)
 arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
 service <- rlnorm(100)
-server_list <- server_split(c(15,30,50),c(1,3,1,10))
-
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
-    server_list = server_list, service = service)
+    Number_of_queues = stepfun(c(15,30,50), c(1,3,1,10)), service = service)
 
 curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
     xlab = "time", ylab = "Number of customers")
@@ -80,17 +77,6 @@ legend(100,40, legend = c("Customer input - arrivals",
     "Customer output - secondqueue"),
     col = c("black","red","blue"), lwd = 1, cex = 0.8
 )
-
-#plot densities --------------
-plot(density(arrival_df$times, from = 0, adjust = 0.5))
-lines(density(firstqueue$times, from = 0, adjust = 0.5), col = "red")
-lines(density(secondqueue$times, from = 0, adjust = 0.5), col = "blue")
-
-#queue lengths ------------
-plot(ecdf(arrival_df$times)(c(1:200))*100 - ecdf(firstqueue$times)(c(1:200))*100, type = "s", 
-  xlab = "time", ylab = "queue length")
-plot(ecdf(arrival_df$times)(c(1:200))*100 - ecdf(secondqueue$times)(c(1:200))*100, type = "s", 
-  xlab = "time", ylab = "queue length")
 ```
 
 # References

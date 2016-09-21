@@ -2,8 +2,10 @@
 
 export(lag_step)
 export(n_max)
+export(next_function)
 export(queue_step)
 export(reduce_bags)
+export(server_split)
 export(wait_step)
 export(which_nmax)
 export(which_nmin)

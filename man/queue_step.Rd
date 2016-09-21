@@ -4,16 +4,19 @@
 \alias{queue_step}
 \title{Compute the vector of response times from a queue with a vector of arrival times and service times.}
 \usage{
-queue_step(arrival_df, Number_of_queues = stats::stepfun(1, c(1, 1)), service)
+queue_step(arrival_df, server_list = list(stats::stepfun(1, c(1, 1))),
+  service, queueoutput = FALSE)
 }
 \arguments{
 \item{arrival_df}{A dataframe with column names ID and times . The ID column is a key
 for the customers. The times column is of class \code{numeric} and represents the
 arrival times of the customers.}
 
-\item{Number_of_queues}{A step function which describes the number of service desks open}
+\item{server_list}{A list of step functions with output either 0 or 1 representing the availability of each server.}
 
-\item{service}{A vector of service times with the same ordering as arrival_df}
+\item{service}{A vector of service times with the same ordering as arrival_df.}
+
+\item{queueoutput}{A boolean variable which indicates whether the server number should be returned.}
 }
 \value{
 A vector of response times for the input of arrival times and service times
@@ -22,11 +25,14 @@ A vector of response times for the input of arrival times and service times
 Compute the vector of response times from a queue with a vector of arrival times and service times.
 }
 \examples{
+set.seed(700)
 arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
 service <- rlnorm(100)
+server_list <- server_split(c(15,30,50),c(1,3,1,10))
+
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
-    Number_of_queues = stepfun(c(15,30,50), c(1,3,1,10)), service = service)
+    server_list = server_list, service = service, queueoutput = TRUE)
 
 curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
     xlab = "time", ylab = "Number of customers")
@@ -44,8 +50,7 @@ ecdf(arrival_df$times)(c(1:200))*100 - ecdf(secondqueue$times)(c(1:200))*100
 
 ord <- order(arrival_df$times)
 cbind(arrival_df[ord,], service[ord],
-    queue_step(arrival_df = arrival_df,
-    Number_of_queues = stepfun(c(15,30,50), c(1,3,1,10)), service = service)$times[ord])
+    secondqueue$times[ord], secondqueue$queue[ord])
 }
 \references{
 Sutton, C., & Jordan, M. I. (2011). Bayesian inference for queueing networks and modeling of internet services. The Annals of Applied Statistics, 254-282, page 258.
