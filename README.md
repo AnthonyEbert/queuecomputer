@@ -81,14 +81,14 @@ lines(density(secondqueue$times, from = 0, adjust = 0.5), col = "blue")
 
 #queue lengths ------------
 plot(ecdf(arrival_df$times)(c(1:200))*100 - ecdf(firstqueue$times)(c(1:200))*100, type = "s", 
-  xlab = "time", ylab = "queue length")
+  xlab = "time", ylab = "queue length", ylim = c(0, 100))
 ```
 
 ![](README-unnamed-chunk-4-3.png)
 
 ``` r
 plot(ecdf(arrival_df$times)(c(1:200))*100 - ecdf(secondqueue$times)(c(1:200))*100, type = "s", 
-  xlab = "time", ylab = "queue length")
+  xlab = "time", ylab = "queue length", ylim = c(0, 100))
 ```
 
 ![](README-unnamed-chunk-4-4.png)
