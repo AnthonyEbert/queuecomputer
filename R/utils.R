@@ -114,7 +114,16 @@ server_split <- function(x, y){
         intermediate_plateaus[j] <- intermediate_plateaus[j] - 1
       }
     }
-    output[[i]] <- stats::stepfun(x,newplat[i,])
+    
+    # Fix for issue 1
+    newrow <- rep(TRUE, length(newplat[i,]))
+    for(k in 2:length(newplat[i,])){
+       if(newplat[i,][k-1] == 0 && newplat[i,][k] == 0){
+         newrow[k] <- FALSE
+       }
+    }
+
+    output[[i]] <- stats::stepfun(x[newrow[-1]],newplat[i,][newrow])
   }
   return(output)
 }
