@@ -1,7 +1,7 @@
 
 
 
-#test
+
 
 #' Compute the vector of response times from a queue with a vector of arrival times and service times.
 #'
@@ -71,10 +71,10 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
   arrival_df <- arrival_df[order(ord),]
   queue_vector <- queue_vector[order(ord)]
 
-  output_df <- data.frame(ID = arrival_df$ID, times = output_df)
-
   if(queueoutput == TRUE){
     output_df <- data.frame(ID = arrival_df$ID, times = output_df, queues = queue_vector)
+  } else {
+    output_df <- data.frame(ID = arrival_df$ID, times = output_df)
   }
 
   return(output_df)
