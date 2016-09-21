@@ -56,3 +56,18 @@ Also a quote using `>`:
 
 > "He who gives up [code] safety for [code] speed deserves neither."
 ([via](https://twitter.com/hadleywickham/status/504368538874703872))
+
+
+## Original Algorithm
+
+The computation of departure times for a single-server FIFO (first-in-first-out) queue is simple and efficient (for any sample of $t^a$): 
+
+$$ t^d_k = \text{max}(t^d_{k-1}, t^a_k) + s_k $$
+
+where $t^d_k$, $t^a_k$ and $s_k$ are the departure, arrival and service times for the $k$th customer respectively, see (@sutton2011bayesian, pg 258). Note: the customers have been sorted in order of arrival times. The intuition here is that the $k$th customer must wait for the $k-1$th customer to be served. 
+
+This result can be extended to multi-server queues in the following manner: 
+
+$$ t_k^d = \text{max}(\text{min}(\text{n latest departure times for all customers 1:(k-1)}), \quad t^a_k) + s_k $$
+
+for a queue with $n$ servers. This simple, but unreported extension to @sutton2011bayesian greatly simplifies the computation of departure times for multi-server queues. 

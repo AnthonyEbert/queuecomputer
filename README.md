@@ -25,24 +25,25 @@ There is already a lot of queueing simulation packages out there including the f
 -   [rstackdeque](https://cran.r-project.org/web/packages/rstackdeque/index.html).
 -   [simmer](http://r-simmer.org/)
 
-So what does this package do differently to the others? The focus of this package is on queue computation rather than queue simulation. Existing queue simulation software are highly constrained in arrival distributions, this package decouples sampling and queue computation to free the user to specify any sampling distribution. Queue simulation is difficult. However once
+So what does this package do differently to the others?
+
+The focus of this package is on queue computation rather than queue simulation. Existing queue simulation software are highly constrained in arrival distributions, this package decouples sampling and queue computation to free the user to specify any sampling distribution.
+
+This package was inspired by the problem of modelling passenger flows through an international airport terminal. Batch arrivals (planes) occur throughout the day at predetermined times at different parts of the airport. A completely flexible queueing framework is needed to allow for the potentially complex arrival and service distributions and resource schedules. An efficient computation engine is needed to allow for Bayesian sampling of the parameters to return posteriors for the queue parameters.
+
+Simulating arbitrary queues is difficult, however once:
 
 1.  The arrival times \(t^a\) and service times \(s\) are known for all customers and,
-2.  the number of servers is specified
+2.  the server resource schedule is specified
 
-then the departure times \(t^d\) for all customers can be computed exactly. The computation of departure times for a single-server FIFO (first-in-first-out) queue is simple and efficient (for any sample of \(t^a\)):
+then the departure times \(t^d\) for all customers can be computed exactly.
 
-\[ t^d_k = \text{max}(t^d_{k-1}, t^a_k) + s_k \]
+The focus on this package is:
 
-where \(t^d_k\), \(t^a_k\) and \(s_k\) are the departure, arrival and service times for the \(k\)th customer respectively, see (Sutton and Jordan (2011), pg 258). Note: the customers have been sorted in order of arrival times. The intuition here is that the \(k\)th customer must wait for the \(k-1\)th customer to be served.
+-   fast computation of departure times given arrival and service times, and
+-   a flexible framework to allow for extensions such as server effects.
 
-This result can be extended to multi-server queues in the following manner:
-
-\[ t_k^d = \text{max}(\text{min}(\text{n latest departure times for all customers 1:(k-1)}), \quad t^a_k) + s_k \]
-
-for a queue with \(n\) servers. This simple, but unreported extension to Sutton and Jordan (2011) greatly simplifies the computation of departure times for multi-server queues. It is up to the user to provide arrival and service times, and therefore very complicated distributions can be simulated (by the user) and tested with this package.
-
-This package was inspired by the problem of modelling passenger flows through an international airport terminal. Batch arrivals (planes) happen throughout the day at predetermined times at different parts of the airport. A completely flexible queueing computation engine is needed to allow for the complex arrival and service distributions. An efficient computation engine is needed to allow for Bayesian sampling of the parameters to return posteriors for the queue parameters.
+It is up to the user to provide arrival and service times, and therefore very complicated distributions can be simulated (by the user) and tested with this package.
 
 ``` r
 set.seed(700)
@@ -95,5 +96,3 @@ plot(ecdf(arrival_df$times)(c(1:200))*100 - ecdf(secondqueue$times)(c(1:200))*10
 
 References
 ==========
-
-Sutton, Charles, and Michael I Jordan. 2011. “Bayesian Inference for Queueing Networks and Modeling of Internet Services.” *The Annals of Applied Statistics*. JSTOR, 254–82.

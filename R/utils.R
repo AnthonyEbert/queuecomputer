@@ -2,61 +2,6 @@
 
 ## Testing Functions
 
-#' Return \code{n}th maximum of vector
-#'
-#' @param input A vector of numbers.
-#' @param n An integer.
-#' @return \code{n} th maximum of \code{input}
-#' @examples
-#' n_max(c(3,1,7),2)
-#' @seealso wait_step
-#' @export
-n_max <- function(input, n, tail_variable = 500){
-  input <- tail(input, tail_variable)
-  for(i in 1:n){
-    output <- suppressWarnings(max(input, na.rm = TRUE))
-    input[which.max(input)] <- NA
-  }
-  return(output)
-}
-
-#' Find nth maximum of vector.
-#'
-#' @param input A vector.
-#' @param n     An integer.
-#' @return The position of the \code{n} th maximum of \code{input}
-#' @examples
-#' which_nmax(c(40,50,30),1)
-#' which_nmax(c(40,50,30),2)
-#' which_nmax(c(40,50,30),3)
-#' @export
-which_nmax <- function(input,n){
-  for(i in 1:n){
-    output <- which.max(input)
-    input[which.max(input)] <- NA
-  }
-  return(output)
-}
-
-#' Find nth minimum of vector.
-#'
-#' @param input A vector.
-#' @param n     An integer.
-#' @return The position of the \code{n} th minimum of \code{input}
-#' @examples
-#' which_nmin(c(40,50,30),1)
-#' which_nmin(c(40,50,30),2)
-#' which_nmin(c(40,50,30),3)
-#' @seealso \code{\link{which_nmax}}
-#' @export
-which_nmin <- function(input,n){
-  for(i in 1:n){
-    output <- which.min(input)
-    input[which.min(input)] <- NA
-  }
-  return(output)
-}
-
 #' Return arrival vector of bags dataset.
 #'
 #' @param bagdataset A dataset of bags.
