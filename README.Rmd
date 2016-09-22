@@ -1,6 +1,11 @@
 
+<!-- --- -->
+<!-- output: github_document -->
+<!-- bibliography: references.bib -->
+<!-- --- -->
+
 ---
-output: github_document
+output: html
 bibliography: references.bib
 ---
 
@@ -15,11 +20,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-# queuecomputer
 
 $$ $$
 
-## Install
+# Install
 
 ```{r, eval = FALSE}
 devtools::install_github("AnthonyEbert/queuecomputer")
@@ -30,20 +34,20 @@ library(queuecomputer)
 devtools::load_all()
 ```
 
-## Why more queueing software?
+# Why more queueing software?
 
 There is already a lot of queueing simulation packages out there including the following R packages: 
 
 * [liqueueR](https://cran.r-project.org/web/packages/liqueueR/index.html),
-* [queueing](https://cran.r-project.org/web/packages/queueing/index.html) & 
-* [rstackdeque](https://cran.r-project.org/web/packages/rstackdeque/index.html). 
-* [simmer](http://r-simmer.org/)
+* [queueing](https://cran.r-project.org/web/packages/queueing/index.html),
+* [rstackdeque](https://cran.r-project.org/web/packages/rstackdeque/index.html) &
+* [simmer](http://r-simmer.org/).
 
 So what does this package do differently to the others? 
 
-The focus of this package is on queue computation rather than queue simulation. Existing queue simulation software are highly constrained in arrival distributions, this package decouples sampling and queue computation to free the user to specify any sampling distribution. 
+The focus of this package is on <b>queue computation</b> rather than <b>queue simulation</b>. Existing queue simulation software are highly constrained in arrival distributions, this package decouples sampling and queue computation to free the user to specify any arrival or service process. 
 
-This package was inspired by the problem of modelling passenger flows through an international airport terminal. Batch arrivals (planes) occur throughout the day at predetermined times at different parts of the airport. A completely flexible queueing framework is needed to allow for the potentially complex arrival and service distributions and resource schedules. An efficient computation engine is needed to allow for Bayesian sampling of the parameters to return posteriors for the queue parameters. 
+This package was inspired by the problem of modelling passenger flows through an international airport terminal. Batch arrivals (planes) occur throughout the day at scheduled times with delays at different parts of the airport. A completely flexible queueing framework is needed to allow for arbitrary arrival and service distributions (with dependencies) and resource schedules. An efficient computation engine is needed to allow for Bayesian sampling. 
 
 Simulating arbitrary queues is difficult, however once:
 
@@ -62,11 +66,15 @@ The focus on this package is:
 It is up to the user to provide arrival and service times, and therefore very complicated distributions can be simulated (by the user) and tested with this package. 
 
 
+# Example
 
-
-
+In this example the arrival process is log-normal and the service times are log-normal. We compare two different queue scenarios, the first `firstqueue` with a single server throughout the day and the second `secondqueue` with 1 server until time 15, 3 servers from time 15 to time 30, 1 server from time 30 to time 50 and 10 servers from there onwards. 
 
 ```{r}
+library(ggplot2)
+library(reshape2)
+library(magrittr)
+
 set.seed(700)
 arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
 service <- rlnorm(100)
@@ -74,7 +82,26 @@ server_list <- server_split(c(15,30,50),c(1,3,1,10))
 
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
-    server_list = server_list, service = service)
+    server_list = server_list, service = service, queueoutput = TRUE)
+```
+
+## Print secondqueue output ordered by arrival times
+
+```{r}
+ord <- order(arrival_df$times)
+
+first_queueoutput <- data.frame(ID = arrival_df$ID[ord], arrivals = arrival_df$times[ord], service = service[ord],
+    departure = firstqueue$times[ord])
+
+second_queueoutput <- data.frame(ID = arrival_df$ID[ord], arrivals = arrival_df$times[ord], service = service[ord],
+    departure = secondqueue$times[ord], serverID = secondqueue$queue[ord])
+
+second_queueoutput[1:50,]
+```
+
+## Plot customers arrived and customers served
+
+```{r}
 
 curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
     xlab = "time", ylab = "Number of customers")
@@ -86,16 +113,58 @@ legend(100,40, legend = c("Customer input - arrivals",
     col = c("black","red","blue"), lwd = 1, cex = 0.8
 )
 
-#plot densities --------------
-plot(density(arrival_df$times, from = 0, adjust = 0.5))
-lines(density(firstqueue$times, from = 0, adjust = 0.5), col = "red")
-lines(density(secondqueue$times, from = 0, adjust = 0.5), col = "blue")
-
-#queue lengths ------------
-plot(ecdf(arrival_df$times)(c(1:200))*100 - ecdf(firstqueue$times)(c(1:200))*100, type = "s", 
-  xlab = "time", ylab = "queue length", ylim = c(0, 100))
-plot(ecdf(arrival_df$times)(c(1:200))*100 - ecdf(secondqueue$times)(c(1:200))*100, type = "s", 
-  xlab = "time", ylab = "queue length", ylim = c(0, 100))
 ```
 
-# References
+## Plot densities
+
+```{r}
+departure_df <- data.frame(arrival_times = arrival_df$times, 
+  firstqueue_departuretimes = firstqueue$times, 
+  secondqueue_departuretimes = secondqueue$times) %>% reshape2::melt()
+
+qplot(value, data = departure_df, colour = variable, geom = "density") + xlab("time")
+```
+
+## Plot queue lengths
+
+```{r}
+#queue lengths ------------
+
+ecdf_df <- data.frame(time = c(1:200), 
+  firstqueue = ecdf(arrival_df$times)(c(1:200)) * 100 - 
+    ecdf(firstqueue$times)(c(1:200))*100, 
+  secondqueue = ecdf(arrival_df$times)(c(1:200))*100 - 
+    ecdf(secondqueue$times)(c(1:200))*100) %>% reshape2::melt(id.vars = "time")
+
+head(ecdf_df)
+
+qplot(time, value, data = ecdf_df, colour = variable, geom = "step") + xlab("time") + ylab("queue length")
+```
+
+## Summary statistics
+
+```{r}
+first_waiting_time <- (first_queueoutput$departure - first_queueoutput$service - first_queueoutput$arrival)
+second_waiting_time <- (second_queueoutput$departure - second_queueoutput$service - second_queueoutput$arrival)
+
+first_waiting_time %>% summary
+second_waiting_time %>% summary
+```
+
+## How long does it take?
+
+Let's try a big queue with 50,000 people. 
+
+```{r}
+arrival_df <- data.frame(ID = c(1:50000), times = rlnorm(50000, meanlog = 3))
+service <- rlnorm(50000)
+server_list <- server_split(c(15,100,150),c(1,3,1,10))
+
+# Output in time (seconds)
+system.time(bigqueue <- queue_step(arrival_df = arrival_df, service = service, server_list = server_list, queueoutput = TRUE))
+
+```
+
+Not bad but not great. We can do better. 
+
+
