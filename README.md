@@ -1,4 +1,8 @@
 
+<!-- --- -->
+<!-- output: html -->
+<!-- bibliography: references.bib -->
+<!-- --- -->
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 \[ \]
 
@@ -18,15 +22,15 @@ Why more queueing software?
 There is already a lot of queueing simulation packages out there including the following R packages:
 
 -   [liqueueR](https://cran.r-project.org/web/packages/liqueueR/index.html),
--   [queueing](https://cran.r-project.org/web/packages/queueing/index.html) &
--   [rstackdeque](https://cran.r-project.org/web/packages/rstackdeque/index.html).
--   [simmer](http://r-simmer.org/)
+-   [queueing](https://cran.r-project.org/web/packages/queueing/index.html),
+-   [rstackdeque](https://cran.r-project.org/web/packages/rstackdeque/index.html) &
+-   [simmer](http://r-simmer.org/).
 
 So what does this package do differently to the others?
 
 The focus of this package is on <b>queue computation</b> rather than <b>queue simulation</b>. Existing queue simulation software are highly constrained in arrival distributions, this package decouples sampling and queue computation to free the user to specify any arrival or service process.
 
-This package was inspired by the problem of modelling passenger flows through an international airport terminal. Batch arrivals (planes) occur throughout the day at predetermined times at different parts of the airport. A completely flexible queueing framework is needed to allow for arbitrary arrival and service distributions and resource schedules. An efficient computation engine is needed to allow for Bayesian sampling.
+This package was inspired by the problem of modelling passenger flows through an international airport terminal. Batch arrivals (planes) occur throughout the day at scheduled times with delays at different parts of the airport. A completely flexible queueing framework is needed to allow for arbitrary arrival and service distributions (with dependencies) and resource schedules. An efficient computation engine is needed to allow for Bayesian sampling.
 
 Simulating arbitrary queues is difficult, however once:
 
@@ -201,5 +205,20 @@ second_waiting_time %>% summary
 #>   0.000   4.450   9.073  11.180  19.680  26.400
 ```
 
-References
-==========
+How long does it take?
+----------------------
+
+Let's try a big queue with 50,000 people.
+
+``` r
+arrival_df <- data.frame(ID = c(1:50000), times = rlnorm(50000, meanlog = 3))
+service <- rlnorm(50000)
+server_list <- server_split(c(15,100,150),c(1,3,1,10))
+
+# Output in time (seconds)
+system.time(bigqueue <- queue_step(arrival_df = arrival_df, service = service, server_list = server_list, queueoutput = TRUE))
+#>    user  system elapsed 
+#>   3.128   0.000   3.130
+```
+
+Not bad but not great. We can do better.
