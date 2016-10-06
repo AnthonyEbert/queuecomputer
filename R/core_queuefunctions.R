@@ -43,8 +43,7 @@
 #' @seealso wait_step, lag_step
 #' @references Sutton, C., & Jordan, M. I. (2011). Bayesian inference for queueing networks and modeling of internet services. The Annals of Applied Statistics, 254-282, page 258.
 #' @export
-queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))), service, queueoutput = FALSE,
-  POSIXct_format = FALSE, start_time = NULL){
+queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))), service, queueoutput = FALSE){
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -76,10 +75,6 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
     output_df <- data.frame(ID = arrival_df$ID, times = output_df, queues = queue_vector)
   } else {
     output_df <- data.frame(ID = arrival_df$ID, times = output_df)
-  }
-
-  if(POSIXct_format == TRUE){
-    output_df$times <- as.POSIXct(output_df$times*60, origin = start_time)
   }
 
   return(output_df)
