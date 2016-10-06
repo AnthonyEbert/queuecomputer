@@ -1,13 +1,13 @@
 
----
-output: github_document
-bibliography: references.bib
----
-
 <!-- --- -->
-<!-- output: html -->
+<!-- output: github_document -->
 <!-- bibliography: references.bib -->
 <!-- --- -->
+
+---
+output: html
+bibliography: references.bib
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 

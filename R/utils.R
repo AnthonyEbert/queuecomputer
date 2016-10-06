@@ -59,7 +59,7 @@ server_split <- function(x, y){
         intermediate_plateaus[j] <- intermediate_plateaus[j] - 1
       }
     }
-    
+
     # Fix for issue 1
     newrow <- rep(TRUE, length(newplat[i,]))
     for(k in 2:length(newplat[i,])){
