@@ -80,6 +80,80 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
   return(output_df)
 }
 
+
+#' Compute the vector of response times from a queue with a vector of arrival times and service times.
+#'
+#'
+#' @param arrival_df A dataframe with column names ID and times . The ID column is a key
+#'     for the customers. The times column is of class \code{numeric} and represents the
+#'     arrival times of the customers.
+#' @param Number_of_servers The number of servers in the queue model.
+#' @param service A vector of service times with the same ordering as arrival_df.
+#' @param queueoutput A boolean variable which indicates whether the server number should be returned.
+#' @return A vector of response times for the input of arrival times and service times
+#' @examples
+#' set.seed(700)
+#' arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
+#' service <- rlnorm(100)
+#'
+#'
+#' firstqueue <- queue_fast(arrival_df = arrival_df, service = service)
+#' secondqueue <- queue_fast(arrival_df = arrival_df,
+#'     Number_of_servers = 2, service = service, queueoutput = TRUE)
+#'
+#' curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
+#'     xlab = "time", ylab = "Number of customers")
+#' curve(ecdf(firstqueue$times)(x) * 100 , add = TRUE, col = "red")
+#' curve(ecdf(secondqueue$times)(x) * 100, add = TRUE, col = "blue")
+#' legend(100,40, legend = c("Customer input - arrivals",
+#'     "Customer output - firstqueue",
+#'     "Customer output - secondqueue"),
+#'     col = c("black","red","blue"), lwd = 1, cex = 0.8
+#' )
+#'
+#' # Queue lengths
+#' ecdf(arrival_df$times)(c(1:200))*100 - ecdf(firstqueue$times)(c(1:200))*100
+#' ecdf(arrival_df$times)(c(1:200))*100 - ecdf(secondqueue$times)(c(1:200))*100
+#'
+#' ord <- order(arrival_df$times)
+#' cbind(arrival_df[ord,], service[ord],
+#'     secondqueue$times[ord], secondqueue$queue[ord])
+#' @seealso wait_step, lag_step
+#' @references Sutton, C., & Jordan, M. I. (2011). Bayesian inference for queueing networks and modeling of internet services. The Annals of Applied Statistics, 254-282, page 258.
+#' @export
+queue_fast <- function(arrival_df, Number_of_servers = 1, service){
+
+  # Order arrivals and service according to time
+  ord <- order(arrival_df$times)
+  arrival_df <- arrival_df[ord, ]
+  service <- service[ord]
+
+  queue_times <- rep(0, Number_of_servers)
+  output_df <- rep(NA, dim(arrival_df)[1])
+  queue_vector <- rep(NA,dim(arrival_df)[1])
+
+  for(i in 1:dim(arrival_df)[1]){
+    # new_queue_times <- mapply(queue_times, rep(arrival_df$times[i], Number_of_queues), FUN = max)
+    # new_queue_times <- mapply(next_function, server_list, test_queue_times)
+    # queue <- which.min(new_queue_times)
+
+    queue <- which.min(queue_times)
+    queue_times[queue] <- max(arrival_df$times[i], queue_times[queue]) + service[i]
+
+    # queue_times[queue] <- new_queue_times[queue] + service[i]
+    output_df[i] <- queue_times[queue]
+  }
+
+  # Put order back to original ordering
+  output_df <- output_df[order(ord)]
+  arrival_df <- arrival_df[order(ord),]
+  queue_vector <- queue_vector[order(ord)]
+
+  output_df <- data.frame(ID = arrival_df$ID, times = output_df)
+
+  return(output_df)
+}
+
 #' Add lag to vector of arrival times.
 #' @param arrival_df A dataframe with column names ID and times . The ID column is a key
 #'     for the customers. The times column is of class \code{numeric} and represents the

@@ -1,0 +1,123 @@
+---
+title: "Comparison of simmer and queuecomputer"
+author: "anthony ebert"
+date: "11 October 2016"
+output: html_document
+---
+
+```{r initialisation}
+library(queuecomputer)
+library(iterators)
+library(simmer)
+library(microbenchmark)
+library(ggplot2)
+```
+
+# Setup
+
+```{r setup}
+set.seed(500)
+
+n_customers <- 10000
+
+lambda_a <- 1/1
+lambda_s <- 1/0.8
+
+interarrivals <- rexp(n_customers, lambda_a)
+
+arrivals <- cumsum(interarrivals)
+arrival_df <- data.frame(ID = c(1:n_customers), times = arrivals)
+
+service <- rexp(n_customers, lambda_s)
+```
+
+# simmer
+
+```{r}
+
+service_next <- iter(service)
+arrival_next <- iter(interarrivals)
+
+system.time({
+mm1.trajectory <<- create_trajectory() %>%
+  seize("resource", amount=1) %>%
+  timeout(function() nextElem(service_next)) %>%
+  release("resource", amount=1)
+
+mm1.env <<- simmer() %>%
+  add_resource("resource", capacity=2, queue_size=Inf) %>%
+  add_generator("arrival", mm1.trajectory, function() nextElem(arrival_next)) %>% 
+  run(until=9980)
+})
+
+plot_resource_usage(mm1.env, "resource", steps=TRUE, items = "system") + xlim(c(0,10000)) + ylim(c(0,15))
+
+mat <- (mm1.env %>% get_mon_arrivals())
+
+mat[5000:5015,3]
+```
+
+
+# queuecomputer
+
+```{r}
+system.time({
+MM1 <<- queue_step(arrival_df = arrival_df, service = service, server_list = server_split(c(1), c(2,2)))
+})
+
+system_lengths <- ((ecdf(arrival_df$times)(seq(1,10000,by=0.1)) - ecdf(MM1$times)(seq(1,10000,by=0.1)) ) * n_customers) %>% round()
+
+plot(system_lengths, type = "s", xlim = c(0,100000), ylim = c(0,15), xlab = "time", ylab = "queue length")
+
+ord <- order(MM1$times)
+
+MM1$times[ord][5000:5015]
+```
+
+
+```{r}
+queue_fast <- function(arrival_df, Number_of_servers = 1, service){
+
+  # Order arrivals and service according to time
+  ord <- order(arrival_df$times)
+  arrival_df <- arrival_df[ord, ]
+  service <- service[ord]
+
+  queue_times <- rep(0, Number_of_servers)
+  output_df <- rep(NA, dim(arrival_df)[1])
+  queue_vector <- rep(NA,dim(arrival_df)[1])
+
+  for(i in 1:dim(arrival_df)[1]){
+    # new_queue_times <- mapply(queue_times, rep(arrival_df$times[i], Number_of_queues), FUN = max)
+    # new_queue_times <- mapply(next_function, server_list, test_queue_times)
+    # queue <- which.min(new_queue_times)
+
+    queue <- which.min(queue_times)
+    queue_times[queue] <- max(arrival_df$times[i], queue_times[queue]) + service[i]
+
+    # queue_times[queue] <- new_queue_times[queue] + service[i]
+    output_df[i] <- queue_times[queue]
+  }
+
+  # Put order back to original ordering
+  output_df <- output_df[order(ord)]
+  arrival_df <- arrival_df[order(ord),]
+  queue_vector <- queue_vector[order(ord)]
+
+  output_df <- data.frame(ID = arrival_df$ID, times = output_df)
+
+  return(output_df)
+}
+
+system.time({
+MM1_fast <<- queue_fast(arrival_df = arrival_df, service = service, Number_of_servers = 2)
+})
+
+system_lengths <- ((ecdf(arrival_df$times)(seq(1,10000,by=0.1)) - ecdf(MM1_fast$times)(seq(1,10000,by=0.1)) ) * n_customers) %>% round()
+
+plot(system_lengths, type = "s", xlim = c(0,100000), ylim = c(0,15), xlab = "time", ylab = "queue length")
+
+ord <- order(MM1_fast$times)
+
+MM1_fast$times[ord][5000:5015]
+```
