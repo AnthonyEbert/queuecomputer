@@ -56,8 +56,10 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
   output_df <- rep(NA, dim(arrival_df)[1])
   queue_vector <- rep(NA,dim(arrival_df)[1])
 
+  times <- arrival_df$times # This step leads to a big improvement in speed for some reason.
+
   for(i in 1:dim(arrival_df)[1]){
-    test_queue_times <- pmax.int(queue_times, rep(arrival_df$times[i], Number_of_queues))
+    test_queue_times <- pmax.int(queue_times, times[i])
     new_queue_times <- mapply(next_function, server_list, test_queue_times)
     queue <- which.min(new_queue_times)
 
