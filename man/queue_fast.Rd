@@ -14,8 +14,6 @@ arrival times of the customers.}
 \item{Number_of_servers}{The number of servers in the queue model.}
 
 \item{service}{A vector of service times with the same ordering as arrival_df.}
-
-\item{queueoutput}{A boolean variable which indicates whether the server number should be returned.}
 }
 \value{
 A vector of response times for the input of arrival times and service times
@@ -50,9 +48,6 @@ ecdf(arrival_df$times)(c(1:200))*100 - ecdf(secondqueue$times)(c(1:200))*100
 ord <- order(arrival_df$times)
 cbind(arrival_df[ord,], service[ord],
     secondqueue$times[ord])
-}
-\references{
-Sutton, C., & Jordan, M. I. (2011). Bayesian inference for queueing networks and modeling of internet services. The Annals of Applied Statistics, 254-282, page 258.
 }
 \seealso{
 wait_step, lag_step

@@ -52,9 +52,6 @@ ord <- order(arrival_df$times)
 cbind(arrival_df[ord,], service[ord],
     secondqueue$times[ord], secondqueue$queue[ord])
 }
-\references{
-Sutton, C., & Jordan, M. I. (2011). Bayesian inference for queueing networks and modeling of internet services. The Annals of Applied Statistics, 254-282, page 258.
-}
 \seealso{
 wait_step, lag_step
 }

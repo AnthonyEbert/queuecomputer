@@ -41,7 +41,6 @@
 #' cbind(arrival_df[ord,], service[ord],
 #'     secondqueue$times[ord], secondqueue$queue[ord])
 #' @seealso wait_step, lag_step
-#' @references Sutton, C., & Jordan, M. I. (2011). Bayesian inference for queueing networks and modeling of internet services. The Annals of Applied Statistics, 254-282, page 258.
 #' @export
 queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))), service, queueoutput = FALSE){
 
@@ -91,7 +90,6 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
 #'     arrival times of the customers.
 #' @param Number_of_servers The number of servers in the queue model.
 #' @param service A vector of service times with the same ordering as arrival_df.
-#' @param queueoutput A boolean variable which indicates whether the server number should be returned.
 #' @return A vector of response times for the input of arrival times and service times
 #' @examples
 #' set.seed(700)
@@ -121,7 +119,6 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
 #' cbind(arrival_df[ord,], service[ord],
 #'     secondqueue$times[ord])
 #' @seealso wait_step, lag_step
-#' @references Sutton, C., & Jordan, M. I. (2011). Bayesian inference for queueing networks and modeling of internet services. The Annals of Applied Statistics, 254-282, page 258.
 #' @export
 queue_fast <- function(arrival_df, Number_of_servers = 1, service){
 
@@ -172,8 +169,8 @@ queue_fast <- function(arrival_df, Number_of_servers = 1, service){
 #'
 #' # lag_step is equivalent to queue_step with a large number of queues, but it's faster to compute.
 #'
-#' cbind(queue_step(arrival_df = arrival_df, service = service,
-#'     Number_of_queues = stepfun(1,c(100,100))), lag_step(arrival_df = arrival_df, service = service))
+#' cbind(queue_fast(arrival_df = arrival_df, service = service, Number_of_servers = 100),
+#' lag_step(arrival_df = arrival_df, service = service))
 #' @seealso queue_step
 #' @export
 lag_step <- function(arrival_df, service){
@@ -195,6 +192,7 @@ lag_step <- function(arrival_df, service){
 #'  after they pick up their bags from the baggage carosel. The time at which they leave is
 #'  the maximum of the passenger and bag arrival times.
 #' @examples
+#'set.seed(500)
 #'arrivals <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 4))
 #'service <- rlnorm(100)
 #'
@@ -212,8 +210,11 @@ lag_step <- function(arrival_df, service){
 #'wait_step(arrival_df1 = arrivals, arrival_df2 = arrivals2)
 #' @export
 wait_step <- function(arrival_df1, arrival_df2){
-  mat <- cbind(arrival_df1$times,arrival_df2$times)
-  output_df <- data.frame(ID = arrival_df1$ID, times = apply(mat, 1, max))
+  arrival_df1 <- arrival_df1[order(arrival_df1$ID), ]
+  arrival_df2 <- arrival_df2[order(arrival_df2$ID), ]
+
+  times <- pmax.int(arrival_df1$times,arrival_df2$times)
+  output_df <- data.frame(ID = arrival_df1$ID, times = times)
   return(output_df)
 }
 

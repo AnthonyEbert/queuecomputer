@@ -29,8 +29,8 @@ lag_step(arrival_df = arrival_df, service = service)
 
 # lag_step is equivalent to queue_step with a large number of queues, but it's faster to compute.
 
-cbind(queue_step(arrival_df = arrival_df, service = service,
-    Number_of_queues = stepfun(1,c(100,100))), lag_step(arrival_df = arrival_df, service = service))
+cbind(queue_fast(arrival_df = arrival_df, service = service, Number_of_servers = 100),
+lag_step(arrival_df = arrival_df, service = service))
 }
 \seealso{
 queue_step

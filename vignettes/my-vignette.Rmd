@@ -1,5 +1,5 @@
 ---
-title: "queuecomputer package"
+title: "Using the `queuecomputer` package"
 author: "Anthony Ebert"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -9,65 +9,83 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+# Introduction
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+The purpose of the package `queuecomputer` is to compute, deterministically, the output of a queue network given certain inputs. The most important functions are `queue_step`, `lag_step` and `wait_step`. An important case of a queueing network which can be modelled with these functions is that of an international airport terminal. 
 
-## Vignette Info
+When passengers arrive at the immigration desk to be processed this is a queue. If the arrival times of all customers as well as the time needed at the service desk are supplied then the departure times can be computed deterministically. The logic is implemented in the `queue_step` function where the user supplies the arrival times and service times as input. 
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+Passengers walking between queueing stages is modelled as a `lag_step`, where the service times are simply added to the arrival times. The departure times are equivalent to a `queue_step` with an excessive number of servers. 
 
-## Styles
+Passengers waiting for bags at the baggage carousels is modelled with `wait_step`. The inputs are the arrival times of the bags and passengers, and the departure times is the vector of maximum times for each. 
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+# Input format
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+The first argument to the functions `queue_step`, `lag_step` and `wait_step` is a dataframe with a column of unique customer IDs labelled 'ID' and a column of arrival times labelled 'times'. For example:
 
-## Figures
+```{r}
+library(queuecomputer)
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
+arrivals <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 4))
 
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+head(arrivals)
+
+service <- rlnorm(100)
+
+departures <- queue_step(arrival_df = arrivals, service = service)
+
+head(departures)
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+# Resourcing schedule
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+The resourcing schedule is specified with a list of step functions with range $\{0,1\}$, where 0 represents unavailable and 1 represents available. The `server_split` function was developed to make this easier to input: 
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+```{r}
+resource_schedule <- server_split(c(10,50,100), c(0, 1, 3, 1))
 
-## More Examples
+resource_schedule
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+departures <- queue_step(arrival_df = arrivals, service = service, server_list = resource_schedule)
 
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+head(departures)
 ```
 
-Also a quote using `>`:
+# Setting up a queue network
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+It is simple to set up a chain of queueing elements with `queuecomputer`. Suppose passengers must walk to a queue, then wait for service and then wait for their bags. 
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+set.seed(500)
+
+arrivals <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 2))
+service_l <- rlnorm(100)
+service_q <- rlnorm(100, meanlog = -1.5)
+arrivals_b <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
+
+# The queue elements can be computed one by one. 
+
+departures_1 <- lag_step(arrivals, service_l)
+departures_2 <- queue_step(departures_1, service = service_q)
+departures_3 <- wait_step(departures_2, arrivals_b)
+
+departure_df <- data.frame(arrival_times = arrivals$times, departures_1 = departures_1$times, departures_2 = departures_2$times, departures_3 = departures_3$times) %>% reshape2::melt()
+
+qplot(value, data = departure_df, colour = variable, geom = "density") + xlab("time")
+
+# The queue elements can be chained together with the magrittr package. 
+
+departures <- lag_step(arrivals, service_l) %>% queue_step(service = service_q) %>% wait_step(arrivals_b)
+
+# plot(density(arrivals$times, from = 0), xlim = c(0, 100))
+# lines(density(departures_1$times, from = 0), col = "red")
+# lines(density(departures_2$times, from = 0), col = "blue")
+# lines(density(departures_3$times, from = 0), col = "green")
+
+```
 
 
-## Original Algorithm
 
-The computation of departure times for a single-server FIFO (first-in-first-out) queue is simple and efficient (for any sample of $t^a$): 
-
-$$ t^d_k = \text{max}(t^d_{k-1}, t^a_k) + s_k $$
-
-where $t^d_k$, $t^a_k$ and $s_k$ are the departure, arrival and service times for the $k$th customer respectively, see (@sutton2011bayesian, pg 258). Note: the customers have been sorted in order of arrival times. The intuition here is that the $k$th customer must wait for the $k-1$th customer to be served. 
-
-This result can be extended to multi-server queues in the following manner: 
-
-$$ t_k^d = \text{max}(\text{min}(\text{n latest departure times for all customers 1:(k-1)}), \quad t^a_k) + s_k $$
-
-for a queue with $n$ servers. This simple, but unreported extension to @sutton2011bayesian greatly simplifies the computation of departure times for multi-server queues. 

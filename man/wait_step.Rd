@@ -27,6 +27,7 @@ A good real-world example of this is finding the departure times for passengers
  the maximum of the passenger and bag arrival times.
 }
 \examples{
+set.seed(500)
 arrivals <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 4))
 service <- rlnorm(100)
 

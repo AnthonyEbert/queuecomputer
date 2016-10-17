@@ -15,6 +15,9 @@
 #' @seealso wait_step
 #' @export
 reduce_bags <- function(bagdataset, number_of_passengers){
+  ID = NULL
+  times = NULL
+
   zerobags <- data.frame(BagID = NA, ID = c(1:number_of_passengers), times = 0)
   reduced_df <- as.data.frame(dplyr::summarise(dplyr::group_by(rbind(bagdataset, zerobags), ID), n = max(times)))
   ord <- order(reduced_df$ID)
@@ -30,7 +33,7 @@ reduce_bags <- function(bagdataset, number_of_passengers){
 #' @return Next available time for server in question.
 #' @export
 next_function <- function(sf,time){
-  output <- switch(sf(time) + 1, c(knots(sf),Inf)[findInterval(time,knots(sf)) + 1] , time)
+  output <- switch(sf(time) + 1, c(stats::knots(sf),Inf)[findInterval(time,stats::knots(sf)) + 1] , time)
   return(output)
 }
 

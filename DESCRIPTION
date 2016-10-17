@@ -1,6 +1,6 @@
 Package: queuecomputer
 Title: Computes the output times for queues with arbitrary arrival and service times
-Version: 0.1.3
+Version: 0.1.4
 Authors@R: person("Anthony", "Ebert"   , email = "anthonyebert@gmail.com", role = c("aut", "cre"))
 Description: Computes the output times for queues with arbitrary arrival and service times. 
     The package is referred to as "queuecomputer" rather than "queuesimulator" since the 
@@ -16,5 +16,7 @@ Imports:
 RoxygenNote: 5.0.1.9000
 Suggests: knitr,
     rmarkdown,
-    testthat
+    testthat,
+    reshape2,
+    ggplot2
 VignetteBuilder: knitr
