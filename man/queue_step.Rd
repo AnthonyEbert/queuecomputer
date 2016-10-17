@@ -2,7 +2,7 @@
 % Please edit documentation in R/core_queuefunctions.R
 \name{queue_step}
 \alias{queue_step}
-\title{Compute the vector of response times from a queue with a vector of arrival times and service times.}
+\title{Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.}
 \usage{
 queue_step(arrival_df, server_list = list(stats::stepfun(1, c(1, 1))),
   service, queueoutput = FALSE)
@@ -22,7 +22,7 @@ arrival times of the customers.}
 A vector of response times for the input of arrival times and service times
 }
 \description{
-Compute the vector of response times from a queue with a vector of arrival times and service times.
+Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.
 }
 \examples{
 set.seed(700)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/core_queuefunctions.R
 \name{queue_fast}
 \alias{queue_fast}
-\title{Compute the vector of response times from a queue with a vector of arrival times and service times.}
+\title{Faster version of queue_step with reduced functionality.}
 \usage{
 queue_fast(arrival_df, Number_of_servers = 1, service)
 }
@@ -11,7 +11,7 @@ queue_fast(arrival_df, Number_of_servers = 1, service)
 for the customers. The times column is of class \code{numeric} and represents the
 arrival times of the customers.}
 
-\item{Number_of_servers}{The number of servers in the queue model.}
+\item{Number_of_servers}{The number of servers in the queue model. It is only possible to set the number of servers, not a resource schedule.}
 
 \item{service}{A vector of service times with the same ordering as arrival_df.}
 }
@@ -19,7 +19,7 @@ arrival times of the customers.}
 A vector of response times for the input of arrival times and service times
 }
 \description{
-Compute the vector of response times from a queue with a vector of arrival times and service times.
+Faster version of queue_step with reduced functionality.
 }
 \examples{
 set.seed(700)

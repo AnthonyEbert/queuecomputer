@@ -3,7 +3,7 @@
 
 
 
-#' Compute the vector of response times from a queue with a vector of arrival times and service times.
+#' Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.
 #'
 #'
 #' @param arrival_df A dataframe with column names ID and times . The ID column is a key
@@ -82,13 +82,14 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
 }
 
 
-#' Compute the vector of response times from a queue with a vector of arrival times and service times.
+#' Faster version of queue_step with reduced functionality.
+#'
 #'
 #'
 #' @param arrival_df A dataframe with column names ID and times . The ID column is a key
 #'     for the customers. The times column is of class \code{numeric} and represents the
 #'     arrival times of the customers.
-#' @param Number_of_servers The number of servers in the queue model.
+#' @param Number_of_servers The number of servers in the queue model. It is only possible to set the number of servers, not a resource schedule.
 #' @param service A vector of service times with the same ordering as arrival_df.
 #' @return A vector of response times for the input of arrival times and service times
 #' @examples
@@ -132,14 +133,9 @@ queue_fast <- function(arrival_df, Number_of_servers = 1, service){
   queue_vector <- rep(NA,dim(arrival_df)[1])
 
   for(i in 1:dim(arrival_df)[1]){
-    # new_queue_times <- mapply(queue_times, rep(arrival_df$times[i], Number_of_queues), FUN = max)
-    # new_queue_times <- mapply(next_function, server_list, test_queue_times)
-    # queue <- which.min(new_queue_times)
-
     queue <- which.min(queue_times)
     queue_times[queue] <- max(arrival_df$times[i], queue_times[queue]) + service[i]
 
-    # queue_times[queue] <- new_queue_times[queue] + service[i]
     output_df[i] <- queue_times[queue]
   }
 
