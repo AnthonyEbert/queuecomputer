@@ -31,7 +31,7 @@ service <- rlnorm(100)
 
 firstqueue <- queue_fast(arrival_df = arrival_df, service = service)
 secondqueue <- queue_fast(arrival_df = arrival_df,
-    Number_of_servers = 2, service = service, queueoutput = TRUE)
+    Number_of_servers = 2, service = service)
 
 curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
     xlab = "time", ylab = "Number of customers")
@@ -49,7 +49,7 @@ ecdf(arrival_df$times)(c(1:200))*100 - ecdf(secondqueue$times)(c(1:200))*100
 
 ord <- order(arrival_df$times)
 cbind(arrival_df[ord,], service[ord],
-    secondqueue$times[ord], secondqueue$queue[ord])
+    secondqueue$times[ord])
 }
 \references{
 Sutton, C., & Jordan, M. I. (2011). Bayesian inference for queueing networks and modeling of internet services. The Annals of Applied Statistics, 254-282, page 258.

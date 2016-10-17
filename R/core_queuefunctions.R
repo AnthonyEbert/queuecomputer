@@ -57,7 +57,7 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
   queue_vector <- rep(NA,dim(arrival_df)[1])
 
   for(i in 1:dim(arrival_df)[1]){
-    test_queue_times <- mapply(queue_times, rep(arrival_df$times[i], Number_of_queues), FUN = max)
+    test_queue_times <- pmax.int(queue_times, rep(arrival_df$times[i], Number_of_queues))
     new_queue_times <- mapply(next_function, server_list, test_queue_times)
     queue <- which.min(new_queue_times)
 
@@ -99,7 +99,7 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
 #'
 #' firstqueue <- queue_fast(arrival_df = arrival_df, service = service)
 #' secondqueue <- queue_fast(arrival_df = arrival_df,
-#'     Number_of_servers = 2, service = service, queueoutput = TRUE)
+#'     Number_of_servers = 2, service = service)
 #'
 #' curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
 #'     xlab = "time", ylab = "Number of customers")
@@ -117,7 +117,7 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
 #'
 #' ord <- order(arrival_df$times)
 #' cbind(arrival_df[ord,], service[ord],
-#'     secondqueue$times[ord], secondqueue$queue[ord])
+#'     secondqueue$times[ord])
 #' @seealso wait_step, lag_step
 #' @references Sutton, C., & Jordan, M. I. (2011). Bayesian inference for queueing networks and modeling of internet services. The Annals of Applied Statistics, 254-282, page 258.
 #' @export
