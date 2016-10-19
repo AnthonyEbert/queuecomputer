@@ -4,17 +4,17 @@
 \alias{queue_step}
 \title{Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.}
 \usage{
-queue_step(arrival_df, server_list = server_split(1, c(1, 1)), service,
+queue_step(arrival_df, service, server_list = server_split(1, c(1, 1)),
   queueoutput = FALSE)
 }
 \arguments{
-\item{arrival_df}{A dataframe with column names ID and times . The ID column is a key
+\item{arrival_df}{dataframe with column names ID and times . The ID column is a key
 for the customers. The times column is of class \code{numeric} and represents the
 arrival times of the customers.}
 
-\item{server_list}{A list of step functions with output either 0 or 1 representing the availability of each server.}
+\item{service}{vector of service times with the same ordering as arrival_df.}
 
-\item{service}{A vector of service times with the same ordering as arrival_df.}
+\item{server_list}{an object of class \code{"server.list"}.}
 
 \item{queueoutput}{A boolean variable which indicates whether the server number should be returned.}
 }

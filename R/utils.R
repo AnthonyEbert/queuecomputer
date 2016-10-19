@@ -71,23 +71,23 @@ server_split <- function(x, y){
 
     output[[i]] <- stats::stepfun(x[newrow[-1]],newplat[i,][newrow])
   }
-  class(output) <- "server_list"
+  class(output) <- "server.list"
 
   return(output)
 }
 
-#' Creates a \code{"server_list"} object from a list of times and starting availability.
+#' Creates a \code{"server.list"} object from a list of times and starting availability.
 #'
-#' @param times list of vectors giving change times for each server.
-#' @param init vector of 1s and 0s which represents whether the server starts availabile \code{(1)} or unavailable \code{(0)}.
-#' @return \code{"server_list"} object.
+#' @param times list of numeric vectors giving change times for each server.
+#' @param init vector of 1s and 0s with equal length to \code{times}. It represents whether the server starts in an availabile \code{(1)} or unavailable \code{(0)} state.
+#' @return an object of class \code{"server.list"}, which is a list of step functions of range \{0, 1\}.
 #' @seealso \code{\link{server_split}}, \code{\link{queue_step}}
 #' @examples
-#' # Create a server_list with the first server available anytime before time 10,
+#' # Create a server.list object with the first server available anytime before time 10,
 #' # and the second server available between time 15 and time 30.
-#' server_list(list(10, c(15,30)), c(1,0))
+#' as.server.list(list(10, c(15,30)), c(1,0))
 #' @export
-server_list <- function(times, init){
+as.server.list <- function(times, init){
 
   stopifnot(class(times) == "list")
   stopifnot(length(times) == length(init))
@@ -104,7 +104,7 @@ server_list <- function(times, init){
     output[[i]] <- stats::stepfun(times[[i]], y)
   }
 
-  class(output) <- "server_list"
+  class(output) <- "server.list"
   return(output)
 
 }

@@ -4,16 +4,16 @@
 \alias{queue_fast}
 \title{Faster version of \code{queue_step} with reduced functionality.}
 \usage{
-queue_fast(arrival_df, Number_of_servers = 1, service)
+queue_fast(arrival_df, service, Number_of_servers = 1)
 }
 \arguments{
 \item{arrival_df}{A dataframe with column names ID and times . The ID column is a key
 for the customers. The times column is of class \code{numeric} and represents the
 arrival times of the customers.}
 
-\item{Number_of_servers}{The number of servers in the queue model. It is only possible to set the number of servers, not a resource schedule.}
-
 \item{service}{A vector of service times with the same ordering as arrival_df.}
+
+\item{Number_of_servers}{The number of servers in the queue model. It is only possible to set the number of servers, not a resource schedule.}
 }
 \value{
 A vector of response times for the input of arrival times and service times.

@@ -6,11 +6,11 @@
 #' Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.
 #'
 #'
-#' @param arrival_df A dataframe with column names ID and times . The ID column is a key
+#' @param arrival_df dataframe with column names ID and times . The ID column is a key
 #'     for the customers. The times column is of class \code{numeric} and represents the
 #'     arrival times of the customers.
-#' @param server_list A list of step functions with output either 0 or 1 representing the availability of each server.
-#' @param service A vector of service times with the same ordering as arrival_df.
+#' @param service vector of service times with the same ordering as arrival_df.
+#' @param server_list an object of class \code{"server.list"}.
 #' @param queueoutput A boolean variable which indicates whether the server number should be returned.
 #' @return A vector of response times for the input of arrival times and service times.
 #' @examples
@@ -42,9 +42,9 @@
 #'     secondqueue$times[ord], secondqueue$queue[ord])
 #' @seealso \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_fast}}
 #' @export
-queue_step <- function(arrival_df, server_list = server_split(1, c(1,1)), service, queueoutput = FALSE){
+queue_step <- function(arrival_df, service, server_list = server_split(1, c(1,1)), queueoutput = FALSE){
 
-  stopifnot(class(server_list) == "server_list")
+  stopifnot(class(server_list) == "server.list")
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -123,7 +123,7 @@ queue_step <- function(arrival_df, server_list = server_split(1, c(1,1)), servic
 #'     secondqueue$times[ord])
 #' @seealso \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_step}}
 #' @export
-queue_fast <- function(arrival_df, Number_of_servers = 1, service){
+queue_fast <- function(arrival_df, service, Number_of_servers = 1){
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
