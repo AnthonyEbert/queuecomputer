@@ -44,4 +44,7 @@ arrivals2 <- reduce_bags(bags.df, 100)
 # Find the time when customers can leave with their bags.
 wait_step(arrival_df1 = arrivals, arrival_df2 = arrivals2)
 }
+\seealso{
+\code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_step}}
+}
 

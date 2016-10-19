@@ -40,7 +40,7 @@
 #' ord <- order(arrival_df$times)
 #' cbind(arrival_df[ord,], service[ord],
 #'     secondqueue$times[ord], secondqueue$queue[ord])
-#' @seealso \code{\link{wait_step}}, \code{\link{lag_step}}, queue_fast
+#' @seealso \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_fast}}
 #' @export
 queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))), service, queueoutput = FALSE){
 
@@ -82,7 +82,7 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
 }
 
 
-#' Faster version of queue_step with reduced functionality.
+#' Faster version of \code{queue_step} with reduced functionality.
 #'
 #'
 #'
@@ -119,7 +119,7 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
 #' ord <- order(arrival_df$times)
 #' cbind(arrival_df[ord,], service[ord],
 #'     secondqueue$times[ord])
-#' @seealso wait_step, lag_step, queue_step
+#' @seealso \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_step}}
 #' @export
 queue_fast <- function(arrival_df, Number_of_servers = 1, service){
 
@@ -163,11 +163,11 @@ queue_fast <- function(arrival_df, Number_of_servers = 1, service){
 #' service <- rlnorm(100)
 #' lag_step(arrival_df = arrival_df, service = service)
 #'
-#' # lag_step is equivalent to queue_step with a large number of queues, but it's faster to compute.
+#' # \code{lag_step} is equivalent to \code{queue_step} with a large number of queues, but it's faster to compute.
 #'
 #' cbind(queue_fast(arrival_df = arrival_df, service = service, Number_of_servers = 100),
 #' lag_step(arrival_df = arrival_df, service = service))
-#' @seealso queue_step
+#' @seealso \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{queue_step}}
 #' @export
 lag_step <- function(arrival_df, service){
 
@@ -204,6 +204,7 @@ lag_step <- function(arrival_df, service){
 #'
 #'# Find the time when customers can leave with their bags.
 #'wait_step(arrival_df1 = arrivals, arrival_df2 = arrivals2)
+#' @seealso \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_step}}
 #' @export
 wait_step <- function(arrival_df1, arrival_df2){
   arrival_df1 <- arrival_df1[order(arrival_df1$ID), ]

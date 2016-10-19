@@ -2,7 +2,7 @@
 % Please edit documentation in R/core_queuefunctions.R
 \name{queue_fast}
 \alias{queue_fast}
-\title{Faster version of queue_step with reduced functionality.}
+\title{Faster version of \code{queue_step} with reduced functionality.}
 \usage{
 queue_fast(arrival_df, Number_of_servers = 1, service)
 }
@@ -19,7 +19,7 @@ arrival times of the customers.}
 A vector of response times for the input of arrival times and service times.
 }
 \description{
-Faster version of queue_step with reduced functionality.
+Faster version of \code{queue_step} with reduced functionality.
 }
 \examples{
 set.seed(700)
@@ -50,6 +50,6 @@ cbind(arrival_df[ord,], service[ord],
     secondqueue$times[ord])
 }
 \seealso{
-wait_step, lag_step, queue_step
+\code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_step}}
 }
 

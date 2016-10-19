@@ -53,6 +53,6 @@ cbind(arrival_df[ord,], service[ord],
     secondqueue$times[ord], secondqueue$queue[ord])
 }
 \seealso{
-\code{\link{wait_step}}, \code{\link{lag_step}}, \url{http://rstudio.com} queue_fast
+\code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_fast}}
 }
 
