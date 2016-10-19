@@ -4,8 +4,7 @@
 \alias{queue_step}
 \title{Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.}
 \usage{
-queue_step(arrival_df, service, server_list = server_split(1, c(1, 1)),
-  queueoutput = FALSE)
+queue_step(arrival_df, service, servers = 1, queueoutput = FALSE)
 }
 \arguments{
 \item{arrival_df}{dataframe with column names ID and times . The ID column is a key
@@ -14,7 +13,7 @@ arrival times of the customers.}
 
 \item{service}{vector of service times with the same ordering as arrival_df.}
 
-\item{server_list}{an object of class \code{"server.list"}.}
+\item{servers}{an integer or an object of class \code{"server.list"}.}
 
 \item{queueoutput}{A boolean variable which indicates whether the server number should be returned.}
 }
@@ -32,7 +31,7 @@ server_list <- server_split(c(15,30,50),c(1,3,1,10))
 
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
-    server_list = server_list, service = service, queueoutput = TRUE)
+    servers = server_list, service = service, queueoutput = TRUE)
 
 curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
     xlab = "time", ylab = "Number of customers")
@@ -53,6 +52,6 @@ cbind(arrival_df[ord,], service[ord],
     secondqueue$times[ord], secondqueue$queue[ord])
 }
 \seealso{
-\code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_fast}}
+\code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{as.server.list}}, \code{\link[queuecomputer]{server_split}}
 }
 
