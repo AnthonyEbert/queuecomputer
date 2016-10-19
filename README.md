@@ -229,7 +229,7 @@ server_list <- server_split(c(15,100,150),c(1,3,1,10))
 # Output in time (seconds)
 system.time(bigqueue <- queue_step(arrival_df = arrival_df, service = service, servers = server_list, queueoutput = TRUE))
 #>    user  system elapsed 
-#>   2.104   0.000   2.106
+#>   2.052   0.000   2.051
 ```
 
 Not bad but not great. We can do better.

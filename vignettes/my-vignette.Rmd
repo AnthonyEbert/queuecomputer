@@ -24,7 +24,7 @@ Passengers waiting for bags at the baggage carousels is modelled with `wait_step
 The first argument to the functions `queue_step`, `lag_step` and `wait_step` is a dataframe with a column of unique customer IDs labelled 'ID' and a column of arrival times labelled 'times'. For example:
 
 ```{r}
-devtools::load_all()
+library(queuecomputer)
 
 arrivals <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 4))
 
