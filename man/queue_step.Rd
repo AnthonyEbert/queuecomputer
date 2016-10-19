@@ -4,8 +4,8 @@
 \alias{queue_step}
 \title{Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.}
 \usage{
-queue_step(arrival_df, server_list = list(stats::stepfun(1, c(1, 1))),
-  service, queueoutput = FALSE)
+queue_step(arrival_df, server_list = server_split(1, c(1, 1)), service,
+  queueoutput = FALSE)
 }
 \arguments{
 \item{arrival_df}{A dataframe with column names ID and times . The ID column is a key

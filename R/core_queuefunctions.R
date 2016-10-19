@@ -42,7 +42,9 @@
 #'     secondqueue$times[ord], secondqueue$queue[ord])
 #' @seealso \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_fast}}
 #' @export
-queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))), service, queueoutput = FALSE){
+queue_step <- function(arrival_df, server_list = server_split(1, c(1,1)), service, queueoutput = FALSE){
+
+  stopifnot(class(server_list) == "server_list")
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -163,7 +165,7 @@ queue_fast <- function(arrival_df, Number_of_servers = 1, service){
 #' service <- rlnorm(100)
 #' lag_step(arrival_df = arrival_df, service = service)
 #'
-#' # \code{lag_step} is equivalent to \code{queue_step} with a large number of queues, but it's faster to compute.
+#' # lag_step is equivalent to queue_step with a large number of queues, but it's faster to compute.
 #'
 #' cbind(queue_fast(arrival_df = arrival_df, service = service, Number_of_servers = 100),
 #' lag_step(arrival_df = arrival_df, service = service))

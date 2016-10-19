@@ -19,6 +19,19 @@ A vector of response times for the input of arrival times and service times.
 \description{
 Add lag to vector of arrival times.
 }
+\examples{
+# Create arrival times
+arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
+
+# Create service times
+service <- rlnorm(100)
+lag_step(arrival_df = arrival_df, service = service)
+
+# lag_step is equivalent to queue_step with a large number of queues, but it's faster to compute.
+
+cbind(queue_fast(arrival_df = arrival_df, service = service, Number_of_servers = 100),
+lag_step(arrival_df = arrival_df, service = service))
+}
 \seealso{
 \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{queue_step}}
 }

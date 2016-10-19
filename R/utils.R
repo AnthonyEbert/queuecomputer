@@ -26,23 +26,21 @@ reduce_bags <- function(bagdataset, number_of_passengers){
   return(reduced_df)
 }
 
-#' Return next available time for server given current departure times.
-#'
-#' @param sf A step function with heights either 0 or 1.
-#' @param time the time in question.
-#' @return Next available time for server in question.
-#' @export
+
 next_function <- function(sf,time){
   output <- switch(sf(time) + 1, c(stats::knots(sf),Inf)[findInterval(time,stats::knots(sf)) + 1] , time)
   return(output)
 }
 
-#' Makes it easier to input number of servers into queue_step.
+#' Create a \code{"server_list"} object with a roster of times and number of available servers.
 #'
-#' @param x numeric vector giving the knots or jump locations of the step function for stepfun().
-#' @param y numeric vector giving the knots or jump locations of the step function for stepfun(). Must be integers.
+#' @param x numeric vector giving the times of changes in number of servers.
+#' @param y numeric vector giving the number of servers available between x values.
 #' @return List of height 1 step functions for input into queue_step.
-#' @seealso queue_step()
+#' @seealso \code{\link{server_list}}, \code{\link{queue_step}}
+#' @examples
+#'
+#' server_split(c(15,30,50), c(0, 1, 3, 2))
 #' @export
 server_split <- function(x, y){
   plateaus <- y
@@ -73,5 +71,43 @@ server_split <- function(x, y){
 
     output[[i]] <- stats::stepfun(x[newrow[-1]],newplat[i,][newrow])
   }
+  class(output) <- "server_list"
+
   return(output)
 }
+
+#' Creates a \code{"server_list"} object from a list of times and starting availability.
+#'
+#' @param times list of vectors giving change times for each server.
+#' @param init vector of 1s and 0s which represents whether the server starts availabile \code{(1)} or unavailable \code{(0)}.
+#' @return \code{"server_list"} object.
+#' @seealso \code{\link{server_split}}, \code{\link{queue_step}}
+#' @examples
+#' # Create a server_list with the first server available anytime before time 10,
+#' # and the second server available between time 15 and time 30.
+#' server_list(list(10, c(15,30)), c(1,0))
+#' @export
+server_list <- function(times, init){
+
+  stopifnot(class(times) == "list")
+  stopifnot(length(times) == length(init))
+
+  n <- length(times)
+
+  output <- list()
+
+  for(i in 1:n){
+    switch(init[i] + 1,
+      y <- rep(c(0,1), length.out = length(times[[i]]) + 1),
+      y <- rep(c(1,0), length.out = length(times[[i]]) + 1)
+      )
+    output[[i]] <- stats::stepfun(times[[i]], y)
+  }
+
+  class(output) <- "server_list"
+  return(output)
+
+}
+
+
+

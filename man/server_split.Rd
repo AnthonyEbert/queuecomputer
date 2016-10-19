@@ -2,22 +2,26 @@
 % Please edit documentation in R/utils.R
 \name{server_split}
 \alias{server_split}
-\title{Makes it easier to input number of servers into queue_step.}
+\title{Create a \code{"server_list"} object with a roster of times and number of available servers.}
 \usage{
 server_split(x, y)
 }
 \arguments{
-\item{x}{numeric vector giving the knots or jump locations of the step function for stepfun().}
+\item{x}{numeric vector giving the times of changes in number of servers.}
 
-\item{y}{numeric vector giving the knots or jump locations of the step function for stepfun(). Must be integers.}
+\item{y}{numeric vector giving the number of servers available between x values.}
 }
 \value{
 List of height 1 step functions for input into queue_step.
 }
 \description{
-Makes it easier to input number of servers into queue_step.
+Create a \code{"server_list"} object with a roster of times and number of available servers.
+}
+\examples{
+
+server_split(c(15,30,50), c(0, 1, 3, 2))
 }
 \seealso{
-queue_step()
+\code{\link{server_list}}, \code{\link{queue_step}}
 }
 
