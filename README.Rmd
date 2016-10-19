@@ -176,6 +176,6 @@ system.time(bigqueue <- queue_step(arrival_df = arrival_df, service = service, s
 
 ```
 
-Not bad but not great. We can do better. 
+Not bad but not great. We can do better.  
 
 
