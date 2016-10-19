@@ -8,16 +8,16 @@ Description: Computes the output times for queues with arbitrary arrival
     than "queuesimulator" since the emphasis in this package is computing
     *deterministically* the output times for arbitrary pre-simulated arrival and
     service times.
-Depends:
+Depends: 
     R (>= 3.3.1)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Imports:
+Imports: 
     dplyr,
     stats
-RoxygenNote: 5.0.1
-Suggests:
+RoxygenNote: 5.0.1.9000
+Suggests: 
     knitr,
     rmarkdown,
     testthat,

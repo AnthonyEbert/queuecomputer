@@ -16,7 +16,7 @@ arrival times of the customers.}
 \item{service}{A vector of service times with the same ordering as arrival_df.}
 }
 \value{
-A vector of response times for the input of arrival times and service times
+A vector of response times for the input of arrival times and service times.
 }
 \description{
 Faster version of queue_step with reduced functionality.
@@ -50,6 +50,6 @@ cbind(arrival_df[ord,], service[ord],
     secondqueue$times[ord])
 }
 \seealso{
-wait_step, lag_step
+wait_step, lag_step, queue_step
 }
 

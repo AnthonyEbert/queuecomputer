@@ -19,7 +19,7 @@ arrival times of the customers.}
 \item{queueoutput}{A boolean variable which indicates whether the server number should be returned.}
 }
 \value{
-A vector of response times for the input of arrival times and service times
+A vector of response times for the input of arrival times and service times.
 }
 \description{
 Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.
@@ -53,6 +53,6 @@ cbind(arrival_df[ord,], service[ord],
     secondqueue$times[ord], secondqueue$queue[ord])
 }
 \seealso{
-wait_step, lag_step
+\code{\link{wait_step}}, \code{\link{lag_step}}, \url{http://rstudio.com} queue_fast
 }
 

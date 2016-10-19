@@ -12,7 +12,7 @@
 #' @param server_list A list of step functions with output either 0 or 1 representing the availability of each server.
 #' @param service A vector of service times with the same ordering as arrival_df.
 #' @param queueoutput A boolean variable which indicates whether the server number should be returned.
-#' @return A vector of response times for the input of arrival times and service times
+#' @return A vector of response times for the input of arrival times and service times.
 #' @examples
 #' set.seed(700)
 #' arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
@@ -40,7 +40,7 @@
 #' ord <- order(arrival_df$times)
 #' cbind(arrival_df[ord,], service[ord],
 #'     secondqueue$times[ord], secondqueue$queue[ord])
-#' @seealso wait_step, lag_step
+#' @seealso \code{\link{wait_step}}, \code{\link{lag_step}}, queue_fast
 #' @export
 queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))), service, queueoutput = FALSE){
 
@@ -91,7 +91,7 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
 #'     arrival times of the customers.
 #' @param Number_of_servers The number of servers in the queue model. It is only possible to set the number of servers, not a resource schedule.
 #' @param service A vector of service times with the same ordering as arrival_df.
-#' @return A vector of response times for the input of arrival times and service times
+#' @return A vector of response times for the input of arrival times and service times.
 #' @examples
 #' set.seed(700)
 #' arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
@@ -119,7 +119,7 @@ queue_step <- function(arrival_df, server_list = list(stats::stepfun(1,c(1,1))),
 #' ord <- order(arrival_df$times)
 #' cbind(arrival_df[ord,], service[ord],
 #'     secondqueue$times[ord])
-#' @seealso wait_step, lag_step
+#' @seealso wait_step, lag_step, queue_step
 #' @export
 queue_fast <- function(arrival_df, Number_of_servers = 1, service){
 
