@@ -29,8 +29,8 @@ lag_step(arrival_df = arrival_df, service = service)
 
 # lag_step is equivalent to queue_step with a large number of queues, but it's faster to compute.
 
-cbind(queue_step(arrival_df = arrival_df, service = service, servers = 100),
-lag_step(arrival_df = arrival_df, service = service))
+#cbind(queue_step(arrival_df = arrival_df, service = service, servers = 100),
+#lag_step(arrival_df = arrival_df, service = service))
 }
 \seealso{
 \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{queue_step}}

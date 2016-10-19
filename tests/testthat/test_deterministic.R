@@ -26,7 +26,7 @@ server_list <- server_split(c(15,30,50),c(1,3,1,10))
 
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
-  server_list = server_list, service = service)
+  servers = server_list, service = service)
 
 # testdataframe <- data.frame(arrival_df[ord, ], service[ord], firstqueue$times[ord], secondqueue$times[ord])
 
@@ -45,7 +45,7 @@ test_that("test that deterministic queue simulation departure times haven't chan
 lag_queue <- lag_step(arrival_df = arrival_df, service = service)
 server_list <- server_split(c(1),c(100,100))
 
-secondqueue <- queue_step(arrival_df = arrival_df, server_list = server_list, service = service)
+secondqueue <- queue_step(arrival_df = arrival_df, servers = server_list, service = service)
 
 test_that("lag_step returns same results as queue_step with large number of servers", {
   expect_equal(lag_queue$times, secondqueue$times)

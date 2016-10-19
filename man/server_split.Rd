@@ -22,6 +22,6 @@ Create a \code{"server_list"} object with a roster of times and number of availa
 server_split(c(15,30,50), c(0, 1, 3, 2))
 }
 \seealso{
-\code{\link{server_list}}, \code{\link{queue_step}}
+\code{\link{as.server.list}}, \code{\link{queue_step}}
 }
 

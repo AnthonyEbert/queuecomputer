@@ -74,7 +74,7 @@ server_list <- server_split(c(15,30,50),c(1,3,1,10))
 
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
-    server_list = server_list, service = service, queueoutput = TRUE)
+    servers = server_list, service = service, queueoutput = TRUE)
 ```
 
 Print secondqueue output ordered by arrival times
@@ -227,9 +227,9 @@ service <- rlnorm(50000)
 server_list <- server_split(c(15,100,150),c(1,3,1,10))
 
 # Output in time (seconds)
-system.time(bigqueue <- queue_step(arrival_df = arrival_df, service = service, server_list = server_list, queueoutput = TRUE))
+system.time(bigqueue <- queue_step(arrival_df = arrival_df, service = service, servers = server_list, queueoutput = TRUE))
 #>    user  system elapsed 
-#>   2.164   0.004   2.168
+#>   2.104   0.000   2.106
 ```
 
 Not bad but not great. We can do better.

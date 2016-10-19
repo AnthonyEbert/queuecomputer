@@ -3,6 +3,5 @@
 export(as.server.list)
 export(lag_step)
 export(queue_step)
-export(reduce_bags)
 export(server_split)
 export(wait_step)

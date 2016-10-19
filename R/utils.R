@@ -2,24 +2,12 @@
 
 ## Testing Functions
 
-#' Return arrival vector of bags dataset.
-#'
-#' @param bagdataset A dataset of bags.
-#' @param number_of_passengers The total number of passengers all the bags could belong to.
-#' @return Maximum times for each passenger ID
-#' @examples
-#' bags <- rpois(100,1)
-#' bags.df <- data.frame(BagID = 1:sum(bags),
-#'     ID = rep(1:100, bags), times = rlnorm(sum(bags), meanlog = 2))
-#' arrivals2 <- reduce_bags(bags.df, 100)
-#' @seealso wait_step
-#' @export
 reduce_bags <- function(bagdataset, number_of_passengers){
   ID = NULL
   times = NULL
 
   zerobags <- data.frame(BagID = NA, ID = c(1:number_of_passengers), times = 0)
-  reduced_df <- as.data.frame(dplyr::summarise(dplyr::group_by(rbind(bagdataset, zerobags), ID), n = max(times)))
+  reduced_df <- as.data.frame(dplyr::summarise(dplyr::group_by(rbind(bagdataset, zerobags), ID), n = max(times, 0)))
   ord <- order(reduced_df$ID)
   reduced_df <- reduced_df[order(ord),]
   names(reduced_df) <- c("ID", "times")
@@ -37,7 +25,7 @@ next_function <- function(sf,time){
 #' @param x numeric vector giving the times of changes in number of servers.
 #' @param y numeric vector giving the number of servers available between x values.
 #' @return List of height 1 step functions for input into queue_step.
-#' @seealso \code{\link{server_list}}, \code{\link{queue_step}}
+#' @seealso \code{\link{as.server.list}}, \code{\link{queue_step}}
 #' @examples
 #'
 #' server_split(c(15,30,50), c(0, 1, 3, 2))
@@ -90,6 +78,7 @@ server_split <- function(x, y){
 as.server.list <- function(times, init){
 
   stopifnot(class(times) == "list")
+  stopifnot(all(init %in% c(1,0)))
   stopifnot(length(times) == length(init))
 
   n <- length(times)
