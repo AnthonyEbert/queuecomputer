@@ -60,7 +60,7 @@ queue_step.server.list <- function(arrival_df, service, servers, queueoutput = F
 
   Number_of_queues <- length(servers)
 
-  queue_times <- mapply(queuecomputer:::next_function, servers, rep(0, Number_of_queues))
+  queue_times <- mapply(next_function, servers, rep(0, Number_of_queues))
   output_df <- rep(NA, dim(arrival_df)[1])
   queue_vector <- rep(NA,dim(arrival_df)[1])
 
@@ -68,7 +68,7 @@ queue_step.server.list <- function(arrival_df, service, servers, queueoutput = F
 
   for(i in 1:dim(arrival_df)[1]){
     test_queue_times <- pmax.int(queue_times, times[i])
-    new_queue_times <- mapply(queuecomputer:::next_function, servers, test_queue_times)
+    new_queue_times <- mapply(next_function, servers, test_queue_times)
     queue <- which.min(new_queue_times)
 
     queue_times[queue] <- new_queue_times[queue] + service[i]
