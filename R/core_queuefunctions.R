@@ -104,9 +104,11 @@ queue_step.numeric <- function(arrival_df, service, servers = 1, queueoutput = F
   output_df <- rep(NA, dim(arrival_df)[1])
   queue_vector <- rep(NA,dim(arrival_df)[1])
 
+  times <- arrival_df[, dim(arrival_df)[2]]
+
   for(i in 1:dim(arrival_df)[1]){
     queue <- which.min(queue_times)
-    queue_times[queue] <- max(arrival_df$times[i], queue_times[queue]) + service[i]
+    queue_times[queue] <- max(times[i], queue_times[queue]) + service[i]
 
     output_df[i] <- queue_times[queue]
     queue_vector[i] <- queue
@@ -116,12 +118,28 @@ queue_step.numeric <- function(arrival_df, service, servers = 1, queueoutput = F
   output_df <- output_df[order(ord)]
   arrival_df <- arrival_df[order(ord),]
   queue_vector <- queue_vector[order(ord)]
+  service <- service[order(ord)]
 
-  if(queueoutput == TRUE){
-    output_df <- data.frame(ID = arrival_df$ID, times = output_df, queues = queue_vector)
+  iteration <- attr(arrival_df, "iteration")
+  output_df <- cbind(arrival_df, output_df)
+
+  if(is.null(iteration)){
+    attr(output_df, "iteration") <- 1
   } else {
-    output_df <- data.frame(ID = arrival_df$ID, times = output_df)
+    attr(output_df, "iteration") <- iteration + 1
   }
+
+  attr(output_df, "service") <- as.data.frame(cbind(attr(arrival_df, "service"), service))
+
+
+  names(output_df)[dim(output_df)[2]] <- paste("times", attr(output_df, "iteration"), sep = "")
+  names(attr(output_df, "service"))[dim(attr(output_df, "service"))[2]] <- paste("service", attr(output_df, "iteration"), sep = "")
+
+
+
+  attr(output_df, "queueID") <- as.data.frame(cbind(attr(arrival_df, "queueID"), queue_vector))
+
+  class(output_df) <- c("queue_df", "data.frame")
 
   return(output_df)
 }
