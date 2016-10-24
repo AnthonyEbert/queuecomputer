@@ -16,7 +16,8 @@ LazyData: true
 Imports:
     dplyr,
     stats,
-    iterators
+    iterators,
+    Rcpp
 RoxygenNote: 5.0.1.9000
 Suggests:
     knitr,
@@ -25,3 +26,4 @@ Suggests:
     reshape2,
     ggplot2
 VignetteBuilder: knitr
+LinkingTo: Rcpp
