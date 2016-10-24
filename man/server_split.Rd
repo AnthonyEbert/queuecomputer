@@ -4,12 +4,14 @@
 \alias{server_split}
 \title{Create a \code{"server_list"} object with a roster of times and number of available servers.}
 \usage{
-server_split(x, y)
+server_split(x, y, quick = FALSE)
 }
 \arguments{
 \item{x}{numeric vector giving the times of changes in number of servers.}
 
 \item{y}{numeric vector giving the number of servers available between x values.}
+
+\item{quick}{logical should the quick method be used?}
 }
 \value{
 List of height 1 step functions for input into queue_step.

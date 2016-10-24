@@ -11,7 +11,6 @@
 #'     arrival times of the customers.
 #' @param service vector of service times with the same ordering as arrival_df.
 #' @param servers an integer or an object of class \code{"server.list"}.
-#' @param queueoutput A boolean variable which indicates whether the server number should be returned.
 #' @return A vector of response times for the input of arrival times and service times.
 #' @examples
 #' set.seed(700)
@@ -21,7 +20,7 @@
 #'
 #' firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 #' secondqueue <- queue_step(arrival_df = arrival_df,
-#'     servers = server_list, service = service, queueoutput = TRUE)
+#'     servers = server_list, service = service)
 #'
 #' curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
 #'     xlab = "time", ylab = "Number of customers")
@@ -39,17 +38,17 @@
 #'
 #' ord <- order(arrival_df$times)
 #' cbind(arrival_df[ord,], service[ord],
-#'     secondqueue$times[ord], secondqueue$queue[ord])
+#'     secondqueue$times[ord], attr(secondqueue, "queue")[ord])
 #' @seealso \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{as.server.list}}, \code{\link[queuecomputer]{server_split}}
 #' @export
-queue_step <- function(arrival_df, service, servers = 1, queueoutput = FALSE){
+queue_step <- function(arrival_df, service, servers = 1){
 
   UseMethod("queue_step", servers)
 
 }
 
 #' @export
-queue_step.server.list <- function(arrival_df, service, servers, queueoutput = FALSE){
+queue_step.server.list <- function(arrival_df, service, servers){
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -79,17 +78,14 @@ queue_step.server.list <- function(arrival_df, service, servers, queueoutput = F
   arrival_df <- arrival_df[order(ord),]
   queue_vector <- queue_vector[order(ord)]
 
-  if(queueoutput == TRUE){
-    output_df <- data.frame(ID = arrival_df$ID, times = output_df, queues = queue_vector)
-  } else {
-    output_df <- data.frame(ID = arrival_df$ID, times = output_df)
-  }
+  output_df <- data.frame(ID = arrival_df$ID, times = output_df)
+  attr(output_df, "queue") = queue_vector
 
   return(output_df)
 }
 
 #' @export
-queue_step.quick.q <- function(arrival_df, service, servers, queueoutput = FALSE){
+queue_step.quick.q <- function(arrival_df, service, servers){
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -99,38 +95,42 @@ queue_step.quick.q <- function(arrival_df, service, servers, queueoutput = FALSE
   x <- iterators::iter(c(servers$x, Inf))
   y <- iterators::iter(c(servers$y, NA))
 
-  queue_times <- rep(0, nextElem(y))
+  queue_times <- rep(0, iterators::nextElem(y))
   output_df <- rep(NA, dim(arrival_df)[1])
+  queue_vector <- rep(NA,dim(arrival_df)[1])
 
-  next_time <- nextElem(x)
-  next_size <- nextElem(y)
+  next_time <- iterators::nextElem(x)
+  next_size <- iterators::nextElem(y)
 
   for(i in 1:dim(arrival_df)[1]){
     if(all(queue_times >= next_time)){
       length(queue_times) <- next_size
       queue_times[is.na(queue_times)] <- next_time
 
-      next_time <- nextElem(x)
-      next_size <- nextElem(y)
+      next_time <- iterators::nextElem(x)
+      next_size <- iterators::nextElem(y)
     }
 
     queue <- which.min(queue_times)
     queue_times[queue] <- max(arrival_df$times[i], queue_times[queue]) + service[i]
 
+    queue_vector[i] <- queue
     output_df[i] <- queue_times[queue]
   }
 
   # Put order back to original ordering
   output_df <- output_df[order(ord)]
   arrival_df <- arrival_df[order(ord),]
+  queue_vector <- queue_vector[order(ord)]
 
   output_df <- data.frame(ID = arrival_df$ID, times = output_df)
+  attr(output_df, "queue") = queue_vector
 
   return(output_df)
 }
 
 #' @export
-queue_step.numeric <- function(arrival_df, service, servers = 1, queueoutput = FALSE){
+queue_step.numeric <- function(arrival_df, service, servers = 1){
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -158,6 +158,7 @@ queue_step.numeric <- function(arrival_df, service, servers = 1, queueoutput = F
   arrival_df <- arrival_df[order(ord),]
 
   output_df <- data.frame(ID = arrival_df$ID, times = output_df)
+  attr(output_df, "queue") = queue_vector
 
   return(output_df)
 }

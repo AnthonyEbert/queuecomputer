@@ -24,6 +24,7 @@ next_function <- function(sf,time){
 #'
 #' @param x numeric vector giving the times of changes in number of servers.
 #' @param y numeric vector giving the number of servers available between x values.
+#' @param quick logical should the quick method be used?
 #' @return List of height 1 step functions for input into queue_step.
 #' @seealso \code{\link{as.server.list}}, \code{\link{queue_step}}
 #' @examples
