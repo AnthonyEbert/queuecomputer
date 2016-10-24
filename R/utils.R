@@ -30,7 +30,17 @@ next_function <- function(sf,time){
 #'
 #' server_split(c(15,30,50), c(0, 1, 3, 2))
 #' @export
-server_split <- function(x, y){
+server_split <- function(x, y, quick = FALSE){
+
+  stopifnot(all(y%%1 == 0))
+  stopifnot(!is.unsorted(x))
+  stopifnot(is.logical(quick))
+
+  switch(quick + 1, server_make(x, y), server_pass(x, y))
+}
+
+server_make <- function(x, y){
+
   plateaus <- y
   max_plat <- max(plateaus)
   num_plat <- length(plateaus)
@@ -59,7 +69,17 @@ server_split <- function(x, y){
 
     output[[i]] <- stats::stepfun(x[newrow[-1]],newplat[i,][newrow])
   }
-  class(output) <- "server.list"
+  class(output) <- c("list", "server.list")
+
+  return(output)
+}
+
+server_pass <- function(x, y){
+  output <- list()
+  class(output) <- c("list", "quick.q")
+
+  output$x <- x
+  output$y <- y
 
   return(output)
 }

@@ -85,6 +85,7 @@ In this example the arrival process is log-normal and the service times are log-
 library(ggplot2)
 library(reshape2)
 library(magrittr)
+library(iterators)
 
 set.seed(700)
 arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
@@ -93,7 +94,7 @@ server_list <- server_split(c(15,30,50),c(1,3,1,10))
 
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
-    servers = server_list, service = service, queueoutput = TRUE)
+    servers = server_list, service = service, quick = TRUE)
 ```
 
 ## Print secondqueue output ordered by arrival times
@@ -105,7 +106,7 @@ first_queueoutput <- data.frame(ID = arrival_df$ID[ord], arrivals = arrival_df$t
     departure = firstqueue$times[ord])
 
 second_queueoutput <- data.frame(ID = arrival_df$ID[ord], arrivals = arrival_df$times[ord], service = service[ord],
-    departure = secondqueue$times[ord], serverID = secondqueue$queue[ord])
+    departure = secondqueue$times[ord])
 
 second_queueoutput[1:50,]
 ```
@@ -172,7 +173,7 @@ service <- rlnorm(50000)
 server_list <- server_split(c(15,100,150),c(1,3,1,10))
 
 # Output in time (seconds)
-system.time(bigqueue <- queue_step(arrival_df = arrival_df, service = service, servers = server_list, queueoutput = TRUE))
+system.time(bigqueue <- queue_step(arrival_df = arrival_df, service = service, servers = server_list, quick = TRUE))
 
 ```
 
