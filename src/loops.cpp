@@ -15,7 +15,6 @@ using namespace Rcpp;
 NumericVector qloop_numeric(NumericVector queue_times,
   NumericVector times, NumericVector service, NumericVector output) {
   int n = times.size();
-  int qlen = queue_times.size();
   int queue = 0;
 
   for( int i=0; i < n; ++i)
