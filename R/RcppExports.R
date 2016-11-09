@@ -5,7 +5,7 @@ qloop_numeric <- function(queue_times, times, service, output) {
     .Call('queuecomputer_qloop_numeric', PACKAGE = 'queuecomputer', queue_times, times, service, output)
 }
 
-qloop_quickq <- function(Infinity, times, service, x, y, output) {
-    .Call('queuecomputer_qloop_quickq', PACKAGE = 'queuecomputer', Infinity, times, service, x, y, output)
+qloop_quick2 <- function(queue_times, times, service, output, x, y) {
+    .Call('queuecomputer_qloop_quick2', PACKAGE = 'queuecomputer', queue_times, times, service, output, x, y)
 }
 

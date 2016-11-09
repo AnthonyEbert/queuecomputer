@@ -19,19 +19,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// qloop_quickq
-NumericVector qloop_quickq(NumericVector Infinity, NumericVector times, NumericVector service, NumericVector x, NumericVector y, NumericVector output);
-RcppExport SEXP queuecomputer_qloop_quickq(SEXP InfinitySEXP, SEXP timesSEXP, SEXP serviceSEXP, SEXP xSEXP, SEXP ySEXP, SEXP outputSEXP) {
+// qloop_quick2
+NumericVector qloop_quick2(NumericVector queue_times, NumericVector times, NumericVector service, NumericVector output, NumericVector x, NumericVector y);
+RcppExport SEXP queuecomputer_qloop_quick2(SEXP queue_timesSEXP, SEXP timesSEXP, SEXP serviceSEXP, SEXP outputSEXP, SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type Infinity(InfinitySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type queue_times(queue_timesSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type times(timesSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type service(serviceSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type output(outputSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type output(outputSEXP);
-    rcpp_result_gen = Rcpp::wrap(qloop_quickq(Infinity, times, service, x, y, output));
+    rcpp_result_gen = Rcpp::wrap(qloop_quick2(queue_times, times, service, output, x, y));
     return rcpp_result_gen;
 END_RCPP
 }
