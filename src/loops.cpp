@@ -34,7 +34,7 @@ NumericVector qloop_numeric(NumericVector queue_times,
 }
 
 // [[Rcpp::export]]
-NumericVector qloop_quick2(NumericVector queue_times,
+NumericVector qloop_quick_q(NumericVector queue_times,
                             NumericVector times, NumericVector service, NumericVector output,
                             NumericVector x, NumericVector y) {
   int n = times.size();
@@ -45,27 +45,38 @@ NumericVector qloop_quick2(NumericVector queue_times,
   int diff_size = 0;
   int iter = 0;
 
+  std::vector<double> v_queue_times = Rcpp::as_vector(queue_times);
+
   for( int i=0; i < n; ++i)
   {
 
 
-    Rf_PrintValue(queue_times);
+    // Rf_PrintValue(queue_times);
 
     if( is_true( all (queue_times >= next_time)))
     {
-      printf("is true!");
+      // printf("is true!");
       diff_size = next_size - current_size;
 
       if(diff_size == 0){
-        printf("error");
+        // printf("error");
       }
 
       if(diff_size > 0)
       {
-        printf("big");
+        // printf("big");
         for(int j = current_size; j < next_size; j++)
         {
           queue_times[j] = next_time;
+        }
+      }
+
+      if(diff_size < 0)
+      {
+        // printf("small");
+        for(int j = next_size; j < current_size; j++)
+        {
+          queue_times[j] = INT_MAX;
         }
       }
 
