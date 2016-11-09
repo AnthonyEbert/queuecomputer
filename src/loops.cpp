@@ -40,7 +40,7 @@ NumericVector qloop_quickq(NumericVector Infinity, NumericVector times, NumericV
   int n = times.size();
   int most_servers = max(y);
 
-  int next_time = x[1];
+  int next_time = x[0];
   double next_size = y[1];
   NumericVector next_size_vector = y[1];
 
@@ -52,16 +52,27 @@ NumericVector qloop_quickq(NumericVector Infinity, NumericVector times, NumericV
 
   NumericVector queue_times = rep_each(Infinity, most_servers);
 
+  for( int z=0; z <= y[0] - 1; ++z )
+  {
+    queue_times[z] = 0;
+  }
+
   int diff_size = 0;
 
 
   for( int i=0; i < n; ++i)
   {
-    if( is_true( any (queue_times <= next_time)))
+
+    if( is_true( all (queue_times >= next_time)))
     {
-      diff_size = next_size - x[iter_size];
+
+
+      printf("update");
+      diff_size = next_size - y[iter_size];
+      iter_size = iter_size + 1;
       if( diff_size > 0 )
       {
+        printf("big");
 
         for( int j=x[iter_size]; j < next_size; j++)
         {
@@ -71,16 +82,18 @@ NumericVector qloop_quickq(NumericVector Infinity, NumericVector times, NumericV
       }
       if( diff_size < 0 )
       {
+        printf("small");
         for( int j= next_size ; j < x[iter_size]; j++)
         {
           queue_times[j] = Infinity[1];
         }
       }
 
-      iter_size = iter_size + 1;
+
       next_size = x[iter_size];
       next_time = y[iter_size];
     }
+    Rf_PrintValue(queue_times);
 
     queue = which_min(queue_times);
     queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
