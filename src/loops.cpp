@@ -66,7 +66,6 @@ NumericVector qloop_quick_q_test(NumericVector times, NumericVector service, Num
   for( int i=0; i < n; ++i)
   {
 
-    printf(queue_times[0]);
     if( queue_times >= next_time_v)
     {
       // printf("is true!");
