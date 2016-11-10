@@ -281,6 +281,39 @@ queue_stepc <- function(arrival_df, service, servers = 1){
   return(output_df)
 }
 
+#' @export
+queue_stepc_2 <- function(arrival_df, service, servers = 1){
+
+  # Order arrivals and service according to time
+  ord <- order(arrival_df$times)
+  arrival_df <- arrival_df[ord, ]
+  service <- service[ord]
+
+  stopifnot(servers%%1 == 0)
+
+  queue_times <- rep(0, servers)
+
+  times <- arrival_df[, dim(arrival_df)[2]]
+
+  # Call C++ function
+
+  # output <- qloop_numeric(queue_times, times, service, rep(0, length(times) * 2))
+  output <- qloop_numeric_test(times, service, n_servers = servers)
+
+  # Put order back to original ordering
+
+
+  output_df <- output[1:length(times)][order(ord)]
+  queue_vector <- (output[I(length(times) + 1):length(output)])
+
+  arrival_df <- arrival_df[order(ord),]
+
+  output_df <- data.frame(ID = arrival_df$ID, times = output_df)
+  attr(output_df, "queue") = queue_vector[order(ord)]
+
+  return(output_df)
+}
+
 
 
 

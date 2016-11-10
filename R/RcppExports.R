@@ -5,15 +5,15 @@ qloop_numeric <- function(times, service, output, n_servers) {
     .Call('queuecomputer_qloop_numeric', PACKAGE = 'queuecomputer', times, service, output, n_servers)
 }
 
-qloop_quick_q_test <- function(times, service, x, y) {
-    .Call('queuecomputer_qloop_quick_q_test', PACKAGE = 'queuecomputer', times, service, x, y)
-}
-
-qloop_quick_q <- function(Infty, times, service, output, x, y) {
-    .Call('queuecomputer_qloop_quick_q', PACKAGE = 'queuecomputer', Infty, times, service, output, x, y)
+qloop_numeric_test <- function(times, service, n_servers) {
+    .Call('queuecomputer_qloop_numeric_test', PACKAGE = 'queuecomputer', times, service, n_servers)
 }
 
 test <- function(input) {
     .Call('queuecomputer_test', PACKAGE = 'queuecomputer', input)
+}
+
+qloop_qq_arma <- function(times, service, x, y) {
+    .Call('queuecomputer_qloop_qq_arma', PACKAGE = 'queuecomputer', times, service, x, y)
 }
 
