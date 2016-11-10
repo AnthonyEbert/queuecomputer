@@ -1,8 +1,9 @@
 
 #include <Rcpp.h>
-
 using namespace std;
 using namespace Rcpp;
+
+
 
 
 // Below is a simple example of exporting a C++ function to R. You can
@@ -12,14 +13,16 @@ using namespace Rcpp;
 // For more on using Rcpp click the Help button on the editor toolbar
 
 // [[Rcpp::export]]
-NumericVector qloop_numeric(NumericVector queue_times,
-  NumericVector times, NumericVector service, NumericVector output) {
+NumericVector qloop_numeric(NumericVector times, NumericVector service, NumericVector output, int n_servers) {
   int n = times.size();
   int queue = 0;
 
+  std::vector<double> queue_times(n_servers, 0);
+
   for( int i=0; i < n; ++i)
   {
-    queue = which_min(queue_times);
+    std::vector<double>::iterator result = std::min_element(queue_times.begin(), queue_times.end());
+    queue = std::distance(queue_times.begin(), result);
     queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
     output[i] = queue_times[queue];
     output[i + n] = queue + 1;
@@ -33,10 +36,103 @@ NumericVector qloop_numeric(NumericVector queue_times,
 
 }
 
+// // [[Rcpp::export]]
+// NumericVector qloop_quick_q_test(NumericVector times, NumericVector service, NumericVector x, NumericVector y) {
+//
+//
+//   int n_servers = max(y);
+//
+//   std::vector<double> queue_times(n_servers, INT_MAX);
+//
+//   for(int i = 0; i < y[0]; i++)
+//   {
+//     queue_times[i] = 0;
+//   }
+//
+//   int n = times.size();
+//   std::vector<double> output(n);
+//   int queue = 0;
+//   double next_time = x[0];
+//   int current_size = y[0];
+//   int next_size = y[1];
+//   int diff_size = 0;
+//   int iter = 0;
+//
+//
+//   for( int i=0; i < n; ++i)
+//   {
+//
+//
+//     // Rf_PrintValue(queue_times);
+//
+//     if( is_true( all (queue_times >= next_time)))
+//     {
+//       // printf("is true!");
+//       diff_size = next_size - current_size;
+//
+//       if(diff_size == 0){
+//         // printf("error");
+//       }
+//
+//       if(diff_size > 0)
+//       {
+//         // printf("big");
+//         for(int j = current_size; j < next_size; j++)
+//         {
+//           queue_times[j] = next_time;
+//         }
+//       }
+//
+//       if(diff_size < 0)
+//       {
+//         // printf("small");
+//         for(int j = next_size; j < current_size; j++)
+//         {
+//           queue_times[j] = INT_MAX;
+//         }
+//       }
+//
+//       current_size = next_size;
+//       iter += 1;
+//       next_size = y[iter];
+//       next_time = x[iter];
+//
+//     }
+//
+//     queue = which_min(queue_times);
+//     queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
+//     output[i] = queue_times[queue];
+//     //output[i + n] = queue + 1;
+//     if( i % 100 == 0 )
+//     {
+//       Rcpp::checkUserInterrupt();
+//     }
+//
+//   }
+//
+//   return(wrap(output));
+//
+// }
+
+
+
+
+
 // [[Rcpp::export]]
-NumericVector qloop_quick_q(NumericVector queue_times,
-                            NumericVector times, NumericVector service, NumericVector output,
+NumericVector qloop_quick_q(NumericVector Infty, NumericVector times, NumericVector service, NumericVector output,
                             NumericVector x, NumericVector y) {
+
+
+  int n_servers = max(y);
+  NumericVector queue_times = rep_each(Infty, n_servers);
+
+  for(int i = 0; i < x[0]; i++)
+    {
+    queue_times[i] = 0;
+    }
+
+
+
   int n = times.size();
   int queue = 0;
   double next_time = x[0];
@@ -45,7 +141,6 @@ NumericVector qloop_quick_q(NumericVector queue_times,
   int diff_size = 0;
   int iter = 0;
 
-  std::vector<double> v_queue_times = Rcpp::as_vector(queue_times);
 
   for( int i=0; i < n; ++i)
   {
@@ -81,7 +176,7 @@ NumericVector qloop_quick_q(NumericVector queue_times,
       }
 
       current_size = next_size;
-      iter = iter + 1;
+      iter += 1;
       next_size = y[iter];
       next_time = x[iter];
 
@@ -101,6 +196,14 @@ NumericVector qloop_quick_q(NumericVector queue_times,
   return output;
 
 }
+
+// [[Rcpp::export]]
+NumericVector test(NumericVector input){
+  vector<int> ints(10, 2);
+  return(wrap(ints));
+}
+
+
 
 
 // NumericVector qloop_quickq(NumericVector Infinity, NumericVector times, NumericVector service, NumericVector x, NumericVector y, NumericVector output) {

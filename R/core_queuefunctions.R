@@ -248,10 +248,6 @@ wait_step <- function(arrival_df1, arrival_df2){
   return(output_df)
 }
 
-
-
-
-
 #' @export
 queue_stepc <- function(arrival_df, service, servers = 1){
 
@@ -268,7 +264,8 @@ queue_stepc <- function(arrival_df, service, servers = 1){
 
   # Call C++ function
 
-  output <- qloop_numeric(queue_times, times, service, rep(0, length(times) * 2))
+  # output <- qloop_numeric(queue_times, times, service, rep(0, length(times) * 2))
+  output <- qloop_numeric(times, service, rep(0, length(times) * 2), n_servers = servers)
 
   # Put order back to original ordering
 
