@@ -102,7 +102,7 @@ NumericVector qloop_qq_arma(NumericVector times, NumericVector service, NumericV
 
       current_size = next_size;
       iter += 1;
-      next_size = y[iter];
+      next_size = y[iter+1];
       next_time = x[iter];
 
     }
