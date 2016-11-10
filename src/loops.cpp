@@ -15,31 +15,7 @@ using namespace arma;
 // For more on using Rcpp click the Help button on the editor toolbar
 
 // [[Rcpp::export]]
-NumericVector qloop_numeric(NumericVector times, NumericVector service, NumericVector output, int n_servers) {
-  int n = times.size();
-  int queue = 0;
-
-  std::vector<double> queue_times(n_servers, 0);
-
-  for( int i=0; i < n; ++i)
-  {
-    std::vector<double>::iterator result = std::min_element(queue_times.begin(), queue_times.end());
-    queue = std::distance(queue_times.begin(), result);
-    queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
-    output[i] = queue_times[queue];
-    output[i + n] = queue + 1;
-    if( i % 100 == 0 )
-    {
-      Rcpp::checkUserInterrupt();
-    }
-  }
-
-  return output;
-
-}
-
-// [[Rcpp::export]]
-NumericVector qloop_numeric_test(NumericVector times, NumericVector service, int n_servers) {
+NumericVector qloop_numeric(NumericVector times, NumericVector service, int n_servers) {
   int n = times.size();
   vec output = vec((n+1) * 2);
   int queue = 0;

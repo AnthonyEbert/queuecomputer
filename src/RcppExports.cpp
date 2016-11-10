@@ -7,29 +7,15 @@
 using namespace Rcpp;
 
 // qloop_numeric
-NumericVector qloop_numeric(NumericVector times, NumericVector service, NumericVector output, int n_servers);
-RcppExport SEXP queuecomputer_qloop_numeric(SEXP timesSEXP, SEXP serviceSEXP, SEXP outputSEXP, SEXP n_serversSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type times(timesSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type service(serviceSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type output(outputSEXP);
-    Rcpp::traits::input_parameter< int >::type n_servers(n_serversSEXP);
-    rcpp_result_gen = Rcpp::wrap(qloop_numeric(times, service, output, n_servers));
-    return rcpp_result_gen;
-END_RCPP
-}
-// qloop_numeric_test
-NumericVector qloop_numeric_test(NumericVector times, NumericVector service, int n_servers);
-RcppExport SEXP queuecomputer_qloop_numeric_test(SEXP timesSEXP, SEXP serviceSEXP, SEXP n_serversSEXP) {
+NumericVector qloop_numeric(NumericVector times, NumericVector service, int n_servers);
+RcppExport SEXP queuecomputer_qloop_numeric(SEXP timesSEXP, SEXP serviceSEXP, SEXP n_serversSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type times(timesSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type service(serviceSEXP);
     Rcpp::traits::input_parameter< int >::type n_servers(n_serversSEXP);
-    rcpp_result_gen = Rcpp::wrap(qloop_numeric_test(times, service, n_servers));
+    rcpp_result_gen = Rcpp::wrap(qloop_numeric(times, service, n_servers));
     return rcpp_result_gen;
 END_RCPP
 }

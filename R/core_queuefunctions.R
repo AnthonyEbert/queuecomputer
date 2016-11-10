@@ -138,24 +138,21 @@ queue_step.numeric <- function(arrival_df, service, servers = 1){
   arrival_df <- arrival_df[ord, ]
   service <- service[ord]
 
-  stopifnot(servers%%1 == 0)
-
-  queue_times <- rep(0, servers)
-  output_df <- rep(NA, dim(arrival_df)[1])
-  queue_vector <- rep(NA,dim(arrival_df)[1])
+  stopifnot((servers%%1 == 0) & (servers > 0))
 
   times <- arrival_df[, dim(arrival_df)[2]]
 
-  for(i in 1:dim(arrival_df)[1]){
-    queue <- which.min(queue_times)
-    queue_times[queue] <- max(times[i], queue_times[queue]) + service[i]
+  # Call C++ function
 
-    output_df[i] <- queue_times[queue]
-    queue_vector[i] <- queue
-  }
+  # output <- qloop_numeric(queue_times, times, service, rep(0, length(times) * 2))
+  output <- qloop_numeric(times, service, n_servers = servers)
 
   # Put order back to original ordering
-  output_df <- output_df[order(ord)]
+
+
+  output_df <- output[1:length(times)][order(ord)]
+  queue_vector <- (output[I(length(times) + 1):length(output)])
+
   arrival_df <- arrival_df[order(ord),]
 
   output_df <- data.frame(ID = arrival_df$ID, times = output_df)
@@ -163,6 +160,7 @@ queue_step.numeric <- function(arrival_df, service, servers = 1){
 
   return(output_df)
 }
+
 
 
 #' Add lag to vector of arrival times.
@@ -248,8 +246,8 @@ wait_step <- function(arrival_df1, arrival_df2){
   return(output_df)
 }
 
-#' @export
-queue_stepc <- function(arrival_df, service, servers = 1){
+
+queue_step_R <- function(arrival_df, service, servers = 1){
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -259,13 +257,46 @@ queue_stepc <- function(arrival_df, service, servers = 1){
   stopifnot(servers%%1 == 0)
 
   queue_times <- rep(0, servers)
+  output_df <- rep(NA, dim(arrival_df)[1])
+  queue_vector <- rep(NA,dim(arrival_df)[1])
 
   times <- arrival_df[, dim(arrival_df)[2]]
+
+  for(i in 1:dim(arrival_df)[1]){
+    queue <- which.min(queue_times)
+    queue_times[queue] <- max(times[i], queue_times[queue]) + service[i]
+
+    output_df[i] <- queue_times[queue]
+    queue_vector[i] <- queue
+  }
+
+  # Put order back to original ordering
+  output_df <- output_df[order(ord)]
+  arrival_df <- arrival_df[order(ord),]
+
+  output_df <- data.frame(ID = arrival_df$ID, times = output_df)
+  attr(output_df, "queue") = queue_vector[order(ord)]
+
+  return(output_df)
+}
+
+#' @export
+queue_step_qqc <- function(arrival_df, service, servers){
+
+  # Order arrivals and service according to time
+  ord <- order(arrival_df$times)
+  arrival_df <- arrival_df[ord, ]
+  service <- service[ord]
+
+  times <- arrival_df[, dim(arrival_df)[2]]
+
+  x = c(servers$x, Inf)
+  y = c(servers$y, 1)
 
   # Call C++ function
 
   # output <- qloop_numeric(queue_times, times, service, rep(0, length(times) * 2))
-  output <- qloop_numeric(times, service, rep(0, length(times) * 2), n_servers = servers)
+  output <- qloop_qq_arma(times, service, x, y)
 
   # Put order back to original ordering
 
@@ -280,40 +311,4 @@ queue_stepc <- function(arrival_df, service, servers = 1){
 
   return(output_df)
 }
-
-#' @export
-queue_stepc_2 <- function(arrival_df, service, servers = 1){
-
-  # Order arrivals and service according to time
-  ord <- order(arrival_df$times)
-  arrival_df <- arrival_df[ord, ]
-  service <- service[ord]
-
-  stopifnot(servers%%1 == 0)
-
-  queue_times <- rep(0, servers)
-
-  times <- arrival_df[, dim(arrival_df)[2]]
-
-  # Call C++ function
-
-  # output <- qloop_numeric(queue_times, times, service, rep(0, length(times) * 2))
-  output <- qloop_numeric_test(times, service, n_servers = servers)
-
-  # Put order back to original ordering
-
-
-  output_df <- output[1:length(times)][order(ord)]
-  queue_vector <- (output[I(length(times) + 1):length(output)])
-
-  arrival_df <- arrival_df[order(ord),]
-
-  output_df <- data.frame(ID = arrival_df$ID, times = output_df)
-  attr(output_df, "queue") = queue_vector[order(ord)]
-
-  return(output_df)
-}
-
-
-
 
