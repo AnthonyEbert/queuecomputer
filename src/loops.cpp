@@ -17,7 +17,7 @@ using namespace arma;
 // [[Rcpp::export]]
 NumericVector qloop_numeric(NumericVector times, NumericVector service, int n_servers) {
   int n = times.size();
-  vec output = vec((n+1) * 2);
+  vec output = vec((n+1) * 2 - 1);
   int queue = 0;
 
   vec queue_times = vec(n_servers);
@@ -39,19 +39,12 @@ NumericVector qloop_numeric(NumericVector times, NumericVector service, int n_se
 }
 
 // [[Rcpp::export]]
-NumericVector test(NumericVector input) {
-  vec x = vec(10);
-  x.fill(datum::inf);
-  int z=index_max(x);
-  return(wrap(x));
-}
-
-// [[Rcpp::export]]
-NumericVector qloop_qq_arma(NumericVector times, NumericVector service, NumericVector x, NumericVector y) {
+NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector x, NumericVector y) {
 
   int n_servers = max(y);
 
   // std::vector<double> queue_times(n_servers, INT_MAX);
+
   vec queue_times = vec(n_servers);
   queue_times.fill(datum::inf);
 
@@ -61,7 +54,7 @@ NumericVector qloop_qq_arma(NumericVector times, NumericVector service, NumericV
   }
 
   int n = times.size();
-  vec output = vec(n);
+  vec output = vec((n+1) * 2 - 1);
   int queue = 0;
   double next_time = x[0];
 
@@ -110,7 +103,7 @@ NumericVector qloop_qq_arma(NumericVector times, NumericVector service, NumericV
     queue = index_min(queue_times);
     queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
     output[i] = queue_times[queue];
-    //output[i + n] = queue + 1;
+    output[i + n] = queue + 1;
     if( i % 100 == 0 )
     {
       Rcpp::checkUserInterrupt();

@@ -5,11 +5,7 @@ qloop_numeric <- function(times, service, n_servers) {
     .Call('queuecomputer_qloop_numeric', PACKAGE = 'queuecomputer', times, service, n_servers)
 }
 
-test <- function(input) {
-    .Call('queuecomputer_test', PACKAGE = 'queuecomputer', input)
-}
-
-qloop_qq_arma <- function(times, service, x, y) {
-    .Call('queuecomputer_qloop_qq_arma', PACKAGE = 'queuecomputer', times, service, x, y)
+qloop_qq <- function(times, service, x, y) {
+    .Call('queuecomputer_qloop_qq', PACKAGE = 'queuecomputer', times, service, x, y)
 }
 
