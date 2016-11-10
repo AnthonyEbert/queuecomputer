@@ -36,86 +36,87 @@ NumericVector qloop_numeric(NumericVector times, NumericVector service, NumericV
 
 }
 
-// // [[Rcpp::export]]
-// NumericVector qloop_quick_q_test(NumericVector times, NumericVector service, NumericVector x, NumericVector y) {
-//
-//
-//   int n_servers = max(y);
-//
-//   std::vector<double> queue_times(n_servers, INT_MAX);
-//
-//   for(int i = 0; i < y[0]; i++)
-//   {
-//     queue_times[i] = 0;
-//   }
-//
-//   int n = times.size();
-//   std::vector<double> output(n);
-//   int queue = 0;
-//   double next_time = x[0];
-//   int current_size = y[0];
-//   int next_size = y[1];
-//   int diff_size = 0;
-//   int iter = 0;
-//
-//
-//   for( int i=0; i < n; ++i)
-//   {
-//
-//
-//     // Rf_PrintValue(queue_times);
-//
-//     if( is_true( all (queue_times >= next_time)))
-//     {
-//       // printf("is true!");
-//       diff_size = next_size - current_size;
-//
-//       if(diff_size == 0){
-//         // printf("error");
-//       }
-//
-//       if(diff_size > 0)
-//       {
-//         // printf("big");
-//         for(int j = current_size; j < next_size; j++)
-//         {
-//           queue_times[j] = next_time;
-//         }
-//       }
-//
-//       if(diff_size < 0)
-//       {
-//         // printf("small");
-//         for(int j = next_size; j < current_size; j++)
-//         {
-//           queue_times[j] = INT_MAX;
-//         }
-//       }
-//
-//       current_size = next_size;
-//       iter += 1;
-//       next_size = y[iter];
-//       next_time = x[iter];
-//
-//     }
-//
-//     queue = which_min(queue_times);
-//     queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
-//     output[i] = queue_times[queue];
-//     //output[i + n] = queue + 1;
-//     if( i % 100 == 0 )
-//     {
-//       Rcpp::checkUserInterrupt();
-//     }
-//
-//   }
-//
-//   return(wrap(output));
-//
-// }
+// [[Rcpp::export]]
+NumericVector qloop_quick_q_test(NumericVector times, NumericVector service, NumericVector x, NumericVector y) {
 
 
+  int n_servers = max(y);
 
+  std::vector<double> queue_times(n_servers, INT_MAX);
+
+  for(int i = 0; i < y[0]; i++)
+  {
+    queue_times[i] = 0;
+  }
+
+  int n = times.size();
+  std::vector<double> output(n);
+  int queue = 0;
+  double next_time = x[0];
+  std::vector<double> next_time_v(next_time, n_servers);
+
+  int current_size = y[0];
+  int next_size = y[1];
+  int diff_size = 0;
+  int iter = 0;
+
+  std::vector<double>::iterator result = std::min_element(queue_times.begin(), queue_times.end());
+
+
+  for( int i=0; i < n; ++i)
+  {
+
+    printf(queue_times[0]);
+    if( queue_times >= next_time_v)
+    {
+      // printf("is true!");
+      diff_size = next_size - current_size;
+
+      if(diff_size == 0){
+        // printf("error");
+      }
+
+      if(diff_size > 0)
+      {
+        // printf("big");
+        for(int j = current_size; j < next_size; j++)
+        {
+          queue_times[j] = next_time;
+        }
+      }
+
+      if(diff_size < 0)
+      {
+        // printf("small");
+        for(int j = next_size; j < current_size; j++)
+        {
+          queue_times[j] = INT_MAX;
+        }
+      }
+
+      current_size = next_size;
+      iter += 1;
+      next_size = y[iter];
+      std::replace (next_time_v.begin(), next_time_v.end(), next_time, x[iter]);
+      next_time = x[iter];
+
+    }
+
+    result = std::min_element(queue_times.begin(), queue_times.end());
+    queue = std::distance(queue_times.begin(), result);
+    queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
+    output[i] = queue_times[queue];
+    //output[i + n] = queue + 1;
+    if( i % 100 == 0 )
+    {
+      Rcpp::checkUserInterrupt();
+    }
+
+  }
+
+  return(wrap(output));
+
+}
 
 
 // [[Rcpp::export]]
@@ -199,8 +200,15 @@ NumericVector qloop_quick_q(NumericVector Infty, NumericVector times, NumericVec
 
 // [[Rcpp::export]]
 NumericVector test(NumericVector input){
-  vector<int> ints(10, 2);
-  return(wrap(ints));
+  vector<double> ints(10, 2);
+  vector<double> next_time(10,2);
+  next_time[2] = 3;
+  bool value = (next_time >= ints);
+  // std::pair value2 = mismatch(next_time.begin(), next_time.end(), ints.begin(), ints.end());
+  bool value3 = lexicographical_compare(next_time.begin(), next_time.end(), ints.begin(), ints.end());
+  printf("%d\n", value);
+
+  return(wrap(next_time));
 }
 
 

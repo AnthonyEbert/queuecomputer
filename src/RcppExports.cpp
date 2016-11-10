@@ -19,6 +19,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// qloop_quick_q_test
+NumericVector qloop_quick_q_test(NumericVector times, NumericVector service, NumericVector x, NumericVector y);
+RcppExport SEXP queuecomputer_qloop_quick_q_test(SEXP timesSEXP, SEXP serviceSEXP, SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type times(timesSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type service(serviceSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(qloop_quick_q_test(times, service, x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // qloop_quick_q
 NumericVector qloop_quick_q(NumericVector Infty, NumericVector times, NumericVector service, NumericVector output, NumericVector x, NumericVector y);
 RcppExport SEXP queuecomputer_qloop_quick_q(SEXP InftySEXP, SEXP timesSEXP, SEXP serviceSEXP, SEXP outputSEXP, SEXP xSEXP, SEXP ySEXP) {
