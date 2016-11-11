@@ -31,7 +31,7 @@ next_function <- function(sf,time){
 #'
 #' server_split(c(15,30,50), c(0, 1, 3, 2))
 #' @export
-server_split <- function(x, y, quick = FALSE){
+server_split <- function(x, y, quick = TRUE){
 
   stopifnot(all(y%%1 == 0))
   stopifnot(!is.unsorted(x))
