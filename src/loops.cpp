@@ -68,16 +68,10 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
 
     if( all(queue_times >= next_time))
     {
-      // printf("is true!");
       diff_size = next_size - current_size;
-
-      if(diff_size == 0){
-        // printf("error");
-      }
 
       if(diff_size > 0)
       {
-        // printf("big");
         for(int j = current_size; j < next_size; j++)
         {
           queue_times[j] = next_time;
@@ -86,7 +80,6 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
 
       if(diff_size < 0)
       {
-        // printf("small");
         for(int j = next_size; j < current_size; j++)
         {
           queue_times[j] = datum::inf;
@@ -102,8 +95,17 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
 
     queue = index_min(queue_times);
     queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
+
+    // in case number of servers is zero.
+    if( current_size == 0 )
+      {
+      queue_times[queue] = next_time + service[i];
+      }
+
     output[i] = queue_times[queue];
     output[i + n] = queue + 1;
+
+    // in case user presses stop.
     if( i % 100 == 0 )
     {
       Rcpp::checkUserInterrupt();
