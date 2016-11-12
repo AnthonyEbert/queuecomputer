@@ -1,1 +1,0 @@
-queuecomputer:::qloop_quick2(c(0, Inf, Inf), times = seq(1, 2, by = 0.1), service = rep(0.1, 20), output = rep(1, 20), x = 1.5, y = c(1,3))

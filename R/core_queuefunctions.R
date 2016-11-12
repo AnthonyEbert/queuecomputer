@@ -15,7 +15,7 @@
 #' arrival_df <- data.frame(ID = c(1:n_customers), times = rlnorm(n_customers, meanlog = 3))
 #' service <- rlnorm(n_customers)
 #'
-#' server_list <- server_split(c(15),c(1,2))
+#' server_list <- server_split(c(50),c(1,2))
 #'
 #' firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 #' secondqueue <- queue_step(arrival_df = arrival_df,
@@ -32,12 +32,12 @@
 #' )
 #'
 #' # Queue lengths
-#' ecdf(arrival_df$times)(c(1:200))*100 - ecdf(firstqueue$times)(c(1:200))*100
-#' ecdf(arrival_df$times)(c(1:200))*100 - ecdf(secondqueue$times)(c(1:200))*100
+#' ecdf(arrival_df$times)(c(1:200))*n_customers - ecdf(firstqueue$times)(c(1:200))*n_customers
+#' ecdf(arrival_df$times)(c(1:200))*n_customers - ecdf(secondqueue$times)(c(1:200))*n_customers
 #'
 #' ord <- order(arrival_df$times)
 #' cbind(arrival_df[ord,], service[ord],
-#'     secondqueue$times[ord], attr(secondqueue, "queue")[ord])
+#'     secondqueue$times[ord], attr(secondqueue, "server")[ord])
 #' @seealso \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{as.server.list}}, \code{\link[queuecomputer]{server_split}}
 #' @export
 queue_step <- function(arrival_df, service, servers = 1){
