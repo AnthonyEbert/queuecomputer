@@ -4,7 +4,7 @@
 \alias{server_split}
 \title{Create a \code{"server_list"} object with a roster of times and number of available servers.}
 \usage{
-server_split(x, y, quick = FALSE)
+server_split(x, y, quick = TRUE)
 }
 \arguments{
 \item{x}{numeric vector giving the times of changes in number of servers.}

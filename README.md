@@ -75,7 +75,7 @@ server_list <- server_split(c(15,30,50),c(1,3,1,10))
 
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
-    servers = server_list, service = service, quick = TRUE)
+    servers = server_list, service = service)
 ```
 
 Print secondqueue output ordered by arrival times
@@ -223,14 +223,14 @@ How long does it take?
 Let's try a big queue with 50,000 people.
 
 ``` r
-arrival_df <- data.frame(ID = c(1:50000), times = rlnorm(50000, meanlog = 3))
-service <- rlnorm(50000)
+arrival_df <- data.frame(ID = c(1:1e6), times = rlnorm(1e6, meanlog = 3))
+service <- rlnorm(1e6)
 server_list <- server_split(c(15,100,150),c(1,3,1,10))
 
 # Output in time (seconds)
-system.time(bigqueue <- queue_step(arrival_df = arrival_df, service = service, servers = server_list, quick = TRUE))
+system.time(bigqueue <- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
 #>    user  system elapsed 
-#>   0.480   0.004   0.483
+#>   1.428   0.056   1.485
 ```
 
 Not bad but not great. We can do better.

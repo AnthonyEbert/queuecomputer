@@ -22,19 +22,21 @@ A vector of response times for the input of arrival times and service times.
 Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.
 }
 \examples{
-set.seed(700)
-arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
-service <- rlnorm(100)
-server_list <- server_split(c(15,30,50),c(1,3,1,10))
+set.seed(1L)
+n_customers <- 100
+arrival_df <- data.frame(ID = c(1:n_customers), times = rlnorm(n_customers, meanlog = 3))
+service <- rlnorm(n_customers)
+
+server_list <- server_split(c(50),c(1,2))
 
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
     servers = server_list, service = service)
 
-curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
+curve(ecdf(arrival_df$times)(x) * n_customers , from = 0, to = 200,
     xlab = "time", ylab = "Number of customers")
-curve(ecdf(firstqueue$times)(x) * 100 , add = TRUE, col = "red")
-curve(ecdf(secondqueue$times)(x) * 100, add = TRUE, col = "blue")
+curve(ecdf(firstqueue$times)(x) * n_customers , add = TRUE, col = "red")
+curve(ecdf(secondqueue$times)(x) * n_customers, add = TRUE, col = "blue")
 legend(100,40, legend = c("Customer input - arrivals",
     "Customer output - firstqueue",
     "Customer output - secondqueue"),
@@ -42,12 +44,12 @@ legend(100,40, legend = c("Customer input - arrivals",
 )
 
 # Queue lengths
-ecdf(arrival_df$times)(c(1:200))*100 - ecdf(firstqueue$times)(c(1:200))*100
-ecdf(arrival_df$times)(c(1:200))*100 - ecdf(secondqueue$times)(c(1:200))*100
+ecdf(arrival_df$times)(c(1:200))*n_customers - ecdf(firstqueue$times)(c(1:200))*n_customers
+ecdf(arrival_df$times)(c(1:200))*n_customers - ecdf(secondqueue$times)(c(1:200))*n_customers
 
 ord <- order(arrival_df$times)
 cbind(arrival_df[ord,], service[ord],
-    secondqueue$times[ord], attr(secondqueue, "queue")[ord])
+    secondqueue$times[ord], attr(secondqueue, "server")[ord])
 }
 \seealso{
 \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{as.server.list}}, \code{\link[queuecomputer]{server_split}}
