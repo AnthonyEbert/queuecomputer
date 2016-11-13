@@ -26,11 +26,11 @@ The first argument to the functions `queue_step`, `lag_step` and `wait_step` is 
 ```{r}
 library(queuecomputer)
 
-arrivals <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 4))
+arrivals <- data.frame(ID = c(1:100), times = cumsum(rexp(100)))
 
 head(arrivals)
 
-service <- rlnorm(100)
+service <- rexp(100)
 
 departures <- queue_step(arrival_df = arrivals, service = service)
 
@@ -39,9 +39,15 @@ head(departures)
 
 # Resourcing schedule
 
-The resourcing schedule is specified with a list of step functions with range $\{0,1\}$, where 0 represents unavailable and 1 represents available. The `server_split` function was developed to make this easier to input: 
+The resourcing schedule is specified with either a non-zero natural number, a `quick.q` or a `server.list` object. Use a non-zero natural number when the number of servers does not change over time. The `quick.q` object is the default and is used when we don't care which particular servers are available, just how many are available at certain times. The computation speed for `queue_step()` is much faster when using a `quick.q` rather than a `server.list` input for the `servers` argument. 
+
+We create a `quick.q` object with the `server.split()` function. 
 
 ```{r}
+# Zero servers available before time 10
+# One server available between time 10 and time 50
+# Three servers available between time 50 and time 100
+# One server available from time 100 onwards
 resource_schedule <- server_split(c(10,50,100), c(0, 1, 3, 1))
 
 resource_schedule
@@ -51,39 +57,62 @@ departures <- queue_step(arrival_df = arrivals, service = service, servers = res
 head(departures)
 ```
 
+The `server.list` object is a list of step functions which represent each server, the range is $\{0,1\}$, where 0 represents unavailable and 1 represents available and the knots represent the times where availability changes. 
+
+The `as.server.list()` function is used to create a `server.list` object.
+
+```{r}
+# Server 1 is available before time 10.
+# Server 2 is available between time 15 and time 30.
+# Server 3 is available after time 10. 
+as.server.list(list(10, c(15,30), 10), c(1,0,0))
+```
+
+The `server_split` function was developed to make this easier to input. We use the argument `quick = FALSE` to force `server_split()` to return a `server.list` object. 
+
+```{r}
+# server.list example
+
+resource_schedule <- server_split(c(10,50,100), c(0, 1, 3, 1), quick = FALSE)
+
+resource_schedule
+
+departures <- queue_step(arrival_df = arrivals, service = service, servers = resource_schedule)
+
+head(departures)
+
+```
+
 # Setting up a queue network
 
 It is simple to set up a chain of queueing elements with `queuecomputer`. Suppose passengers must walk to a queue, then wait for service and then wait for their bags. 
 
 ```{r}
-library(dplyr)
 library(ggplot2)
+library(dplyr)
 
 set.seed(500)
 
-arrivals <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 2))
-service_l <- rlnorm(100)
-service_q <- rlnorm(100, meanlog = -1.5)
-arrivals_b <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
+arrivals <- data.frame(ID = c(1:100), times = cumsum(rexp(100)))
+service_l <- rexp(100, 0.8)
+service_q <- rexp(100, 0.5)
+arrivals_b <- data.frame(ID = c(1:100), times = cumsum(rexp(100, 0.8)))
 
 # The queue elements can be computed one by one. 
 
 departures_1 <- lag_step(arrivals, service_l)
-departures_2 <- queue_step(departures_1, service = service_q)
+departures_2 <- queue_step(departures_1, service = service_q, servers = 2)
 departures_3 <- wait_step(departures_2, arrivals_b)
 
 departure_df <- data.frame(arrival_times = arrivals$times, departures_1 = departures_1$times, departures_2 = departures_2$times, departures_3 = departures_3$times) %>% reshape2::melt()
 
 qplot(value, data = departure_df, colour = variable, geom = "density") + xlab("time")
 
-# The queue elements can be chained together with the magrittr package. 
+# The queue elements can be chained together with the %>% operator. 
 
-departures <- lag_step(arrivals, service_l) %>% queue_step(service = service_q) %>% wait_step(arrivals_b)
+departures <- lag_step(arrivals, service_l) %>% queue_step(service = service_q, servers = 2) %>% wait_step(arrivals_b)
 
-# plot(density(arrivals$times, from = 0), xlim = c(0, 100))
-# lines(density(departures_1$times, from = 0), col = "red")
-# lines(density(departures_2$times, from = 0), col = "blue")
-# lines(density(departures_3$times, from = 0), col = "green")
+all(departures$times == departures_3$times)
 
 ```
 
