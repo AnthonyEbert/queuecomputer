@@ -7,13 +7,6 @@ using namespace std;
 using namespace Rcpp;
 using namespace arma;
 
-
-// Below is a simple example of exporting a C++ function to R. You can
-// source this function into an R session using the Rcpp::sourceCpp
-// function (or via the Source button on the editor toolbar)
-
-// For more on using Rcpp click the Help button on the editor toolbar
-
 // [[Rcpp::export]]
 NumericVector qloop_numeric(NumericVector times, NumericVector service, int n_servers) {
   int n = times.size();
@@ -42,8 +35,6 @@ NumericVector qloop_numeric(NumericVector times, NumericVector service, int n_se
 NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector x, NumericVector y) {
 
   int n_servers = max(y);
-
-  // std::vector<double> queue_times(n_servers, INT_MAX);
 
   vec queue_times = vec(n_servers);
   queue_times.fill(datum::inf);
