@@ -2,26 +2,26 @@
 % Please edit documentation in R/utils.R
 \name{server_split}
 \alias{server_split}
-\title{Create a \code{"server_list"} object with a roster of times and number of available servers.}
+\title{Create a \code{quick.q} object with a roster of times and number of available servers.}
 \usage{
-server_split(x, y, quick = TRUE)
+server_split(x, y)
 }
 \arguments{
 \item{x}{numeric vector giving the times of changes in number of servers.}
 
 \item{y}{numeric vector giving the number of servers available between x values.}
-
-\item{quick}{logical should the quick method be used?}
 }
 \value{
-List of height 1 step functions for input into queue_step.
+A \code{list} and \code{quick.q} object with x and y as elements.
 }
 \description{
-Create a \code{"server_list"} object with a roster of times and number of available servers.
+Create a \code{quick.q} object with a roster of times and number of available servers.
 }
 \examples{
 
-server_split(c(15,30,50), c(0, 1, 3, 2))
+servers <- server_split(c(15,30,50), c(0, 1, 3, 2))
+servers
+
 }
 \seealso{
 \code{\link{as.server.list}}, \code{\link{queue_step}}

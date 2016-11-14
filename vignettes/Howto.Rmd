@@ -68,21 +68,6 @@ The `as.server.list()` function is used to create a `server.list` object.
 as.server.list(list(10, c(15,30), 10), c(1,0,0))
 ```
 
-The `server_split` function was developed to make this easier to input. We use the argument `quick = FALSE` to force `server_split()` to return a `server.list` object. 
-
-```{r}
-# server.list example
-
-resource_schedule <- server_split(c(10,50,100), c(0, 1, 3, 1), quick = FALSE)
-
-resource_schedule
-
-departures <- queue_step(arrival_df = arrivals, service = service, servers = resource_schedule)
-
-head(departures)
-
-```
-
 # Setting up a queue network
 
 It is simple to set up a chain of queueing elements with `queuecomputer`. Suppose passengers must walk to a queue, then wait for service and then wait for their bags. 

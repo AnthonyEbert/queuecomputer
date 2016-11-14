@@ -57,7 +57,7 @@ queue_step.server.list <- function(arrival_df, service, servers){
   Number_of_queues <- length(servers)
 
   queue_times <- mapply(next_function, servers, rep(0, Number_of_queues))
-  output_df <- rep(NA, dim(arrival_df)[1])
+  output <- rep(NA, dim(arrival_df)[1])
   queue_vector <- rep(NA,dim(arrival_df)[1])
 
   times <- arrival_df$times # This step leads to a big improvement in speed for some reason.
@@ -68,19 +68,23 @@ queue_step.server.list <- function(arrival_df, service, servers){
     queue <- which.min(new_queue_times)
 
     queue_times[queue] <- new_queue_times[queue] + service[i]
-    output_df[i] <- queue_times[queue]
+    output[i] <- queue_times[queue]
     queue_vector[i] <- queue
   }
 
   # Put order back to original ordering
-  output_df <- output_df[order(ord)]
+
+
+  output_df <- output[1:length(times)][order(ord)]
   arrival_df <- arrival_df[order(ord),]
   service <- service[order(ord)]
-  queue_vector <- queue_vector[order(ord)]
+  queue_vector <- (output[I(length(times) + 1):length(output)])
 
   output_df <- data.frame(ID = arrival_df$ID, times = output_df)
-  attr(output_df, "server") = queue_vector
-  # attr(output_df, "input") = cbind(arrival_df, service) // this step is too slow to include
+  attr(output_df, "server") = queue_vector[order(ord)]
+  attr(output_df, "arrival_df") = arrival_df
+  attr(output_df, "service") = service
+  attr(output_df, "servers_input") = servers
 
   class(output_df) <- c("queue_df", "data.frame")
 
@@ -120,6 +124,7 @@ queue_step.quick.q <- function(arrival_df, service, servers){
   attr(output_df, "server") = queue_vector[order(ord)]
   attr(output_df, "arrival_df") = arrival_df
   attr(output_df, "service") = service
+  attr(output_df, "servers_input") = servers
 
   class(output_df) <- c("queue_df", "data.frame")
 
@@ -152,7 +157,9 @@ queue_step.numeric <- function(arrival_df, service, servers = 1){
 
   output_df <- data.frame(ID = arrival_df$ID, times = output_df)
   attr(output_df, "server") = queue_vector[order(ord)]
-  # attr(output_df, "input") = cbind(arrival_df, service) // this step is too slow to include
+  attr(output_df, "arrival_df") = arrival_df
+  attr(output_df, "service") = service
+  attr(output_df, "servers_input") = servers
 
   class(output_df) <- c("queue_df", "data.frame")
 

@@ -20,27 +20,38 @@ next_function <- function(sf,time){
   return(output)
 }
 
-#' Create a \code{"server_list"} object with a roster of times and number of available servers.
+#' Create a \code{quick.q} object with a roster of times and number of available servers.
 #'
 #' @param x numeric vector giving the times of changes in number of servers.
 #' @param y numeric vector giving the number of servers available between x values.
-#' @param quick logical should the quick method be used?
-#' @return List of height 1 step functions for input into queue_step.
+#' @return A \code{list} and \code{quick.q} object with x and y as elements.
 #' @seealso \code{\link{as.server.list}}, \code{\link{queue_step}}
 #' @examples
 #'
-#' server_split(c(15,30,50), c(0, 1, 3, 2))
+#' servers <- server_split(c(15,30,50), c(0, 1, 3, 2))
+#' servers
+#'
 #' @export
-server_split <- function(x, y, quick = TRUE){
+server_split <- function(x, y){
 
   stopifnot(all(y%%1 == 0))
   stopifnot(!is.unsorted(x))
-  stopifnot(is.logical(quick))
 
-  switch(quick + 1, server_make(x, y), server_pass(x, y))
+
+  output <- list()
+  class(output) <- c("list", "quick.q")
+
+  output$x <- x
+  output$y <- y
+
+  return(output)
 }
 
 server_make <- function(x, y){
+
+  stopifnot(all(y%%1 == 0))
+  stopifnot(!is.unsorted(x))
+
 
   plateaus <- y
   max_plat <- max(plateaus)
@@ -71,16 +82,6 @@ server_make <- function(x, y){
     output[[i]] <- stats::stepfun(x[newrow[-1]],newplat[i,][newrow])
   }
   class(output) <- c("list", "server.list")
-
-  return(output)
-}
-
-server_pass <- function(x, y){
-  output <- list()
-  class(output) <- c("list", "quick.q")
-
-  output$x <- x
-  output$y <- y
 
   return(output)
 }
