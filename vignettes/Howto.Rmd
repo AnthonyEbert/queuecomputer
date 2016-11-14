@@ -87,7 +87,7 @@ arrivals_b <- data.frame(ID = c(1:100), times = cumsum(rexp(100, 0.8)))
 
 departures_1 <- lag_step(arrivals, service_l)
 departures_2 <- queue_step(departures_1, service = service_q, servers = 2)
-departures_3 <- wait_step(departures_2, arrivals_b)
+departures_3 <- wait_step(departures_2, arrivals_b$times)
 
 departure_df <- data.frame(arrival_times = arrivals$times, departures_1 = departures_1$times, departures_2 = departures_2$times, departures_3 = departures_3$times) %>% reshape2::melt()
 
@@ -95,7 +95,7 @@ qplot(value, data = departure_df, colour = variable, geom = "density") + xlab("t
 
 # The queue elements can be chained together with the %>% operator. 
 
-departures <- lag_step(arrivals, service_l) %>% queue_step(service = service_q, servers = 2) %>% wait_step(arrivals_b)
+departures <- lag_step(arrivals, service_l) %>% queue_step(service = service_q, servers = 2) %>% wait_step(arrivals_b$times)
 
 all(departures$times == departures_3$times)
 
