@@ -35,26 +35,27 @@ devtools::load_all()
 
 # Why more queueing software?
 
-There is already a lot of queueing simulation packages out there including the following R packages: 
+<!-- There is already a lot of queueing simulation packages out there including the following R packages:  -->
 
-* [```liqueueR```](https://cran.r-project.org/web/packages/liqueueR/index.html),
-* [```queueing```](https://cran.r-project.org/web/packages/queueing/index.html),
-* [```rstackdeque```](https://cran.r-project.org/web/packages/rstackdeque/index.html) &
-* [```simmer```](http://r-simmer.org/).
+<!-- * [```liqueueR```](https://cran.r-project.org/web/packages/liqueueR/index.html), -->
+<!-- * [```queueing```](https://cran.r-project.org/web/packages/queueing/index.html), -->
+<!-- * [```rstackdeque```](https://cran.r-project.org/web/packages/rstackdeque/index.html) & -->
+<!-- * [```simmer```](http://r-simmer.org/). -->
 
-```liqueueR``` is written for priority queues. ```queueing ``` simulates well known simple queues such as M/M/1.
+<!-- ```liqueueR``` is written for priority queues. ```queueing ``` simulates well known simple queues such as M/M/1. -->
 
-Python packages:
+<!-- Python packages: -->
 
-* [```queue-lib```](https://pypi.python.org/pypi/queuelib)
-* [```simpy```](https://simpy.readthedocs.io/en/latest/)
+<!-- * [```queue-lib```](https://pypi.python.org/pypi/queuelib) -->
+<!-- * [```simpy```](https://simpy.readthedocs.io/en/latest/) -->
 
-Matlab / Octave packages:
+<!-- Matlab / Octave packages: -->
 
-* [```queueing```](http://www.moreno.marzolla.name/software/queueing/)
+<!-- * [```queueing```](http://www.moreno.marzolla.name/software/queueing/) -->
 
+`queuecomputer` is an R package for simulating queueing networks. 
 
-So what does this package do differently to the others? 
+We've developed a more computationally efficient algorithm for simulating First-in-first-out queues and built this into an R package called `queuecomputer`. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called `simmer` and the top Python package is called `SimPy`. We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package. 
 
 The focus of this package is on <b>queue computation</b> rather than <b>queue simulation</b>. Existing queue simulation software are highly constrained in arrival distributions, this package decouples sampling and queue computation to free the user to specify any arrival or service process. 
 

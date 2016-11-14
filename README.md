@@ -19,25 +19,18 @@ library(queuecomputer)
 Why more queueing software?
 ===========================
 
-There is already a lot of queueing simulation packages out there including the following R packages:
-
--   [`liqueueR`](https://cran.r-project.org/web/packages/liqueueR/index.html),
--   [`queueing`](https://cran.r-project.org/web/packages/queueing/index.html),
--   [`rstackdeque`](https://cran.r-project.org/web/packages/rstackdeque/index.html) &
--   [`simmer`](http://r-simmer.org/).
-
-`liqueueR` is written for priority queues. `queueing` simulates well known simple queues such as M/M/1.
-
-Python packages:
-
--   [`queue-lib`](https://pypi.python.org/pypi/queuelib)
--   [`simpy`](https://simpy.readthedocs.io/en/latest/)
-
-Matlab / Octave packages:
-
--   [`queueing`](http://www.moreno.marzolla.name/software/queueing/)
-
-So what does this package do differently to the others?
+<!-- There is already a lot of queueing simulation packages out there including the following R packages:  -->
+<!-- * [```liqueueR```](https://cran.r-project.org/web/packages/liqueueR/index.html), -->
+<!-- * [```queueing```](https://cran.r-project.org/web/packages/queueing/index.html), -->
+<!-- * [```rstackdeque```](https://cran.r-project.org/web/packages/rstackdeque/index.html) & -->
+<!-- * [```simmer```](http://r-simmer.org/). -->
+<!-- ```liqueueR``` is written for priority queues. ```queueing ``` simulates well known simple queues such as M/M/1. -->
+<!-- Python packages: -->
+<!-- * [```queue-lib```](https://pypi.python.org/pypi/queuelib) -->
+<!-- * [```simpy```](https://simpy.readthedocs.io/en/latest/) -->
+<!-- Matlab / Octave packages: -->
+<!-- * [```queueing```](http://www.moreno.marzolla.name/software/queueing/) -->
+We've developed a more computationally efficient algorithm for simulating First-in-first-out queues and built this into an R package called `queuecomputer`. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called `simmer` and the top Python package is called `SimPy`. We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package.
 
 The focus of this package is on <b>queue computation</b> rather than <b>queue simulation</b>. Existing queue simulation software are highly constrained in arrival distributions, this package decouples sampling and queue computation to free the user to specify any arrival or service process.
 
@@ -230,7 +223,7 @@ server_list <- server_split(c(1500,100000,150000),c(1,3,1,10))
 # Output in time (seconds)
 system.time(bigqueue1 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
 #>    user  system elapsed 
-#>   0.792   0.024   0.815
+#>   0.788   0.028   0.813
 ```
 
 Reordering takes a long time. Let's try the same situation with the arrivals ordered according to their arrival time.
@@ -245,7 +238,7 @@ server_list <- server_split(c(1500,100000,150000),c(1,3,1,10))
 # Output in time (seconds)
 system.time(bigqueue2 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
 #>    user  system elapsed 
-#>   0.168   0.008   0.176
+#>   0.160   0.020   0.177
 
 all(bigqueue1$times == bigqueue2$times[order(ord)])
 #> [1] TRUE
