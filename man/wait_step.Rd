@@ -4,16 +4,15 @@
 \alias{wait_step}
 \title{Compute maximum time from two vectors of arrival times.}
 \usage{
-wait_step(arrival_df1, arrival_df2)
+wait_step(arrival_df, service)
 }
 \arguments{
-\item{arrival_df1}{A dataframe with column names ID and times . The ID column is a key
+\item{arrival_df}{A dataframe with column names ID and times . The ID column is a key
 for the customers. The times column is of class \code{numeric} and represents the
 arrival times of the customers.}
 
-\item{arrival_df2}{A dataframe with column names ID and times . The ID column is a key
-for the customers. The times column is of class \code{numeric} and represents the
-arrival times of the customers.}
+\item{service}{A vector of times which represent the arrival times of the second type
+of customers. The ordering of this vector should have the same ordering as \code{arrival_df}.}
 }
 \value{
 The maximum time from two vectors of arrival times.
@@ -56,10 +55,10 @@ reduce_bags <- function(bagdataset, number_of_passengers){
 }
 
 
-arrivals2 <- reduce_bags(bags.df, 100)
+arrivals2 <- reduce_bags(bags.df, 100)$times
 
 # Find the time when customers can leave with their bags.
-wait_step(arrival_df1 = arrivals, arrival_df2 = arrivals2)
+wait_step(arrival_df = arrivals, service = arrivals2)
 }
 \seealso{
 \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_step}}

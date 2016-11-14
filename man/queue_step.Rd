@@ -22,16 +22,22 @@ A vector of response times for the input of arrival times and service times.
 Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.
 }
 \examples{
+
+# We simulate two queues in series.
 set.seed(1L)
 n_customers <- 100
 arrival_df <- data.frame(ID = c(1:n_customers), times = rlnorm(n_customers, meanlog = 3))
-service <- rlnorm(n_customers)
+service_1 <- rlnorm(n_customers)
+
+
+firstqueue <- queue_step(arrival_df = arrival_df,
+    servers = 2, service = service_1)
 
 server_list <- server_split(c(50),c(1,2))
 
-firstqueue <- queue_step(arrival_df = arrival_df, service = service)
-secondqueue <- queue_step(arrival_df = arrival_df,
-    servers = server_list, service = service)
+service_2 <- rlnorm(n_customers)
+secondqueue <- queue_step(arrival_df = firstqueue,
+    servers = server_list, service = service_2)
 
 curve(ecdf(arrival_df$times)(x) * n_customers , from = 0, to = 200,
     xlab = "time", ylab = "Number of customers")
@@ -43,13 +49,8 @@ legend(100,40, legend = c("Customer input - arrivals",
     col = c("black","red","blue"), lwd = 1, cex = 0.8
 )
 
-# Queue lengths
-ecdf(arrival_df$times)(c(1:200))*n_customers - ecdf(firstqueue$times)(c(1:200))*n_customers
-ecdf(arrival_df$times)(c(1:200))*n_customers - ecdf(secondqueue$times)(c(1:200))*n_customers
-
-ord <- order(arrival_df$times)
-cbind(arrival_df[ord,], service[ord],
-    secondqueue$times[ord], attr(secondqueue, "server")[ord])
+summary(firstqueue)
+summary(secondqueue)
 }
 \seealso{
 \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{as.server.list}}, \code{\link[queuecomputer]{server_split}}

@@ -89,7 +89,8 @@ server_make <- function(x, y){
 #' Creates a \code{"server.list"} object from a list of times and starting availability.
 #'
 #' @param times list of numeric vectors giving change times for each server.
-#' @param init vector of 1s and 0s with equal length to \code{times}. It represents whether the server starts in an availabile \code{(1)} or unavailable \code{(0)} state.
+#' @param init vector of 1s and 0s with equal length to \code{times}.
+#' It represents whether the server starts in an availabile \code{(1)} or unavailable \code{(0)} state.
 #' @return an object of class \code{"server.list"}, which is a list of step functions of range \{0, 1\}.
 #' @seealso \code{\link{server_split}}, \code{\link{queue_step}}
 #' @examples

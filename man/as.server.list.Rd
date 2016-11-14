@@ -9,7 +9,8 @@ as.server.list(times, init)
 \arguments{
 \item{times}{list of numeric vectors giving change times for each server.}
 
-\item{init}{vector of 1s and 0s with equal length to \code{times}. It represents whether the server starts in an availabile \code{(1)} or unavailable \code{(0)} state.}
+\item{init}{vector of 1s and 0s with equal length to \code{times}.
+It represents whether the server starts in an availabile \code{(1)} or unavailable \code{(0)} state.}
 }
 \value{
 an object of class \code{"server.list"}, which is a list of step functions of range \{0, 1\}.

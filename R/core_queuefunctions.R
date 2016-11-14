@@ -10,16 +10,22 @@
 #' @param servers an integer or an object of class \code{"server.list"}.
 #' @return A vector of response times for the input of arrival times and service times.
 #' @examples
+#'
+#' # We simulate two queues in series.
 #' set.seed(1L)
 #' n_customers <- 100
 #' arrival_df <- data.frame(ID = c(1:n_customers), times = rlnorm(n_customers, meanlog = 3))
-#' service <- rlnorm(n_customers)
+#' service_1 <- rlnorm(n_customers)
+#'
+#'
+#' firstqueue <- queue_step(arrival_df = arrival_df,
+#'     servers = 2, service = service_1)
 #'
 #' server_list <- server_split(c(50),c(1,2))
 #'
-#' firstqueue <- queue_step(arrival_df = arrival_df, service = service)
-#' secondqueue <- queue_step(arrival_df = arrival_df,
-#'     servers = server_list, service = service)
+#' service_2 <- rlnorm(n_customers)
+#' secondqueue <- queue_step(arrival_df = firstqueue,
+#'     servers = server_list, service = service_2)
 #'
 #' curve(ecdf(arrival_df$times)(x) * n_customers , from = 0, to = 200,
 #'     xlab = "time", ylab = "Number of customers")
@@ -31,13 +37,8 @@
 #'     col = c("black","red","blue"), lwd = 1, cex = 0.8
 #' )
 #'
-#' # Queue lengths
-#' ecdf(arrival_df$times)(c(1:200))*n_customers - ecdf(firstqueue$times)(c(1:200))*n_customers
-#' ecdf(arrival_df$times)(c(1:200))*n_customers - ecdf(secondqueue$times)(c(1:200))*n_customers
-#'
-#' ord <- order(arrival_df$times)
-#' cbind(arrival_df[ord,], service[ord],
-#'     secondqueue$times[ord], attr(secondqueue, "server")[ord])
+#'summary(firstqueue)
+#'summary(secondqueue)
 #' @seealso \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{as.server.list}}, \code{\link[queuecomputer]{server_split}}
 #' @export
 queue_step <- function(arrival_df, service, servers = 1){
@@ -196,12 +197,11 @@ lag_step <- function(arrival_df, service){
 }
 
 #' Compute maximum time from two vectors of arrival times.
-#' @param arrival_df1 A dataframe with column names ID and times . The ID column is a key
+#' @param arrival_df A dataframe with column names ID and times . The ID column is a key
 #'     for the customers. The times column is of class \code{numeric} and represents the
 #'     arrival times of the customers.
-#' @param arrival_df2 A dataframe with column names ID and times . The ID column is a key
-#'     for the customers. The times column is of class \code{numeric} and represents the
-#'     arrival times of the customers.
+#' @param service A vector of times which represent the arrival times of the second type
+#'  of customers. The ordering of this vector should have the same ordering as \code{arrival_df}.
 #' @return The maximum time from two vectors of arrival times.
 #' @details A good real-world example of this is finding the departure times for passengers
 #'  after they pick up their bags from the baggage carosel. The time at which they leave is
@@ -236,18 +236,16 @@ lag_step <- function(arrival_df, service){
 #'}
 #'
 #'
-#'arrivals2 <- reduce_bags(bags.df, 100)
+#'arrivals2 <- reduce_bags(bags.df, 100)$times
 #'
 #'# Find the time when customers can leave with their bags.
-#'wait_step(arrival_df1 = arrivals, arrival_df2 = arrivals2)
+#'wait_step(arrival_df = arrivals, service = arrivals2)
 #' @seealso \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_step}}
 #' @export
-wait_step <- function(arrival_df1, arrival_df2){
-  arrival_df1 <- arrival_df1[order(arrival_df1$ID), ]
-  arrival_df2 <- arrival_df2[order(arrival_df2$ID), ]
+wait_step <- function(arrival_df, service){
 
-  times <- pmax.int(arrival_df1$times,arrival_df2$times)
-  output_df <- data.frame(ID = arrival_df1$ID, times = times)
+  times <- pmax.int(arrival_df$times, service)
+  output_df <- data.frame(ID = arrival_df$ID, times = times)
   return(output_df)
 }
 
