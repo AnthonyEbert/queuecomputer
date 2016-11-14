@@ -165,18 +165,31 @@ second_waiting_time %>% summary
 
 ## How long does it take?
 
-Let's try a big queue with 50,000 people. 
+Let's try a big queue with one million people. 
 
 ```{r}
 arrival_df <- data.frame(ID = c(1:1e6), times = rlnorm(1e6, meanlog = 3))
 service <- rlnorm(1e6)
-server_list <- server_split(c(15,100,150),c(1,3,1,10))
+server_list <- server_split(c(1500,100000,150000),c(1,3,1,10))
 
 # Output in time (seconds)
-system.time(bigqueue <- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
+system.time(bigqueue1 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
 
 ```
 
-Not bad but not great. We can do better.  
+Reordering takes a long time. Let's try the same situation with the arrivals ordered according to their arrival time. 
 
+```{r}
+ord <- order(arrival_df$times)
+arrival_df$times <- arrival_df$times[ord]
+service <- service[ord]
+
+server_list <- server_split(c(1500,100000,150000),c(1,3,1,10))
+
+# Output in time (seconds)
+system.time(bigqueue2 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
+
+all(bigqueue1$times == bigqueue2$times[order(ord)])
+
+```
 
