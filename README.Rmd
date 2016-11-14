@@ -91,7 +91,7 @@ library(iterators)
 set.seed(700)
 arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
 service <- rlnorm(100)
-server_list <- server_split(c(15,30,50),c(1,3,1,10))
+server_list <- as.server.step(c(15,30,50),c(1,3,1,10))
 
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
@@ -171,7 +171,7 @@ Let's try a big queue with one million people.
 ```{r}
 arrival_df <- data.frame(ID = c(1:1e6), times = rlnorm(1e6, meanlog = 3))
 service <- rlnorm(1e6)
-server_list <- server_split(c(1500,100000,150000),c(1,3,1,10))
+server_list <- as.server.step(c(1500,100000,150000),c(1,3,1,10))
 
 # Output in time (seconds)
 system.time(bigqueue1 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
@@ -185,7 +185,7 @@ ord <- order(arrival_df$times)
 arrival_df$times <- arrival_df$times[ord]
 service <- service[ord]
 
-server_list <- server_split(c(1500,100000,150000),c(1,3,1,10))
+server_list <- as.server.step(c(1500,100000,150000),c(1,3,1,10))
 
 # Output in time (seconds)
 system.time(bigqueue2 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))

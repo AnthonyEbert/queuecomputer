@@ -20,26 +20,33 @@ next_function <- function(sf,time){
   return(output)
 }
 
-#' Create a \code{quick.q} object with a roster of times and number of available servers.
+#' Create a \code{server.step} object with a roster of times and number of available servers.
 #'
 #' @param x numeric vector giving the times of changes in number of servers.
-#' @param y numeric vector giving the number of servers available between x values.
-#' @return A \code{list} and \code{quick.q} object with x and y as elements.
-#' @seealso \code{\link{as.server.list}}, \code{\link{queue_step}}
+#' @param y numeric vector one longer than \code{x} giving the number of servers
+#' available between x values.
+#' @return A \code{list} and \code{server.step} object with x and y as elements.
+#' @details This function uses the analogy of a step function to specify the number of
+#' available servers throughout the day. It is used as input to the \code{\link{queue_step}}
+#' function. Alternativily one may use \code{as.server.list} to specify available servers as
+#' a list, however \code{queue_step} is much faster when \code{as.server.step} is used
+#' as input rather than \code{as.server.list}.
+#' @seealso \code{\link{as.server.list}}, \code{\link{queue_step}}, \code{\link{stepfun}}.
 #' @examples
 #'
-#' servers <- server_split(c(15,30,50), c(0, 1, 3, 2))
+#' servers <- as.server.step(c(15,30,50), c(0, 1, 3, 2))
 #' servers
 #'
 #' @export
-server_split <- function(x, y){
+as.server.step <- function(x, y){
 
   stopifnot(all(y%%1 == 0))
   stopifnot(!is.unsorted(x))
+  stopifnot(length(y) == length(x) + 1)
 
 
   output <- list()
-  class(output) <- c("list", "quick.q")
+  class(output) <- c("list", "server.step")
 
   output$x <- x
   output$y <- y
@@ -92,7 +99,7 @@ server_make <- function(x, y){
 #' @param init vector of 1s and 0s with equal length to \code{times}.
 #' It represents whether the server starts in an availabile \code{(1)} or unavailable \code{(0)} state.
 #' @return an object of class \code{"server.list"}, which is a list of step functions of range \{0, 1\}.
-#' @seealso \code{\link{server_split}}, \code{\link{queue_step}}
+#' @seealso \code{\link{as.server.step}}, \code{\link{queue_step}}
 #' @examples
 #' # Create a server.list object with the first server available anytime before time 10,
 #' # and the second server available between time 15 and time 30.

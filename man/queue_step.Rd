@@ -13,7 +13,8 @@ arrival times of the customers.}
 
 \item{service}{vector of service times with the same ordering as arrival_df.}
 
-\item{servers}{an integer or an object of class \code{"server.list"}.}
+\item{servers}{a non-zero natural number, an object of class \code{server.step}
+or an object of class \code{server.list}.}
 }
 \value{
 A vector of response times for the input of arrival times and service times.
@@ -33,7 +34,7 @@ service_1 <- rlnorm(n_customers)
 firstqueue <- queue_step(arrival_df = arrival_df,
     servers = 2, service = service_1)
 
-server_list <- server_split(c(50),c(1,2))
+server_list <- as.server.step(c(50),c(1,2))
 
 service_2 <- rlnorm(n_customers)
 secondqueue <- queue_step(arrival_df = firstqueue,
@@ -53,6 +54,6 @@ summary(firstqueue)
 summary(secondqueue)
 }
 \seealso{
-\code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{as.server.list}}, \code{\link[queuecomputer]{server_split}}
+\code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{as.server.list}}, \code{\link[queuecomputer]{as.server.step}}
 }
 

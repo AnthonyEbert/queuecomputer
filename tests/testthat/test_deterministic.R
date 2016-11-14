@@ -22,7 +22,7 @@ arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
 ord <- order(arrival_df$times)
 
 service <- rlnorm(100)
-server_list <- server_split(c(15,30,50),c(1,3,1,10))
+server_list <- as.server.step(c(15,30,50),c(1,3,1,10))
 
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
@@ -43,7 +43,7 @@ test_that("test that deterministic queue simulation departure times haven't chan
 #Check lag_step and queue_step with large number of servers returns same results ------------------
 
 lag_queue <- lag_step(arrival_df = arrival_df, service = service)
-server_list <- server_split(c(1),c(100,100))
+server_list <- as.server.step(c(1),c(100,100))
 
 secondqueue <- queue_step(arrival_df = arrival_df, servers = server_list, service = service)
 

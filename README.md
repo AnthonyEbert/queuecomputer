@@ -4,7 +4,6 @@
 <!-- bibliography: references.bib -->
 <!-- --- -->
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-\[ \]
 
 Install
 =======
@@ -30,6 +29,8 @@ Why more queueing software?
 <!-- * [```simpy```](https://simpy.readthedocs.io/en/latest/) -->
 <!-- Matlab / Octave packages: -->
 <!-- * [```queueing```](http://www.moreno.marzolla.name/software/queueing/) -->
+`queuecomputer` is an R package for simulating queueing networks.
+
 We've developed a more computationally efficient algorithm for simulating First-in-first-out queues and built this into an R package called `queuecomputer`. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called `simmer` and the top Python package is called `SimPy`. We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package.
 
 The focus of this package is on <b>queue computation</b> rather than <b>queue simulation</b>. Existing queue simulation software are highly constrained in arrival distributions, this package decouples sampling and queue computation to free the user to specify any arrival or service process.
@@ -38,10 +39,10 @@ This package was inspired by the problem of modelling passenger flows through an
 
 Simulating arbitrary queues is difficult, however once:
 
-1.  The arrival times \(t^a\) and service times \(s\) are known for all customers and,
+1.  The arrival times *t*<sup>*a*</sup> and service times *s* are known for all customers and,
 2.  the server resource schedule is specified
 
-then the departure times \(t^d\) for all customers can be computed exactly.
+then the departure times *t*<sup>*d*</sup> for all customers can be computed exactly.
 
 The focus on this package is:
 
@@ -64,7 +65,7 @@ library(iterators)
 set.seed(700)
 arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
 service <- rlnorm(100)
-server_list <- server_split(c(15,30,50),c(1,3,1,10))
+server_list <- as.server.step(c(15,30,50),c(1,3,1,10))
 
 firstqueue <- queue_step(arrival_df = arrival_df, service = service)
 secondqueue <- queue_step(arrival_df = arrival_df,
@@ -218,12 +219,12 @@ Let's try a big queue with one million people.
 ``` r
 arrival_df <- data.frame(ID = c(1:1e6), times = rlnorm(1e6, meanlog = 3))
 service <- rlnorm(1e6)
-server_list <- server_split(c(1500,100000,150000),c(1,3,1,10))
+server_list <- as.server.step(c(1500,100000,150000),c(1,3,1,10))
 
 # Output in time (seconds)
 system.time(bigqueue1 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
 #>    user  system elapsed 
-#>   0.788   0.028   0.813
+#>   1.312   0.059   1.382
 ```
 
 Reordering takes a long time. Let's try the same situation with the arrivals ordered according to their arrival time.
@@ -233,12 +234,12 @@ ord <- order(arrival_df$times)
 arrival_df$times <- arrival_df$times[ord]
 service <- service[ord]
 
-server_list <- server_split(c(1500,100000,150000),c(1,3,1,10))
+server_list <- as.server.step(c(1500,100000,150000),c(1,3,1,10))
 
 # Output in time (seconds)
 system.time(bigqueue2 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
 #>    user  system elapsed 
-#>   0.160   0.020   0.177
+#>   0.266   0.032   0.301
 
 all(bigqueue1$times == bigqueue2$times[order(ord)])
 #> [1] TRUE
