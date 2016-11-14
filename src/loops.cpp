@@ -14,6 +14,7 @@ NumericVector qloop_numeric(NumericVector times, NumericVector service, int n_se
   int queue = 0;
 
   vec queue_times = vec(n_servers);
+  queue_times.fill(0);
 
   for( int i=0; i < n; ++i)
   {
