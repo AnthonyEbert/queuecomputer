@@ -135,6 +135,15 @@ summary(queue_1)
 #>          24          25 
 #> 0.000974026 0.003409091
 
+summary(arrival_df2)
+#>        ID             times       
+#>  Min.   :  1.00   Min.   : 105.7  
+#>  1st Qu.: 50.75   1st Qu.: 235.8  
+#>  Median :100.50   Median : 520.7  
+#>  Mean   :100.50   Mean   : 468.0  
+#>  3rd Qu.:150.25   3rd Qu.: 645.8  
+#>  Max.   :200.00   Max.   :1193.6
+
 summary(queue_2)
 #> 
 #> Mean waiting time:

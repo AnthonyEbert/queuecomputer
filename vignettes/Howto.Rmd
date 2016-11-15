@@ -39,16 +39,16 @@ head(departures)
 
 # Resourcing schedule
 
-The resourcing schedule is specified with either a non-zero natural number, a `server.step` or a `server.list` object. Use a non-zero natural number when the number of servers does not change over time. The `server.step` object is used when we don't care which particular servers are available, just how many are available at certain times. The computation speed for `queue_step()` is much faster when using a `server.step` rather than a `server.list` input for the `servers` argument. 
+The resourcing schedule is specified with either a non-zero natural number, a `server.stepfun` or a `server.list` object. Use a non-zero natural number when the number of servers does not change over time. The `server.stepfun` specifies a step function to indicate how many servers are available throughout the day. The computation speed for `queue_step()` is much faster when using a `server.stepfun` rather than a `server.list` input for the `servers` argument. 
 
-We create a `server.step` object with the `as.server.step` function. 
+We create a `server.stepfun` object with the `as.server.stepfun` function. 
 
 ```{r}
 # Zero servers available before time 10
 # One server available between time 10 and time 50
 # Three servers available between time 50 and time 100
 # One server available from time 100 onwards
-resource_schedule <- as.server.step(c(10,50,100), c(0, 1, 3, 1))
+resource_schedule <- as.server.stepfun(c(10,50,100), c(0, 1, 3, 1))
 
 resource_schedule
 

@@ -24,6 +24,6 @@ Creates a \code{"server.list"} object from a list of times and starting availabi
 as.server.list(list(10, c(15,30)), c(1,0))
 }
 \seealso{
-\code{\link{as.server.step}}, \code{\link{queue_step}}
+\code{\link{as.server.stepfun}}, \code{\link{queue_step}}
 }
 

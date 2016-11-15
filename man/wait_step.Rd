@@ -2,7 +2,7 @@
 % Please edit documentation in R/core_queuefunctions.R
 \name{wait_step}
 \alias{wait_step}
-\title{Compute maximum time from two vectors of arrival times.}
+\title{Compute maximum time for each row from two vectors of arrival times.}
 \usage{
 wait_step(arrival_df, service)
 }
@@ -18,7 +18,7 @@ of customers. The ordering of this vector should have the same ordering as \code
 The maximum time from two vectors of arrival times.
 }
 \description{
-Compute maximum time from two vectors of arrival times.
+Compute maximum time for each row from two vectors of arrival times.
 }
 \details{
 A good real-world example of this is finding the departure times for passengers
@@ -61,6 +61,6 @@ arrivals2 <- reduce_bags(bags.df, 100)$times
 wait_step(arrival_df = arrivals, service = arrivals2)
 }
 \seealso{
-\code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_step}}
+\code{\link{lag_step}}, \code{\link{queue_step}}
 }
 

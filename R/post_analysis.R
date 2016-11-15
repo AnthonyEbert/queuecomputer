@@ -33,7 +33,7 @@ summary.queue_df <- function(object, ...){
   queue_lengths <- (summary(as.factor(queue_lengths))/(length(seq(0, max(queue_df$times), by = 0.1))))
   system_lengths <- (summary(as.factor(system_lengths))/(length(seq(0, max(queue_df$times), by = 0.1))))
 
-  if("server.step" %in% class(attr(queue_df, "servers_input"))){
+  if("server.stepfun" %in% class(attr(queue_df, "servers_input"))){
     service_available <- integrate_stepfun(x = attr(queue_df, "servers_input")$x, y = attr(queue_df, "servers_input")$y, last = max(queue_df$times))
 
     service_rendered <- sum(arrival_df$service)

@@ -1,6 +1,6 @@
 #
 
-#' Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.
+#' Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.
 #'
 #'
 #' @param arrival_df dataframe with column names ID and times . The ID column is a key
@@ -22,7 +22,7 @@
 #' firstqueue <- queue_step(arrival_df = arrival_df,
 #'     servers = 2, service = service_1)
 #'
-#' server_list <- as.server.step(c(50),c(1,2))
+#' server_list <- as.server.stepfun(c(50),c(1,2))
 #'
 #' service_2 <- rlnorm(n_customers)
 #' secondqueue <- queue_step(arrival_df = firstqueue,
@@ -98,7 +98,7 @@ queue_step.server.list <- function(arrival_df, service, servers){
 #' @useDynLib queuecomputer
 #' @importFrom Rcpp sourceCpp
 #' @export
-queue_step.server.step <- function(arrival_df, service, servers){
+queue_step.server.stepfun <- function(arrival_df, service, servers){
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -197,7 +197,7 @@ lag_step <- function(arrival_df, service){
   return(output_df)
 }
 
-#' Compute maximum time from two vectors of arrival times.
+#' Compute maximum time for each row from two vectors of arrival times.
 #' @param arrival_df A dataframe with column names ID and times . The ID column is a key
 #'     for the customers. The times column is of class \code{numeric} and represents the
 #'     arrival times of the customers.
@@ -241,7 +241,7 @@ lag_step <- function(arrival_df, service){
 #'
 #'# Find the time when customers can leave with their bags.
 #'wait_step(arrival_df = arrivals, service = arrivals2)
-#' @seealso \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{queue_step}}
+#' @seealso \code{\link{lag_step}}, \code{\link{queue_step}}
 #' @export
 wait_step <- function(arrival_df, service){
 

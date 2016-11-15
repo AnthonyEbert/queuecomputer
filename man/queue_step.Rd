@@ -2,7 +2,7 @@
 % Please edit documentation in R/core_queuefunctions.R
 \name{queue_step}
 \alias{queue_step}
-\title{Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.}
+\title{Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.}
 \usage{
 queue_step(arrival_df, service, servers = 1)
 }
@@ -20,7 +20,7 @@ or an object of class \code{server.list}.}
 A vector of response times for the input of arrival times and service times.
 }
 \description{
-Compute the departure times of customers given: a set of arrival and service times, and a resource schedule.
+Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.
 }
 \examples{
 
@@ -34,7 +34,7 @@ service_1 <- rlnorm(n_customers)
 firstqueue <- queue_step(arrival_df = arrival_df,
     servers = 2, service = service_1)
 
-server_list <- as.server.step(c(50),c(1,2))
+server_list <- as.server.stepfun(c(50),c(1,2))
 
 service_2 <- rlnorm(n_customers)
 secondqueue <- queue_step(arrival_df = firstqueue,
