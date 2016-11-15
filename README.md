@@ -4,45 +4,22 @@
 <!-- bibliography: references.bib -->
 <!-- --- -->
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+\[ \]
 
-Install
-=======
+queuecomputer
+=============
 
-``` r
-devtools::install_github("AnthonyEbert/queuecomputer")
-library(queuecomputer)
-```
+Overview
+--------
 
-    #> Loading queuecomputer
-
-Why more queueing software?
-===========================
-
-<!-- There is already a lot of queueing simulation packages out there including the following R packages:  -->
-<!-- * [```liqueueR```](https://cran.r-project.org/web/packages/liqueueR/index.html), -->
-<!-- * [```queueing```](https://cran.r-project.org/web/packages/queueing/index.html), -->
-<!-- * [```rstackdeque```](https://cran.r-project.org/web/packages/rstackdeque/index.html) & -->
-<!-- * [```simmer```](http://r-simmer.org/). -->
-<!-- ```liqueueR``` is written for priority queues. ```queueing ``` simulates well known simple queues such as M/M/1. -->
-<!-- Python packages: -->
-<!-- * [```queue-lib```](https://pypi.python.org/pypi/queuelib) -->
-<!-- * [```simpy```](https://simpy.readthedocs.io/en/latest/) -->
-<!-- Matlab / Octave packages: -->
-<!-- * [```queueing```](http://www.moreno.marzolla.name/software/queueing/) -->
-`queuecomputer` is an R package for simulating queueing networks.
-
-We've developed a more computationally efficient algorithm for simulating First-in-first-out queues and built this into an R package called `queuecomputer`. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called `simmer` and the top Python package is called `SimPy`. We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package.
-
-The focus of this package is on <b>queue computation</b> rather than <b>queue simulation</b>. Existing queue simulation software are highly constrained in arrival distributions, this package decouples sampling and queue computation to free the user to specify any arrival or service process.
-
-This package was inspired by the problem of modelling passenger flows through an international airport terminal. Batch arrivals (planes) occur throughout the day at scheduled times with delays at different parts of the airport. A completely flexible queueing framework is needed to allow for arbitrary arrival and service distributions (with dependencies) and resource schedules. An efficient computation engine is needed to allow for Bayesian sampling.
+queuecomputer implements a new method for simulating from a general set of queues in a computationally efficient manner. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called `simmer` and the top Python package is called `SimPy`. We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package.
 
 Simulating arbitrary queues is difficult, however once:
 
-1.  The arrival times *t*<sup>*a*</sup> and service times *s* are known for all customers and,
+1.  The arrival times \(t^a\) and service times \(s\) are known for all customers and,
 2.  the server resource schedule is specified
 
-then the departure times *t*<sup>*d*</sup> for all customers can be computed exactly.
+then the departure times \(t^d\) for all customers can be computed exactly.
 
 The focus on this package is:
 
@@ -51,16 +28,31 @@ The focus on this package is:
 
 It is up to the user to provide arrival and service times, and therefore very complicated distributions can be simulated (by the user) and tested with this package.
 
-Example
-=======
+Installation
+------------
+
+``` r
+devtools::install_github("AnthonyEbert/queuecomputer")
+```
+
+Usage
+-----
 
 In this example the arrival process is log-normal and the service times are log-normal. We compare two different queue scenarios, the first `firstqueue` with a single server throughout the day and the second `secondqueue` with 1 server until time 15, 3 servers from time 15 to time 30, 1 server from time 30 to time 50 and 10 servers from there onwards.
 
 ``` r
+library(queuecomputer)
 library(ggplot2)
 library(reshape2)
-library(magrittr)
-library(iterators)
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 
 set.seed(700)
 arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
@@ -72,8 +64,7 @@ secondqueue <- queue_step(arrival_df = arrival_df,
     servers = server_list, service = service)
 ```
 
-Print secondqueue output ordered by arrival times
--------------------------------------------------
+### Print secondqueue output ordered by arrival times
 
 ``` r
 ord <- order(arrival_df$times)
@@ -138,8 +129,7 @@ second_queueoutput[1:50,]
 #> 50 44 22.764804  2.98207936 49.041396
 ```
 
-Plot customers arrived and customers served
--------------------------------------------
+### Plot customers arrived and customers served
 
 ``` r
 
@@ -154,10 +144,9 @@ legend(100,40, legend = c("Customer input - arrivals",
 )
 ```
 
-![](README-unnamed-chunk-6-1.png)
+![](README-unnamed-chunk-5-1.png)
 
-Plot densities
---------------
+### Plot densities
 
 ``` r
 departure_df <- data.frame(arrival_times = arrival_df$times, 
@@ -168,10 +157,9 @@ departure_df <- data.frame(arrival_times = arrival_df$times,
 qplot(value, data = departure_df, colour = variable, geom = "density") + xlab("time")
 ```
 
-![](README-unnamed-chunk-7-1.png)
+![](README-unnamed-chunk-6-1.png)
 
-Plot queue lengths
-------------------
+### Plot queue lengths
 
 ``` r
 #queue lengths ------------
@@ -194,10 +182,9 @@ head(ecdf_df)
 qplot(time, value, data = ecdf_df, colour = variable, geom = "step") + xlab("time") + ylab("queue length")
 ```
 
-![](README-unnamed-chunk-8-1.png)
+![](README-unnamed-chunk-7-1.png)
 
-Summary statistics
-------------------
+### Summary statistics
 
 ``` r
 first_waiting_time <- (first_queueoutput$departure - first_queueoutput$service - first_queueoutput$arrival)
@@ -224,7 +211,7 @@ server_list <- as.server.step(c(1500,100000,150000),c(1,3,1,10))
 # Output in time (seconds)
 system.time(bigqueue1 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
 #>    user  system elapsed 
-#>   1.312   0.059   1.382
+#>   0.748   0.016   0.764
 ```
 
 Reordering takes a long time. Let's try the same situation with the arrivals ordered according to their arrival time.
@@ -239,7 +226,7 @@ server_list <- as.server.step(c(1500,100000,150000),c(1,3,1,10))
 # Output in time (seconds)
 system.time(bigqueue2 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
 #>    user  system elapsed 
-#>   0.266   0.032   0.301
+#>   0.172   0.012   0.183
 
 all(bigqueue1$times == bigqueue2$times[order(ord)])
 #> [1] TRUE
