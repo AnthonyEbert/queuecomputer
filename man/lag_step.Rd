@@ -33,6 +33,6 @@ cbind(queue_step(arrival_df = arrival_df, service = service, servers = 100),
 lag_step(arrival_df = arrival_df, service = service))
 }
 \seealso{
-\code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{queue_step}}
+\code{\link{wait_step}}, \code{\link{queue_step}}.
 }
 

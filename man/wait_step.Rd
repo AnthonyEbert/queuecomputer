@@ -61,6 +61,6 @@ arrivals2 <- reduce_bags(bags.df, 100)$times
 wait_step(arrival_df = arrivals, service = arrivals2)
 }
 \seealso{
-\code{\link{lag_step}}, \code{\link{queue_step}}
+\code{\link{lag_step}}, \code{\link{queue_step}}.
 }
 

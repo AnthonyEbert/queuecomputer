@@ -1,25 +1,25 @@
 Package: queuecomputer
 Title: Computes the output times for queues with arbitrary arrival and service
     times
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: as.person("Anthony Ebert <anthonyebert@gmail.com>[aut, cre]")
 Description: Computes the output times for queues with arbitrary arrival
     and service times. The package is referred to as "queuecomputer" rather
     than "queuesimulator" since the emphasis in this package is computing
     *deterministically* the output times for arbitrary pre-simulated arrival and
     service times.
-Depends: 
+Depends:
     R (>= 3.3.1)
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-Imports: 
+Imports:
     dplyr,
     stats,
     Rcpp,
     RcppArmadillo
 RoxygenNote: 5.0.1.9000
-Suggests: 
+Suggests:
     knitr,
     rmarkdown,
     testthat,
