@@ -88,12 +88,6 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
     queue = index_min(queue_times);
     queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
 
-    // in case number of servers is zero.
-    if( current_size == 0 )
-      {
-      queue_times[queue] = next_time + service[i];
-      }
-
     output[i] = queue_times[queue];
     output[i + n] = queue + 1;
 
@@ -101,6 +95,12 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
     if( i % 100 == 0 )
     {
       Rcpp::checkUserInterrupt();
+    }
+
+    // in case number of servers is zero.
+    if( current_size == 0 )
+    {
+      i = i - 1;
     }
 
   }

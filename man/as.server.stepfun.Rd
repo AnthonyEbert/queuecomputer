@@ -24,6 +24,9 @@ available servers throughout the day. It is used as input to the \code{\link{que
 function. Alternativily one may use \code{as.server.list} to specify available servers as
 a list, however \code{queue_step} is much faster when \code{as.server.stepfun} is used
 as input rather than \code{as.server.list}.
+
+If any of the service times are large compared to \code{diff(x)} then the
+\code{\link{as.server.list}} function should be used.
 }
 \examples{
 

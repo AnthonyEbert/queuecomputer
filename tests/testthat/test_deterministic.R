@@ -92,11 +92,11 @@ test_that("reorder server.list", {
 summary(q1n)
 summary(q1sf)
 
-# Check large service times for server.stepfun ------------------
+# Check service times for server.stepfun ------------------
 
 arrival_df <- data.frame(ID = c(1:500), times = rlnorm(500, meanlog = 1))
 
-service <- rlnorm(500, meanlog = 1)
+service <- rlnorm(500, meanlog = 0.5)
 
 ord <- order(arrival_df$times)
 
@@ -107,17 +107,19 @@ server_list <- queuecomputer:::server_make(c(50, 200, 250, 275),c(1,2,1,3,1))
 qsf <- queue_step(arrival_df, service, servers = server_sf)
 qsl <- queue_step(arrival_df, service, servers = server_list)
 
-test_that("Check large service times", {
+test_that("Check service times", {
   expect_equal(qsf$times , qsl$times)
 })
 
-server_sf <- as.server.stepfun(c(50, 200),c(1,0,1))
-server_list <- queuecomputer:::server_make(c(50, 200),c(1,0,1))
+service <- rlnorm(500, meanlog = 3)
+
+server_sf <- as.server.stepfun(c(50, 200, 250, 275),c(1,0,1,0,1))
+server_list <- queuecomputer:::server_make(c(50, 200, 250, 275),c(1,0,1,0,1))
 
 qsf <- queue_step(arrival_df, service, servers = server_sf)
 qsl <- queue_step(arrival_df, service, servers = server_list)
 
-test_that("Check large service times", {
+test_that("Check service times, zeros", {
   expect_equal(qsf$times , qsl$times)
 })
 
