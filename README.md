@@ -12,14 +12,14 @@ queuecomputer
 Overview
 --------
 
-queuecomputer implements a new method for simulating from a general set of queues in a computationally efficient manner. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called `simmer` and the top Python package is called `SimPy`. We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package.
+ implements a new method for simulating from a general set of queues in a computationally efficient manner. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called and the top Python package is called . We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package.
 
 Simulating arbitrary queues is difficult, however once:
 
-1.  The arrival times \(t^a\) and service times \(s\) are known for all customers and,
+1.  The arrival times \(A = {a_1, a_2, \cdots, a_n}\) and service times \(S = {s_1, s_2, \cdots, s_n}\) are known for all customers and,
 2.  the server resource schedule is specified
 
-then the departure times \(t^d\) for all customers can be computed exactly.
+then the departure times \(D = {d_1, d_2, \cdots, d_n}\) for all customers can be computed deterministically.
 
 The focus on this package is:
 
@@ -32,13 +32,17 @@ Installation
 ------------
 
 ``` r
+# For the CRAN version (yet to be released)
+install.packages('queuecomputer')
+
+# For the in-development version
 devtools::install_github("AnthonyEbert/queuecomputer")
 ```
 
 Usage
 -----
 
-In this example the arrival process is log-normal and the service times are log-normal. We compare two different queue scenarios, the first `firstqueue` with a single server throughout the day and the second `secondqueue` with 1 server until time 15, 3 servers from time 15 to time 30, 1 server from time 30 to time 50 and 10 servers from there onwards.
+In this example of a customers must pass through two queues. The arrival times to the first queue come in two waves starting at time 100 and time 500. The arrival times to the second queue are the departure times of the first queue plus the time they spent walking to the second queue.
 
 ``` r
 library(queuecomputer)
@@ -54,180 +58,139 @@ library(dplyr)
 #> 
 #>     intersect, setdiff, setequal, union
 
-set.seed(700)
-arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
-service <- rlnorm(100)
-server_list <- as.server.step(c(15,30,50),c(1,3,1,10))
+set.seed(1)
 
-firstqueue <- queue_step(arrival_df = arrival_df, service = service)
-secondqueue <- queue_step(arrival_df = arrival_df,
-    servers = server_list, service = service)
-```
+arrival_df1 <- data.frame(ID = c(1:200), times = c(100 + cumsum(rexp(100)), 500 + cumsum(rexp(100))))
+service1 <- rexp(200, 1/2.5)
 
-### Print secondqueue output ordered by arrival times
+queue_1 <- queue_step(arrival_df = arrival_df1, service = service1, servers = 2)
 
-``` r
-ord <- order(arrival_df$times)
+walktimes <- rexp(200, 1/100)
 
-first_queueoutput <- data.frame(ID = arrival_df$ID[ord], arrivals = arrival_df$times[ord], service = service[ord],
-    departure = firstqueue$times[ord])
+arrival_df2 <- lag_step(arrival_df = queue_1, service = walktimes)
+service2 <- rexp(200, 1/3)
 
-second_queueoutput <- data.frame(ID = arrival_df$ID[ord], arrivals = arrival_df$times[ord], service = service[ord],
-    departure = secondqueue$times[ord])
+queue_2 <- queue_step(arrival_df = arrival_df2, service = service2, servers = 1)
 
-second_queueoutput[1:50,]
-#>    ID  arrivals     service departure
-#> 1  63  1.061725  2.01307780  3.074803
-#> 2  88  1.488319  1.96525722  5.040060
-#> 3  42  2.723766  0.30952181  5.349582
-#> 4  80  2.908758  1.46215112  6.811733
-#> 5  30  3.377003  1.28021358  8.091947
-#> 6   4  3.522079  0.80650222  8.898449
-#> 7  99  4.802027  1.17292296 10.071372
-#> 8  52  4.814366  2.22906647 12.300438
-#> 9  33  4.821817  0.70798823 13.008427
-#> 10 14  4.897423  0.86110290 13.869530
-#> 11 15  5.704956  0.63322402 14.502754
-#> 12 74  6.383100  2.72938384 17.232137
-#> 13 65  6.858535  0.77688315 15.776883
-#> 14 60  6.881756  0.05873893 15.058739
-#> 15 61  7.061939  2.40062563 17.459365
-#> 16 31  7.474810  1.40151084 17.178394
-#> 17 10  8.185190  0.94207223 18.120466
-#> 18  8  8.212469  0.23593588 17.468073
-#> 19 71  8.444148  1.74449802 19.203863
-#> 20 93  8.766556  0.32719669 17.795270
-#> 21 16  9.047441  0.43494748 18.230217
-#> 22  9  9.100634  1.35686034 19.477327
-#> 23 72 10.311166 10.09251124 28.322729
-#> 24 18 10.804171  3.44351122 22.647374
-#> 25 76 11.720475  0.98884489 20.466171
-#> 26 45 12.017232  0.07720980 20.543381
-#> 27 67 13.030232  6.17775768 26.721139
-#> 28 79 13.308661  0.56781022 23.215184
-#> 29 35 13.659027  1.41835111 24.633535
-#> 30 48 14.066098  1.72667183 26.360207
-#> 31 77 14.272732  0.33625943 26.696466
-#> 32 62 15.596647  2.53880672 29.235273
-#> 33 70 15.687771  1.94895263 28.670092
-#> 34  2 15.975132  0.25945200 28.582181
-#> 35  6 16.153044  0.66391471 29.246095
-#> 36 19 16.168960  2.00270633 30.672798
-#> 37 57 16.186088  0.60314611 29.838419
-#> 38 49 16.488483  0.81938725 30.065483
-#> 39 95 16.560112  3.60356382 33.441983
-#> 40 36 16.848182  1.45763528 31.523118
-#> 41 92 17.124419  1.84136610 33.364484
-#> 42  1 18.396847  4.65579089 38.020275
-#> 43  3 18.461777  1.44118444 39.461459
-#> 44 81 18.742626  0.61029266 40.071752
-#> 45 27 19.268697  2.57540186 42.647154
-#> 46 68 19.278342  1.58126057 44.228414
-#> 47 24 19.686917  0.17840810 44.406823
-#> 48 66 20.379716  0.35094449 44.757767
-#> 49 12 21.836983  1.30155003 46.059317
-#> 50 44 22.764804  2.98207936 49.041396
-```
+head(arrival_df1)
+#>   ID    times
+#> 1  1 100.7552
+#> 2  2 101.9368
+#> 3  3 102.0825
+#> 4  4 102.2223
+#> 5  5 102.6584
+#> 6  6 105.5534
+head(queue_1)
+#>   ID    times
+#> 1  1 100.9442
+#> 2  2 104.5025
+#> 3  3 103.7696
+#> 4  4 105.7710
+#> 5  5 104.9376
+#> 6  6 107.2370
+head(arrival_df2)
+#>   ID    times
+#> 1  1 120.3923
+#> 2  2 105.6711
+#> 3  3 227.5242
+#> 4  4 175.9008
+#> 5  5 339.9853
+#> 6  6 108.7119
+head(queue_2)
+#>   ID    times
+#> 1  1 125.5523
+#> 2  2 107.2552
+#> 3  3 290.7928
+#> 4  4 186.2768
+#> 5  5 404.4597
+#> 6  6 109.9423
 
-### Plot customers arrived and customers served
+summary(queue_1)
+#> 
+#> Mean waiting time:
+#>  11.3821
+#> Mean response time:
+#>  13.7479
+#> Utilization factor:
+#>  0.3841
+#> Queue Lengths:
+#>           0           1           2           3           4           5 
+#> 0.636038961 0.017694805 0.019155844 0.012824675 0.015584416 0.013474026 
+#>           6           7           8           9          10          11 
+#> 0.004870130 0.015584416 0.013474026 0.028571429 0.036201299 0.044805195 
+#>          12          13          14          15          16          17 
+#> 0.031331169 0.025974026 0.015584416 0.022564935 0.012012987 0.011525974 
+#>          18          19          20          21          22          23 
+#> 0.005681818 0.005681818 0.001461039 0.005519481 0.000974026 0.003409091 
+#> 
+#> System Lengths:
+#>           0           1           2           3           4           5 
+#> 0.608928571 0.013961039 0.013149351 0.017694805 0.019155844 0.012824675 
+#>           6           7           8           9          10          11 
+#> 0.015584416 0.013474026 0.004870130 0.015584416 0.013474026 0.028571429 
+#>          12          13          14          15          16          17 
+#> 0.036201299 0.044805195 0.031331169 0.025974026 0.015584416 0.022564935 
+#>          18          19          20          21          22          23 
+#> 0.012012987 0.011525974 0.005681818 0.005681818 0.001461039 0.005519481 
+#>          24          25 
+#> 0.000974026 0.003409091
 
-``` r
+summary(queue_2)
+#> 
+#> Mean waiting time:
+#>  34.0863
+#> Mean response time:
+#>  37.1955
+#> Utilization factor:
+#>  0.5192
+#> Queue Lengths:
+#>            0            1            2            3            4 
+#> 5.467902e-01 2.245596e-02 2.571166e-02 3.088739e-02 2.304032e-02 
+#>            5            6            7            8            9 
+#> 2.437599e-02 9.015778e-03 1.995158e-02 1.302279e-02 7.930545e-03 
+#>           10           11           12           13           14 
+#> 2.120377e-02 2.813257e-02 1.769764e-02 2.671342e-02 1.369063e-02 
+#>           15           16           17           18           19 
+#> 1.010101e-02 1.001753e-02 1.819851e-02 8.848819e-03 9.600134e-03 
+#>           20           21           22           23           24 
+#> 1.001753e-02 9.349695e-03 9.349695e-03 1.928375e-02 2.804909e-02 
+#>           25           26           27           28           29 
+#> 9.015778e-03 7.513148e-03 8.598380e-03 1.502630e-03 8.097504e-03 
+#>           30           31 
+#> 8.347942e-05 1.753068e-03 
+#> 
+#> System Lengths:
+#>            0            1            2            3            4 
+#> 4.809250e-01 6.586526e-02 2.245596e-02 2.571166e-02 3.088739e-02 
+#>            5            6            7            8            9 
+#> 2.304032e-02 2.437599e-02 9.015778e-03 1.995158e-02 1.302279e-02 
+#>           10           11           12           13           14 
+#> 7.930545e-03 2.120377e-02 2.813257e-02 1.769764e-02 2.671342e-02 
+#>           15           16           17           18           19 
+#> 1.369063e-02 1.010101e-02 1.001753e-02 1.819851e-02 8.848819e-03 
+#>           20           21           22           23           24 
+#> 9.600134e-03 1.001753e-02 9.349695e-03 9.349695e-03 1.928375e-02 
+#>           25           26           27           28           29 
+#> 2.804909e-02 9.015778e-03 7.513148e-03 8.598380e-03 1.502630e-03 
+#>           30           31           32 
+#> 8.097504e-03 8.347942e-05 1.753068e-03
 
-curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
+curve(ecdf(arrival_df1$times)(x) * 200 , from = 0, to = 1500,
     xlab = "time", ylab = "Number of customers")
-curve(ecdf(firstqueue$times)(x) * 100 , add = TRUE, col = "red")
-curve(ecdf(secondqueue$times)(x) * 100, add = TRUE, col = "blue")
-legend(100,40, legend = c("Customer input - arrivals",
+curve(ecdf(queue_1$times)(x) * 200 , add = TRUE, col = "red")
+curve(ecdf(arrival_df2$times)(x) * 200, add = TRUE, col = "blue")
+curve(ecdf(queue_2$times)(x) * 200, add = TRUE, col = "green")
+legend(600,70, legend = c("Customer arrivals to firstqeue",
     "Customer output - firstqueue",
+    "Customer arrivals to second queue", 
     "Customer output - secondqueue"),
-    col = c("black","red","blue"), lwd = 1, cex = 0.8
+    col = c("black","red","blue", "green"), lwd = 1, cex = 0.8
 )
 ```
 
-![](README-unnamed-chunk-5-1.png)
+![](README-unnamed-chunk-3-1.png)
 
-### Plot densities
+More information
+----------------
 
-``` r
-departure_df <- data.frame(arrival_times = arrival_df$times, 
-  firstqueue_departuretimes = firstqueue$times, 
-  secondqueue_departuretimes = secondqueue$times) %>% reshape2::melt()
-#> No id variables; using all as measure variables
-
-qplot(value, data = departure_df, colour = variable, geom = "density") + xlab("time")
-```
-
-![](README-unnamed-chunk-6-1.png)
-
-### Plot queue lengths
-
-``` r
-#queue lengths ------------
-
-ecdf_df <- data.frame(time = c(1:200), 
-  firstqueue = ecdf(arrival_df$times)(c(1:200)) * 100 - 
-    ecdf(firstqueue$times)(c(1:200))*100, 
-  secondqueue = ecdf(arrival_df$times)(c(1:200))*100 - 
-    ecdf(secondqueue$times)(c(1:200))*100) %>% reshape2::melt(id.vars = "time")
-
-head(ecdf_df)
-#>   time   variable value
-#> 1    1 firstqueue     0
-#> 2    2 firstqueue     2
-#> 3    3 firstqueue     4
-#> 4    4 firstqueue     5
-#> 5    5 firstqueue     9
-#> 6    6 firstqueue     8
-
-qplot(time, value, data = ecdf_df, colour = variable, geom = "step") + xlab("time") + ylab("queue length")
-```
-
-![](README-unnamed-chunk-7-1.png)
-
-### Summary statistics
-
-``` r
-first_waiting_time <- (first_queueoutput$departure - first_queueoutput$service - first_queueoutput$arrival)
-second_waiting_time <- (second_queueoutput$departure - second_queueoutput$service - second_queueoutput$arrival)
-
-first_waiting_time %>% summary
-#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#>    0.00   16.56   52.89   44.53   68.66   73.99
-second_waiting_time %>% summary
-#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#>   0.000   4.450   9.073  11.180  19.680  26.400
-```
-
-How long does it take?
-----------------------
-
-Let's try a big queue with one million people.
-
-``` r
-arrival_df <- data.frame(ID = c(1:1e6), times = rlnorm(1e6, meanlog = 3))
-service <- rlnorm(1e6)
-server_list <- as.server.step(c(1500,100000,150000),c(1,3,1,10))
-
-# Output in time (seconds)
-system.time(bigqueue1 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
-#>    user  system elapsed 
-#>   0.748   0.016   0.764
-```
-
-Reordering takes a long time. Let's try the same situation with the arrivals ordered according to their arrival time.
-
-``` r
-ord <- order(arrival_df$times)
-arrival_df$times <- arrival_df$times[ord]
-service <- service[ord]
-
-server_list <- as.server.step(c(1500,100000,150000),c(1,3,1,10))
-
-# Output in time (seconds)
-system.time(bigqueue2 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
-#>    user  system elapsed 
-#>   0.172   0.012   0.183
-
-all(bigqueue1$times == bigqueue2$times[order(ord)])
-#> [1] TRUE
-```
+For more information on how to use the package see the package vignettes or the R help files.

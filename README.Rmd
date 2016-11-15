@@ -26,14 +26,14 @@ $$ $$
 
 ## Overview
 
-queuecomputer implements a new method for simulating from a general set of queues in a computationally efficient manner. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called `simmer` and the top Python package is called `SimPy`. We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package. 
+\textbf{queuecomputer} implements a new method for simulating from a general set of queues in a computationally efficient manner. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called \textbf{simmer} and the top Python package is called \textbf{SimPy}. We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package. 
 
 Simulating arbitrary queues is difficult, however once:
 
-1. The arrival times $t^a$ and service times $s$ are known for all customers and,
+1. The arrival times $A = {a_1, a_2, \cdots, a_n}$ and service times $S = {s_1, s_2, \cdots, s_n}$ are known for all customers and,
 2. the server resource schedule is specified
 
-then the departure times $t^d$ for all customers can be computed exactly. 
+then the departure times $D = {d_1, d_2, \cdots, d_n}$ for all customers can be computed deterministically.  
 
 The focus on this package is:
 
@@ -45,12 +45,16 @@ It is up to the user to provide arrival and service times, and therefore very co
 ## Installation
 
 ```{r, eval = FALSE}
+# For the CRAN version (yet to be released)
+install.packages('queuecomputer')
+
+# For the in-development version
 devtools::install_github("AnthonyEbert/queuecomputer")
 ```
 
 ## Usage
 
-In this example the arrival process is log-normal and the service times are log-normal. We compare two different queue scenarios, the first `firstqueue` with a single server throughout the day and the second `secondqueue` with 1 server until time 15, 3 servers from time 15 to time 30, 1 server from time 30 to time 50 and 10 servers from there onwards. 
+In this example of a customers must pass through two queues. The arrival times to the first queue come in two waves starting at time 100 and time 500. The arrival times to the second queue are the departure times of the first queue plus the time they spent walking to the second queue. 
 
 ```{r}
 library(queuecomputer)
@@ -58,109 +62,44 @@ library(ggplot2)
 library(reshape2)
 library(dplyr)
 
-set.seed(700)
-arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
-service <- rlnorm(100)
-server_list <- as.server.step(c(15,30,50),c(1,3,1,10))
+set.seed(1)
 
-firstqueue <- queue_step(arrival_df = arrival_df, service = service)
-secondqueue <- queue_step(arrival_df = arrival_df,
-    servers = server_list, service = service)
-```
+arrival_df1 <- data.frame(ID = c(1:200), times = c(100 + cumsum(rexp(100)), 500 + cumsum(rexp(100))))
+service1 <- rexp(200, 1/2.5)
 
-### Print secondqueue output ordered by arrival times
+queue_1 <- queue_step(arrival_df = arrival_df1, service = service1, servers = 2)
 
-```{r}
-ord <- order(arrival_df$times)
+walktimes <- rexp(200, 1/100)
 
-first_queueoutput <- data.frame(ID = arrival_df$ID[ord], arrivals = arrival_df$times[ord], service = service[ord],
-    departure = firstqueue$times[ord])
+arrival_df2 <- lag_step(arrival_df = queue_1, service = walktimes)
+service2 <- rexp(200, 1/3)
 
-second_queueoutput <- data.frame(ID = arrival_df$ID[ord], arrivals = arrival_df$times[ord], service = service[ord],
-    departure = secondqueue$times[ord])
+queue_2 <- queue_step(arrival_df = arrival_df2, service = service2, servers = 1)
 
-second_queueoutput[1:50,]
-```
+head(arrival_df1)
+head(queue_1)
+head(arrival_df2)
+head(queue_2)
 
-### Plot customers arrived and customers served
+summary(queue_1)
 
-```{r}
+summary(queue_2)
 
-curve(ecdf(arrival_df$times)(x) * 100 , from = 0, to = 200,
+curve(ecdf(arrival_df1$times)(x) * 200 , from = 0, to = 1500,
     xlab = "time", ylab = "Number of customers")
-curve(ecdf(firstqueue$times)(x) * 100 , add = TRUE, col = "red")
-curve(ecdf(secondqueue$times)(x) * 100, add = TRUE, col = "blue")
-legend(100,40, legend = c("Customer input - arrivals",
+curve(ecdf(queue_1$times)(x) * 200 , add = TRUE, col = "red")
+curve(ecdf(arrival_df2$times)(x) * 200, add = TRUE, col = "blue")
+curve(ecdf(queue_2$times)(x) * 200, add = TRUE, col = "green")
+legend(600,70, legend = c("Customer arrivals to firstqeue",
     "Customer output - firstqueue",
+    "Customer arrivals to second queue", 
     "Customer output - secondqueue"),
-    col = c("black","red","blue"), lwd = 1, cex = 0.8
+    col = c("black","red","blue", "green"), lwd = 1, cex = 0.8
 )
 
 ```
 
-### Plot densities
+## More information
 
-```{r}
-departure_df <- data.frame(arrival_times = arrival_df$times, 
-  firstqueue_departuretimes = firstqueue$times, 
-  secondqueue_departuretimes = secondqueue$times) %>% reshape2::melt()
-
-qplot(value, data = departure_df, colour = variable, geom = "density") + xlab("time")
-```
-
-### Plot queue lengths
-
-```{r}
-#queue lengths ------------
-
-ecdf_df <- data.frame(time = c(1:200), 
-  firstqueue = ecdf(arrival_df$times)(c(1:200)) * 100 - 
-    ecdf(firstqueue$times)(c(1:200))*100, 
-  secondqueue = ecdf(arrival_df$times)(c(1:200))*100 - 
-    ecdf(secondqueue$times)(c(1:200))*100) %>% reshape2::melt(id.vars = "time")
-
-head(ecdf_df)
-
-qplot(time, value, data = ecdf_df, colour = variable, geom = "step") + xlab("time") + ylab("queue length")
-```
-
-### Summary statistics
-
-```{r}
-first_waiting_time <- (first_queueoutput$departure - first_queueoutput$service - first_queueoutput$arrival)
-second_waiting_time <- (second_queueoutput$departure - second_queueoutput$service - second_queueoutput$arrival)
-
-first_waiting_time %>% summary
-second_waiting_time %>% summary
-```
-
-## How long does it take?
-
-Let's try a big queue with one million people. 
-
-```{r}
-arrival_df <- data.frame(ID = c(1:1e6), times = rlnorm(1e6, meanlog = 3))
-service <- rlnorm(1e6)
-server_list <- as.server.step(c(1500,100000,150000),c(1,3,1,10))
-
-# Output in time (seconds)
-system.time(bigqueue1 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
-
-```
-
-Reordering takes a long time. Let's try the same situation with the arrivals ordered according to their arrival time. 
-
-```{r}
-ord <- order(arrival_df$times)
-arrival_df$times <- arrival_df$times[ord]
-service <- service[ord]
-
-server_list <- as.server.step(c(1500,100000,150000),c(1,3,1,10))
-
-# Output in time (seconds)
-system.time(bigqueue2 <<- queue_step(arrival_df = arrival_df, service = service, servers = server_list))
-
-all(bigqueue1$times == bigqueue2$times[order(ord)])
-
-```
+For more information on how to use the package see the package vignettes or the R help files. 
 
