@@ -4,22 +4,20 @@
 <!-- bibliography: references.bib -->
 <!-- --- -->
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-\[ \]
-
 queuecomputer
 =============
 
 Overview
 --------
 
- implements a new method for simulating from a general set of queues in a computationally efficient manner. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called and the top Python package is called . We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package.
+queuecomputer implements a new and computationally efficient method for simulating from a general set of queues. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called simmer and the top Python package is called SimPy. We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package.
 
 Simulating arbitrary queues is difficult, however once:
 
-1.  The arrival times \(A = {a_1, a_2, \cdots, a_n}\) and service times \(S = {s_1, s_2, \cdots, s_n}\) are known for all customers and,
+1.  The arrival times A and service times S are known for all customers and,
 2.  the server resource schedule is specified
 
-then the departure times \(D = {d_1, d_2, \cdots, d_n}\) for all customers can be computed deterministically.
+then the departure times D for all customers can be computed deterministically.
 
 The focus on this package is:
 

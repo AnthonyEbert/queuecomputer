@@ -1,5 +1,5 @@
 ---
-title: "Using the `queuecomputer` package"
+title: "Using the queuecomputer package"
 author: "Anthony Ebert"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -11,13 +11,7 @@ vignette: >
 
 # Introduction
 
-The purpose of the package `queuecomputer` is to compute, deterministically, the output of a queue network given certain inputs. The most important functions are `queue_step`, `lag_step` and `wait_step`. An important case of a queueing network which can be modelled with these functions is that of an international airport terminal. 
-
-When passengers arrive at the immigration desk to be processed this is a queue. If the arrival times of all customers as well as the time needed at the service desk are supplied then the departure times can be computed deterministically. The logic is implemented in the `queue_step` function where the user supplies the arrival times and service times as input. 
-
-Passengers walking between queueing stages is modelled as a `lag_step`, where the service times are simply added to the arrival times. The departure times are equivalent to a `queue_step` with an excessive number of servers. 
-
-Passengers waiting for bags at the baggage carousels is modelled with `wait_step`. The inputs are the arrival times of the bags and passengers, and the departure times is the vector of maximum times for each. 
+The purpose of the package queuecomputer is to compute, deterministically, the output of a queue network given the arrival and service times for all customers. The most important functions are `queue_step`, `lag_step` and `wait_step`. 
 
 # Input format
 
