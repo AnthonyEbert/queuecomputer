@@ -7,7 +7,7 @@
 #'     for the customers. The times column is of class \code{numeric} and represents the
 #'     arrival times of the customers.
 #' @param service vector of service times with the same ordering as arrival_df.
-#' @param servers a non-zero natural number, an object of class \code{server.step}
+#' @param servers a non-zero natural number, an object of class \code{server.stepfun}
 #' or an object of class \code{server.list}.
 #' @return A vector of response times for the input of arrival times and service times.
 #' @examples
@@ -40,7 +40,7 @@
 #'
 #'summary(firstqueue)
 #'summary(secondqueue)
-#' @seealso \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{as.server.list}}, \code{\link[queuecomputer]{as.server.step}}
+#' @seealso \code{\link{wait_step}}, \code{\link{lag_step}}, \code{\link{as.server.list}}, \code{\link{as.server.stepfun}}
 #' @export
 queue_step <- function(arrival_df, service, servers = 1){
 
@@ -188,7 +188,7 @@ queue_step.numeric <- function(arrival_df, service, servers = 1){
 #'
 #' cbind(queue_step(arrival_df = arrival_df, service = service, servers = 100),
 #' lag_step(arrival_df = arrival_df, service = service))
-#' @seealso \code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{queue_step}}
+#' @seealso \code{\link{wait_step}}, \code{\link{queue_step}}.
 #' @export
 lag_step <- function(arrival_df, service){
 
@@ -241,7 +241,7 @@ lag_step <- function(arrival_df, service){
 #'
 #'# Find the time when customers can leave with their bags.
 #'wait_step(arrival_df = arrivals, service = arrivals2)
-#' @seealso \code{\link{lag_step}}, \code{\link{queue_step}}
+#' @seealso \code{\link{lag_step}}, \code{\link{queue_step}}.
 #' @export
 wait_step <- function(arrival_df, service){
 

@@ -36,7 +36,7 @@ next_function <- function(sf,time){
 #' @seealso \code{\link{as.server.list}}, \code{\link{queue_step}}, \code{\link{stepfun}}.
 #' @examples
 #'
-#' servers <- as.server.step(c(15,30,50), c(0, 1, 3, 2))
+#' servers <- as.server.stepfun(c(15,30,50), c(0, 1, 3, 2))
 #' servers
 #'
 #' @export

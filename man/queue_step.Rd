@@ -13,7 +13,7 @@ arrival times of the customers.}
 
 \item{service}{vector of service times with the same ordering as arrival_df.}
 
-\item{servers}{a non-zero natural number, an object of class \code{server.step}
+\item{servers}{a non-zero natural number, an object of class \code{server.stepfun}
 or an object of class \code{server.list}.}
 }
 \value{
@@ -54,6 +54,6 @@ summary(firstqueue)
 summary(secondqueue)
 }
 \seealso{
-\code{\link[queuecomputer]{wait_step}}, \code{\link[queuecomputer]{lag_step}}, \code{\link[queuecomputer]{as.server.list}}, \code{\link[queuecomputer]{as.server.step}}
+\code{\link{wait_step}}, \code{\link{lag_step}}, \code{\link{as.server.list}}, \code{\link{as.server.stepfun}}
 }
 
