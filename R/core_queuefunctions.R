@@ -44,6 +44,10 @@
 #' @export
 queue_step <- function(arrival_df, service, servers = 1){
 
+  stopifnot(all(service >= 0))
+  stopifnot(all(arrival_df$times >= 0))
+  stopifnot(length(arrival_df$times) == length(service))
+
   UseMethod("queue_step", servers)
 
 }

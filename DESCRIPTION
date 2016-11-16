@@ -1,6 +1,6 @@
 Package: queuecomputer
 Title: Computationally Efficient Queue Simulation
-Version: 0.5.1.9000
+Version: 0.5.1.9001
 Authors@R: person("Anthony", "Ebert", email = "anthonyebert+CRAN@gmail.com",
                    role = c("aut", "cre"))
 Description: Implementation of a computationally efficient method for
@@ -23,3 +23,4 @@ Suggests:
     ggplot2
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
+URL: https://github.com/AnthonyEbert/queuecomputer
