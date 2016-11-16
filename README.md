@@ -1,7 +1,5 @@
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](http://cran.r-project.org/package=queuecomputer)
-[![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](http://cran.rstudio.com/package=queuecomputer)
-
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](http://cran.r-project.org/package=queuecomputer) [![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](http://cran.rstudio.com/package=queuecomputer)
 
 <!-- --- -->
 <!-- output: html -->
@@ -34,7 +32,6 @@ Installation
 ------------
 
 ``` r
-# For the CRAN version (yet to be released)
 install.packages('queuecomputer')
 
 # For the in-development version
@@ -44,7 +41,7 @@ devtools::install_github("AnthonyEbert/queuecomputer")
 Usage
 -----
 
-In this example of a customers must pass through two queues. The arrival times to the first queue come in two waves starting at time 100 and time 500. The arrival times to the second queue are the departure times of the first queue plus the time they spent walking to the second queue.
+In this example of a queueing network, customers must pass through two queues. The arrival times to the first queue come in two waves starting at time 100 and time 500. The arrival times to the second queue are the departure times of the first queue plus the time they spent walking to the second queue.
 
 ``` r
 library(queuecomputer)
