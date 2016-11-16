@@ -1,4 +1,8 @@
 
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](http://cran.r-project.org/package=queuecomputer)
+[![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](http://cran.rstudio.com/package=queuecomputer)
+
+
 <!-- --- -->
 <!-- output: html -->
 <!-- bibliography: references.bib -->

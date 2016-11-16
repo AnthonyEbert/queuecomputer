@@ -51,7 +51,7 @@ devtools::install_github("AnthonyEbert/queuecomputer")
 
 ## Usage
 
-In this example of a customers must pass through two queues. The arrival times to the first queue come in two waves starting at time 100 and time 500. The arrival times to the second queue are the departure times of the first queue plus the time they spent walking to the second queue. 
+In this example of a queueing network, customers must pass through two queues. The arrival times to the first queue come in two waves starting at time 100 and time 500. The arrival times to the second queue are the departure times of the first queue plus the time they spent walking to the second queue. 
 
 ```{r}
 library(queuecomputer)
