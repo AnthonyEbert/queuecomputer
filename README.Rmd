@@ -42,7 +42,6 @@ It is up to the user to provide arrival and service times, and therefore very co
 ## Installation
 
 ```{r, eval = FALSE}
-# For the CRAN version (yet to be released)
 install.packages('queuecomputer')
 
 # For the in-development version
