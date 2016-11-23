@@ -104,11 +104,9 @@ queue_step.server.stepfun <- function(arrival_df, service, servers){
 
   ordstatement <- is.unsorted(arrival_df$times)
 
-  x = c(servers$x, Inf)
-  y = c(servers$y, 1)
+  # Order arrivals and service according to time
 
   if(ordstatement){
-    # Order arrivals and service according to time
     ord <- order(arrival_df$times)
     arrival_df <- arrival_df[ord, ]
     service <- service[ord]
@@ -117,15 +115,20 @@ queue_step.server.stepfun <- function(arrival_df, service, servers){
 
   times <- arrival_df$times
 
+  x = c(servers$x, Inf)
+  y = c(servers$y, 1)
+
 
   # Call C++ function
 
   output <- qloop_qq(times, service, x, y)
 
-  # Put order back to original ordering
+  # Reformat C++ output
 
   output_df <- output[1:length(times)]
   queue_vector <- (output[I(length(times) + 1):length(output)])
+
+  # Put order back to original ordering
 
   if(ordstatement){
     output_df <- output_df[order(ord)]
@@ -152,8 +155,9 @@ queue_step.numeric <- function(arrival_df, service, servers = 1){
 
   ordstatement <- is.unsorted(arrival_df$times)
 
+  # Order arrivals and service according to time
+
   if(ordstatement){
-    # Order arrivals and service according to time
     ord <- order(arrival_df$times)
     arrival_df <- arrival_df[ord, ]
     service <- service[ord]
@@ -165,10 +169,12 @@ queue_step.numeric <- function(arrival_df, service, servers = 1){
 
   output <- qloop_numeric(times, service, n_servers = servers)
 
-  # Put order back to original ordering
+  # Reformat C++ output
 
   output_df <- output[1:length(times)]
   queue_vector <- (output[I(length(times) + 1):length(output)])
+
+  # Put order back to original ordering
 
   if(ordstatement){
     output_df <- output_df[order(ord)]
