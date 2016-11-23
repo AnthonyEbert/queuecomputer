@@ -4,7 +4,7 @@
 \alias{queue_step}
 \title{Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.}
 \usage{
-queue_step(arrival_df, service, servers = 1, safety = TRUE)
+queue_step(arrival_df, service, servers = 1)
 }
 \arguments{
 \item{arrival_df}{dataframe with column names ID and times . The ID column is a key

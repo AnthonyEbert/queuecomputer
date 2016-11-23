@@ -42,22 +42,22 @@
 #'summary(secondqueue)
 #' @seealso \code{\link{wait_step}}, \code{\link{lag_step}}, \code{\link{as.server.list}}, \code{\link{as.server.stepfun}}
 #' @export
-queue_step <- function(arrival_df, service, servers = 1, safety = TRUE){
-
-  if(safety == FALSE){
-    UseMethod("queue_step_unsafe", servers)
-  }
+queue_step <- function(arrival_df, service, servers = 1){
 
   stopifnot(all(service >= 0))
   stopifnot(all(arrival_df$times >= 0))
   stopifnot(length(arrival_df$times) == length(service))
+
+  if(!is.unsorted(arrival_df$times) & !("server.list" %in% class(servers))){
+    UseMethod("queue_step_ordered", servers)
+  }
 
   UseMethod("queue_step", servers)
 
 }
 
 #' @export
-queue_step.server.list <- function(arrival_df, service, servers, safety){
+queue_step.server.list <- function(arrival_df, service, servers){
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -106,7 +106,7 @@ queue_step.server.list <- function(arrival_df, service, servers, safety){
 #' @useDynLib queuecomputer
 #' @importFrom Rcpp sourceCpp
 #' @export
-queue_step.server.stepfun <- function(arrival_df, service, servers, safety){
+queue_step.server.stepfun <- function(arrival_df, service, servers){
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -142,7 +142,7 @@ queue_step.server.stepfun <- function(arrival_df, service, servers, safety){
 }
 
 #' @export
-queue_step.numeric <- function(arrival_df, service, servers = 1, safety){
+queue_step.numeric <- function(arrival_df, service, servers = 1){
 
   # Order arrivals and service according to time
   ord <- order(arrival_df$times)
@@ -177,7 +177,7 @@ queue_step.numeric <- function(arrival_df, service, servers = 1, safety){
 }
 
 #' @export
-queue_step_unsafe.numeric <- function(arrival_df, service, servers = 1, safety = FALSE){
+queue_step_ordered.numeric <- function(arrival_df, service, servers = 1){
 
   times <- arrival_df$times
 
@@ -203,7 +203,7 @@ queue_step_unsafe.numeric <- function(arrival_df, service, servers = 1, safety =
 }
 
 #' @export
-queue_step_unsafe.server.stepfun <- function(arrival_df, service, servers, safety = FALSE){
+queue_step_ordered.server.stepfun <- function(arrival_df, service, servers){
 
   # Order arrivals and service according to time
 
@@ -229,14 +229,6 @@ queue_step_unsafe.server.stepfun <- function(arrival_df, service, servers, safet
   attr(output_df, "servers_input") = servers
 
   class(output_df) <- c("queue_df", "data.frame")
-
-  return(output_df)
-}
-
-#' @export
-queue_step_unsafe.server.list <- function(arrival_df, service, servers, safety = FALSE){
-
-  stop('queue_step_unsafe method for server.list object not yet developed')
 
   return(output_df)
 }
