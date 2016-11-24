@@ -1,5 +1,5 @@
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](http://cran.r-project.org/package=queuecomputer) [![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](http://cran.rstudio.com/package=queuecomputer)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](https://cran.r-project.org/web/packages/queuecomputer/index.html) [![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](https://cran.rstudio.com/web/packages/queuecomputer/index.html)
 
 <!-- --- -->
 <!-- output: html -->
