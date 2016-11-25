@@ -107,7 +107,7 @@ queue_step.server.stepfun <- function(arrival_df, service, servers){
   # Order arrivals and service according to time
 
   if(ordstatement){
-    ord <- order(arrival_df$times)
+    ord <- order(arrival_df$times, method = "radix")
     arrival_df <- arrival_df[ord, ]
     service <- service[ord]
   }
@@ -131,10 +131,11 @@ queue_step.server.stepfun <- function(arrival_df, service, servers){
   # Put order back to original ordering
 
   if(ordstatement){
-    output_df <- output_df[order(ord)]
-    arrival_df <- arrival_df[order(ord),]
-    service <- service[order(ord)]
-    queue_vector <- queue_vector[order(ord)]
+    new_ord <- order(ord)
+    output_df <- output_df[new_ord]
+    arrival_df <- arrival_df[new_ord,]
+    service <- service[new_ord]
+    queue_vector <- queue_vector[new_ord]
   }
 
   output_df <- data.frame(ID = arrival_df$ID, times = output_df)
@@ -158,7 +159,7 @@ queue_step.numeric <- function(arrival_df, service, servers = 1){
   # Order arrivals and service according to time
 
   if(ordstatement){
-    ord <- order(arrival_df$times)
+    ord <- order(arrival_df$times, method = "radix")
     arrival_df <- arrival_df[ord, ]
     service <- service[ord]
   }
@@ -177,10 +178,11 @@ queue_step.numeric <- function(arrival_df, service, servers = 1){
   # Put order back to original ordering
 
   if(ordstatement){
-    output_df <- output_df[order(ord)]
-    arrival_df <- arrival_df[order(ord),]
-    service <- service[order(ord)]
-    queue_vector <- queue_vector[order(ord)]
+    new_ord <- order(ord)
+    output_df <- output_df[new_ord]
+    arrival_df <- arrival_df[new_ord,]
+    service <- service[new_ord]
+    queue_vector <- queue_vector[new_ord]
   }
 
   output_df <- data.frame(ID = arrival_df$ID, times = output_df)
