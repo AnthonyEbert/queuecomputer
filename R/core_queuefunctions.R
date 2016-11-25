@@ -1,5 +1,54 @@
 #
 
+#' @export
+queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
+
+  stopifnot(all(service >= 0))
+  stopifnot(all(arrivals >= 0))
+  stopifnot(length(arrivals) == length(service))
+
+  UseMethod("queue", servers)
+
+}
+
+#' @export
+queue.numeric <- function(arrivals, service, servers = 1, serveroutput = FALSE){
+
+  stopifnot((servers%%1 == 0) & (servers > 0))
+
+  ordstatement <- is.unsorted(arrivals)
+
+  # Order arrivals and service according to time
+
+  if(ordstatement){
+    ord <- order(arrivals, method = "radix")
+    arrivals <- arrivals[ord, ]
+    service <- service[ord]
+  }
+
+  # Call C++ function
+
+  output <- qloop_numeric(arrivals, service, n_servers = servers)
+
+  # Reformat C++ output
+
+  output <- output[1:length(times)]
+  queue_vector <- (output[I(length(times) + 1):length(output)])
+
+  if(ordstatement){
+    new_ord <- order(ord)
+    output <- output[new_ord]
+    queue_vector <- queue_vector[new_ord]
+  }
+
+  if(serveroutput){
+    attr(output, "server") <- queue_vector
+  }
+
+  return(output)
+}
+
+
 #' Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.
 #'
 #'
