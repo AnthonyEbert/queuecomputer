@@ -3,8 +3,8 @@
 output: github_document
 ---
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](https://cran.r-project.org/package=queuecomputer)
-[![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](https://cran.rstudio.com/package=queuecomputer)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
+[![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
 
 
 <!-- --- -->
