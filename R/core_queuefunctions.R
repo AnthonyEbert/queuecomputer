@@ -1,10 +1,19 @@
 #
 
-
+#' Compute the departure times of a set of customers in a queue from their arrival and service times.
+#' @param arrivals numeric vector of non-negative arrival times
+#' @param service numeric vector of non-negative service times
+#' @param servers a non-zero natural number, an object of class \code{server.stepfun}
+#' or an object of class \code{server.list}.
+#' @param serveroutput boolean whether the server used by each customer should be returned.
 #' @useDynLib queuecomputer
 #' @importFrom Rcpp sourceCpp
 #' @export
 queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
+
+  stopifnot(all(service >= 0))
+  stopifnot(all(arrivals >= 0))
+  stopifnot(length(arrivals) == length(service))
 
   ordstatement <- is.unsorted(arrivals)
 
@@ -18,20 +27,20 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
 
   output <- queue_pass(arrivals = arrivals, service = service, servers = servers)
 
-  output <- output[1:length(arrivals)]
-  queue_vector <- (output[I(length(arrivals) + 1):length(output)])
+  departures <- output[1:length(arrivals)]
+  queue_vector <- (output[I(length(arrivals) + 1):I(length(output) - 1)])
 
   if(ordstatement){
     new_ord <- order(ord)
-    output <- output[new_ord]
+    departures <- departures[new_ord]
     queue_vector <- queue_vector[new_ord]
   }
 
   if(serveroutput){
-    attr(output, "server") <- queue_vector
+    attr(departures, "server") <- queue_vector
   }
 
-  return(output)
+  return(departures)
 }
 
 
@@ -124,7 +133,7 @@ queue_step <- function(arrival_df, service, servers = 1){
 
   output <- queue(arrivals = arrival_df$times, service = service, servers = servers, serveroutput = TRUE)
 
-  output_df <- data.frame(ID = arrival_df$ID, times = output)
+  output_df <- data.frame(ID = arrival_df$ID, times = as.numeric(output))
   attr(output_df, "server") <- attr(output, "server")
   attr(output_df, "arrival_df") = arrival_df
   attr(output_df, "service") = service
