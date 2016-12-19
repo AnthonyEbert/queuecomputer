@@ -6,6 +6,9 @@ output: github_document
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
 [![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
 
+<!-- Comment this bit out for CRAN -->
+[![Build Status](https://travis-ci.org/AnthonyEbert/queuecomputer.svg?branch=simple_exports2)](https://travis-ci.org/AnthonyEbert/queuecomputer)
+<!-- Comment this bit out for CRAN -->
 
 <!-- --- -->
 <!-- output: html -->

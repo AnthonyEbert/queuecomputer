@@ -46,7 +46,7 @@ as.server.stepfun <- function(x, y){
   stopifnot(!is.unsorted(x))
   stopifnot(length(y) == length(x) + 1)
   stopifnot(sum(y) != 0)
-  stopifnot(y[length(y)] != 0)
+  # stopifnot(y[length(y)] != 0)
 
 
   output <- list()
@@ -131,6 +131,18 @@ as.server.list <- function(times, init){
   class(output) <- c("list", "server.list")
   return(output)
 
+}
+
+
+
+
+
+### Release Questions
+
+release_questions <- function(){
+  c(
+    "Have you deleted the travis badge?"
+  )
 }
 
 

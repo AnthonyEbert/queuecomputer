@@ -47,6 +47,7 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
 
   int n = times.size();
   vec output = vec((n+1) * 2 - 1);
+  output.fill(datum::inf);
   int queue = 0;
   double next_time = x[0];
 
@@ -58,7 +59,7 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
   for( int i=0; i < n; ++i)
   {
 
-    if( all(queue_times >= next_time))
+    if( all(queue_times >= next_time) | (times[i] >= next_time))
     {
       diff_size = next_size - current_size;
 
@@ -101,6 +102,10 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
     if( current_size == 0 )
     {
       i = i - 1;
+      if( next_time == datum::inf )
+      {
+        break;
+      }
     }
 
   }
