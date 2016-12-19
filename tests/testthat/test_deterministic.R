@@ -123,6 +123,16 @@ test_that("Check service times, zeros", {
   expect_equal(qsf$times , qsl$times)
 })
 
+server_sf <- as.server.stepfun(c(50, 200, 250, 275),c(1,0,1,0,1))
+server_list <- as.server.list(list(c(50, 200, 250, 275)),1)
+
+qsf <- queue_step(arrival_df, service, servers = server_sf)
+qsl <- queue_step(arrival_df, service, servers = server_list)
+
+test_that("Check service times, zeros with as.server.list", {
+    expect_equal(qsf$times , qsl$times)
+})
+
 
 # Check queue_step.server.stepfun and queue_step.numeric give same answer.
 
