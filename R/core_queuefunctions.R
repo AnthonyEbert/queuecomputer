@@ -6,6 +6,12 @@
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
 #' or an object of class \code{server.list}.
 #' @param serveroutput boolean whether the server used by each customer should be returned.
+#' @description \code{queue} is a faster internal version of \code{queue_step}. It is not compatible with the \code{summary.queue_df} method.
+#' @examples
+#' queue(rep(1, 7), service = rep(0.2, 7),
+#' servers = as.server.stepfun(3.1, c(2, 1)))
+#' @seealso
+#' \code{\link{queue_step}}
 #' @useDynLib queuecomputer
 #' @importFrom Rcpp sourceCpp
 #' @export
@@ -15,6 +21,8 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
   stopifnot(all(arrivals >= 0))
   stopifnot(length(arrivals) == length(service))
   stopifnot(anyNA(c(arrivals, service)) == FALSE )
+  stopifnot(is.numeric(arrivals))
+  stopifnot(is.numeric(service))
 
   ordstatement <- is.unsorted(arrivals)
 

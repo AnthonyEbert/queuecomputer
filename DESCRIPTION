@@ -14,7 +14,7 @@ Imports:
     dplyr,
     stats,
     Rcpp
-RoxygenNote: 5.0.1.9000
+RoxygenNote: 5.0.1
 Suggests:
     knitr,
     rmarkdown,
