@@ -51,6 +51,7 @@ queue_pass <- function(arrivals, service, servers){
 
 queue_pass.numeric <- function(arrivals, service, servers){
   stopifnot((servers%%1 == 0) & (servers > 0))
+  stopifnot(length(servers) == 1)
   output <- qloop_numeric(arrivals, service, n_servers = servers)
   return(output)
 }
