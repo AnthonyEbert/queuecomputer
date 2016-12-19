@@ -170,7 +170,15 @@ secondqueue <- queue_step(arrival_df = firstqueue,
 all(firstqueue$times >= secondqueue$times)
 
 
+# Wait step
+
+test_that("Wait step for bags", {
+    expect_equal(wait_step(arrival_df, service)$times, pmax.int(arrival_df$times, service))
+})
 
 
+# Post analysis, just running some functions to see if they work.
+
+summary(firstqueue)
 
 
