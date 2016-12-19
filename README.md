@@ -4,6 +4,8 @@
 <!-- Comment this bit out for CRAN -->
 [![Build Status](https://travis-ci.org/AnthonyEbert/queuecomputer.svg?branch=simple_exports2)](https://travis-ci.org/AnthonyEbert/queuecomputer) <!-- Comment this bit out for CRAN -->
 
+[![codecov](https://codecov.io/gh/AnthonyEbert/queuecomputer/branch/master/graph/badge.svg)](https://codecov.io/gh/AnthonyEbert/queuecomputer)
+
 <!-- --- -->
 <!-- output: html -->
 <!-- bibliography: references.bib -->
