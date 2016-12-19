@@ -14,6 +14,7 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
   stopifnot(all(service >= 0))
   stopifnot(all(arrivals >= 0))
   stopifnot(length(arrivals) == length(service))
+  stopifnot(anyNA(c(arrivals, service)) == FALSE )
 
   ordstatement <- is.unsorted(arrivals)
 
