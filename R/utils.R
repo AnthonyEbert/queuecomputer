@@ -135,3 +135,15 @@ as.server.list <- function(times, init){
 
 
 
+
+
+### Release Questions
+
+release_questions <- function(){
+  c(
+    "Have you deleted the travis badge?"
+  )
+}
+
+
+
