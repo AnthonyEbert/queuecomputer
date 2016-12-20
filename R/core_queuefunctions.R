@@ -67,8 +67,16 @@ queue_pass.numeric <- function(arrivals, service, servers){
 
 
 queue_pass.server.stepfun <- function(arrivals, service, servers){
+
   x = c(servers$x, Inf)
   y = c(servers$y, 1)
+
+  if(length(x) != 2){
+    if( any(max(service) >= diff(x))){
+      warning("Service times may span multiple server epochs. Results may not be 100% accurate")
+    }
+  }
+
   output <- qloop_qq(arrivals, service, x, y)
   return(output)
 }

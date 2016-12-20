@@ -96,7 +96,7 @@ summary(q1sf)
 
 arrival_df <- data.frame(ID = c(1:500), times = rlnorm(500, meanlog = 1))
 
-service <- rlnorm(500, meanlog = 0.5)
+service <- pmin.int(rlnorm(500, meanlog = 0.5), 24)
 
 ord <- order(arrival_df$times)
 
@@ -111,7 +111,7 @@ test_that("Check service times", {
   expect_equal(qsf$times , qsl$times)
 })
 
-service <- rlnorm(500, meanlog = 3)
+service <- pmin.int(rlnorm(500, meanlog = 3), 24)
 
 server_sf <- as.server.stepfun(c(50, 200, 250, 275),c(1,0,1,0,1))
 server_list <- queuecomputer:::server_make(c(50, 200, 250, 275),c(1,0,1,0,1))
@@ -133,12 +133,24 @@ test_that("Check service times, zeros with as.server.list", {
     expect_equal(qsf$times , qsl$times)
 })
 
+# Check that a warning is produced
+
+set.seed(1)
+
+service <- rlnorm(500, meanlog = 3)
+
+server_sf <- as.server.stepfun(c(50, 200, 250, 275),c(1,0,1,0,1))
+
+test_that("Check warning is produced", {
+  expect_warning(qsf <- queue_step(arrival_df, service, servers = server_sf))
+})
+
 
 # Check queue_step.server.stepfun and queue_step.numeric give same answer.
 
 arrival_df <- data.frame(ID = c(1:500), times = rlnorm(500, meanlog = 3))
 
-service <- rlnorm(500, meanlog = 4)
+service <- pmin.int(rlnorm(500, meanlog = 4), 25)
 
 ord <- order(arrival_df$times)
 
