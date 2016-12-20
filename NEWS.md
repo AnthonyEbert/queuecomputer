@@ -1,27 +1,14 @@
 
+# queuecomputer 0.6.1
 
-# queuecomputer 0.6.0.9002
+## New features:
+* It's faster. We accomplish this by checking whether arrival times are already ordered (in which case we skip reordering!) and by using the `"radix"` method within the `order` function. 
+* Internal `queue` function for high level users
+* Customers can now miss the queue if they arrive too late. 
 
-* Fixed serious bug where servers from previous epoch were serving customers who had just arrived. 
-
-# queuecomputer 0.6.0.9001
-
-* Changed method of order function to radix. Improved speed. 
-
-# queuecomputer 0.5.1.9002
-
-* Added a check within queue_step for is.unsorted so that time isn't wasted sorting arrival times which are already sorted. This can improve speed by 1 order of magnitude (important!). 
-* Changed CRAN URL in github badges in README to canonical form. 
-
-# queuecomputer 0.5.1.9001
-
-* Added extra stopifnot conditions in queue_step function. 
-* Added URL to DESCRIPTION
-
-# queuecomputer 0.5.1.9000
-
-* Minor edits in readme
-* Added a `NEWS.md` file to track changes to the package.
+## Bug fixes:
+* `queue_step` with `as.server.stepfun` now checks if departure times force move to next epoch. Previously (in some cases) new customers could be served by servers in previous epochs. 
+* Added extra checks in `queue_step` and `as.server.stepfun` for correct input. 
 
 # queuecomputer 0.5.1
 
