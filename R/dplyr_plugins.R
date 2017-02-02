@@ -1,6 +1,7 @@
 
 #' Compute queue lengths from arrival, service and departure data
 #' @export
+#' @import dplyr
 #' @param arrivals vector of arrival times
 #' @param service vector of service times
 #' @param departure vector of departure times

@@ -6,13 +6,15 @@ Authors@R: person("Anthony", "Ebert", email = "anthonyebert+CRAN@gmail.com",
 Description: Implementation of a computationally efficient method for
     simulating queues with arbitrary arrival and service times.
 Depends:
-    R (>= 3.3.1), dplyr
+    R (>= 3.3.1), 
+    dplyr
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 Imports:
     stats,
-    Rcpp
+    Rcpp, 
+    tidyr
 RoxygenNote: 5.0.1.9000
 Suggests:
     knitr,
