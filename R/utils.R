@@ -137,3 +137,23 @@ as.server.list <- function(times, init){
 }
 
 
+
+check_queueinput <- function(arrivals, service, departures = NULL){
+  stopifnot(all(service >= 0))
+  stopifnot(all(arrivals >= 0))
+  stopifnot(length(arrivals) == length(service))
+  stopifnot(anyNA(c(arrivals, service)) == FALSE )
+  stopifnot(is.numeric(arrivals))
+  stopifnot(is.numeric(service))
+
+  if(!is.null(departures)){
+    stopifnot(all(departures >= 0))
+    stopifnot(length(departures) == length(service))
+    stopifnot(anyNA(departures) == FALSE )
+    stopifnot(is.numeric(departures))
+  }
+}
+
+
+
+

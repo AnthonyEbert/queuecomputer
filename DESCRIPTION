@@ -1,17 +1,16 @@
 Package: queuecomputer
 Title: Computationally Efficient Queue Simulation
-Version: 0.6.1
+Version: 0.6.1.9001
 Authors@R: person("Anthony", "Ebert", email = "anthonyebert+CRAN@gmail.com",
                    role = c("aut", "cre"))
 Description: Implementation of a computationally efficient method for
     simulating queues with arbitrary arrival and service times.
 Depends:
-    R (>= 3.3.1)
+    R (>= 3.3.1), dplyr
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 Imports:
-    dplyr,
     stats,
     Rcpp
 RoxygenNote: 5.0.1.9000
