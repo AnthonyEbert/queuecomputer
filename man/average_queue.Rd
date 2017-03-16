@@ -4,7 +4,7 @@
 \alias{average_queue}
 \title{Compute time average queue length}
 \usage{
-average_queue(times, QueueLength)
+average_queue(x)
 }
 \description{
 Compute time average queue length

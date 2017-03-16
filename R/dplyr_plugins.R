@@ -81,7 +81,7 @@ queue_lengths <- function(arrivals, service = 0, departures, scales = NULL){
     time = value
   )
 
-  queuedata <- queuedata %>% select(key, time, QueueLength)
+  queuedata <- queuedata %>% select(time, QueueLength)
 
   return(queuedata)
 
@@ -89,7 +89,39 @@ queue_lengths <- function(arrivals, service = 0, departures, scales = NULL){
 
 #' Compute time average queue length
 #' @export
-average_queue <- function(times, QueueLength){
+average_queue <- function(x){
+  times <- x$time
+  QueueLength <- x$QueueLength
+
   times <- c(0, times)
-  (diff(times) %*% QueueLength) / length(QueueLength)
+  (diff(times) %*% QueueLength) / (times[length(times)] - times[1])
 }
+
+#' Summary queue
+#' @export
+summary_queue <- function(x){
+  return(
+    x %>%
+    mutate(diff_times = c(diff(time), 0)) %>%
+    group_by(QueueLength) %>%
+    summarise(proportion = sum(diff_times)) %>%
+    mutate(proportion = proportion / sum(proportion))
+  )
+}
+
+#' summarise it all
+#' @export
+summary_all <- function(arrivals, service, departures){
+  queue_lengths(arrivals, service, departures) %>% summary_queue()
+}
+
+
+
+
+
+
+
+
+
+
+
