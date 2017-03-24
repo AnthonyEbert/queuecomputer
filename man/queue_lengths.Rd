@@ -4,7 +4,7 @@
 \alias{queue_lengths}
 \title{Compute queue lengths from arrival, service and departure data}
 \usage{
-queue_lengths(arrivals, service = 0, departures, scales = NULL)
+queue_lengths(arrivals, service = 0, departures)
 }
 \arguments{
 \item{arrivals}{vector of arrival times}

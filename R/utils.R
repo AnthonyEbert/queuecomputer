@@ -156,4 +156,17 @@ check_queueinput <- function(arrivals, service, departures = NULL){
 
 
 
+generate_input <- function(mag = 3){
+  n <- 10^mag
+  arrivals <<- cumsum(rexp(n))
+  service <<- rexp(n)
+  departures <<- queue(arrivals, service, 1)
+  QDC_obj <<- QDC(arrivals, service, 1)
+}
+
+generate_queuedata <- function(mag = 3){
+  generate_input(mag = 3)
+  queuedata <<- queue_lengths(arrivals, service, departures)
+}
+
 

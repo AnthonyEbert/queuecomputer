@@ -103,6 +103,76 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #' Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.
 #'
 #'
+#' @param arrivals numeric vector of non-negative arrival times
+#' @param service vector of service times with the same ordering as arrival_df.
+#' @param servers a non-zero natural number, an object of class \code{server.stepfun}
+#' or an object of class \code{server.list}.
+#' @return A vector of response times for the input of arrival times and service times.
+#' @examples
+#'
+#' # We simulate two queues in series.
+#' set.seed(1L)
+#' n_customers <- 100
+#' arrival_df <- data.frame(ID = c(1:n_customers), times = rlnorm(n_customers, meanlog = 3))
+#' service_1 <- rlnorm(n_customers)
+#'
+#'
+#' firstqueue <- queue_step(arrival_df = arrival_df,
+#'     servers = 2, service = service_1)
+#'
+#' server_list <- as.server.stepfun(c(50),c(1,2))
+#'
+#' service_2 <- rlnorm(n_customers)
+#' secondqueue <- queue_step(arrival_df = firstqueue,
+#'     servers = server_list, service = service_2)
+#'
+#' curve(ecdf(arrival_df$times)(x) * n_customers , from = 0, to = 200,
+#'     xlab = "time", ylab = "Number of customers")
+#' curve(ecdf(firstqueue$times)(x) * n_customers , add = TRUE, col = "red")
+#' curve(ecdf(secondqueue$times)(x) * n_customers, add = TRUE, col = "blue")
+#' legend(100,40, legend = c("Customer input - arrivals",
+#'     "Customer output - firstqueue",
+#'     "Customer output - secondqueue"),
+#'     col = c("black","red","blue"), lwd = 1, cex = 0.8
+#' )
+#'
+#'summary(firstqueue)
+#'summary(secondqueue)
+#' @seealso \code{\link{wait_step}}, \code{\link{lag_step}}, \code{\link{as.server.list}}, \code{\link{as.server.stepfun}}
+#' @export
+QDC <- function(arrivals, service, servers = 1){
+
+  departure_output <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE)
+
+  departures_df <- data.frame(
+    arrivals = arrivals,
+    service = service,
+    departures = departures,
+    server = attr(departure_output, "server")
+  )
+
+  queuelength_df <- queue_lengths(
+    arrivals, service, departures
+  )
+
+  output <- list(
+    departures_df = departures_df,
+    queuelength_df = queuelength_df,
+    servers_input = servers
+  )
+
+
+  class(output) <- c("queue_list", "list")
+
+  return(output)
+}
+
+
+
+
+#' Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.
+#'
+#'
 #' @param arrival_df dataframe with column names ID and times . The ID column is a key
 #'     for the customers. The times column is of class \code{numeric} and represents the
 #'     arrival times of the customers.
@@ -158,6 +228,11 @@ queue_step <- function(arrival_df, service, servers = 1){
 
 
 }
+
+
+
+
+
 
 #' Add lag to vector of arrival times.
 #' @param arrival_df A dataframe with column names ID and times . The ID column is a key
