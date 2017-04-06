@@ -137,6 +137,32 @@ as.server.list <- function(times, init){
 }
 
 
+#' Creates batches of customer arrivals from a dataframe within a \code{dplyr::do} command
+#'
+#' @param data a named list object.
+#' @param arrival_dist a distribution whose support is strictly positive. Either as an object or a non-empty character string. It represents the distribution of arrival times.
+#' @param service_rate a strictly positive number representing the rate parameter in the exponential distribution for the service times.
+#' @param time a number greater than or equal to zero.
+create_batches <- function(data, arrival_dist, service_rate = NULL, time = 0){
+
+  output_df <- dplyr::data_frame(arrivals = time + do_func_ignore_things(data, arrival_dist))
+
+  if(is.null(service_rate) == FALSE){
+    output_df <- output_df %>% dplyr::mutate(
+      service = stats::rexp(data$n, service_rate)
+    )
+  }
+  return(output_df)
+}
+
+
+do_func_ignore_things <- function(data, what){
+  acceptable_args <- data[names(data) %in% (formals(what) %>% names)]
+
+  do.call(what, acceptable_args %>% as.list)
+}
+
+
 
 check_queueinput <- function(arrivals, service, departures = NULL){
   stopifnot(all(service >= 0))
@@ -152,6 +178,20 @@ check_queueinput <- function(arrivals, service, departures = NULL){
     stopifnot(anyNA(departures) == FALSE )
     stopifnot(is.numeric(departures))
   }
+}
+
+
+
+generate_input <- function(mag = 3){
+  n <- 10^mag
+  arrivals <- cumsum(rexp(n))
+  service <- stats::rexp(n)
+  departures <- queue(arrivals, service, 1)
+  QDC_obj <- QDC(arrivals, service, 1)
+
+  output <- list(arrivals = arrivals, service = service, departures = departures, QDC_obj = QDC_obj)
+
+  return(output)
 }
 
 

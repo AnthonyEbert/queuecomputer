@@ -4,20 +4,23 @@
 \alias{queue_lengths}
 \title{Compute queue lengths from arrival, service and departure data}
 \usage{
-queue_lengths(arrivals, service = 0, departures, scales = NULL)
+queue_lengths(arrivals, service = 0, departures)
 }
 \arguments{
 \item{arrivals}{vector of arrival times}
 
 \item{service}{vector of service times}
 
-\item{departure}{vector of departure times}
+\item{departures}{vector of departure times}
 }
 \description{
 Compute queue lengths from arrival, service and departure data
 }
 \examples{
 library(ggplot2)
+library(dplyr)
+library(queuecomputer)
+
 set.seed(1L)
 n_customers <- 100
 
@@ -63,7 +66,7 @@ output <- queueoutput_df \%>\%
 
 
 ggplot(output) +
-  aes(x = time, y = QueueLength) + geom_step() +
+  aes(x = times, y = queuelength) + geom_step() +
   facet_grid(~route)
 }
 
