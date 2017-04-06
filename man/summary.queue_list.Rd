@@ -6,6 +6,11 @@
 \usage{
 \method{summary}{queue_list}(object, ...)
 }
+\arguments{
+\item{object}{an object of class \code{queue_list}, the result of a call to \code{queue_step}.}
+
+\item{...}{futher arguments to be passed to or from other methods.}
+}
 \description{
 Summary method for queue_list object
 }

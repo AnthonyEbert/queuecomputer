@@ -6,6 +6,7 @@
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
 #' or an object of class \code{server.list}.
 #' @param serveroutput boolean whether the server used by each customer should be returned.
+#' @param adjust non-negative number, an adjustment parameter for scaling the service times.
 #' @description \code{queue} is a faster internal version of \code{queue_step}. It is not compatible with the \code{summary.queue_df} method.
 #' @examples
 #' queue(rep(1, 7), service = rep(0.2, 7),
@@ -15,8 +16,9 @@
 #' @useDynLib queuecomputer
 #' @importFrom Rcpp sourceCpp
 #' @export
-queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
+queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust = 1){
 
+  service = service * adjust
   check_queueinput(arrivals, service)
 
   ordstatement <- is.unsorted(arrivals)
@@ -107,48 +109,28 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #' @param service vector of service times with the same ordering as arrival_df.
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
 #' or an object of class \code{server.list}.
+#' @param adjust non-negative number, an adjustment parameter for scaling the service times.
 #' @return A vector of response times for the input of arrival times and service times.
 #' @examples
+#' n_customers <- 1e3
+#' arrival_rate <- 0.8
+#' service_rate <- 1
 #'
-#' # We simulate two queues in series.
-#' set.seed(1L)
-#' n_customers <- 100
-#' arrival_df <- data.frame(ID = c(1:n_customers), times = rlnorm(n_customers, meanlog = 3))
-#' service_1 <- rlnorm(n_customers)
-#'
-#'
-#' firstqueue <- queue_step(arrival_df = arrival_df,
-#'     servers = 2, service = service_1)
-#'
-#' server_list <- as.server.stepfun(c(50),c(1,2))
-#'
-#' service_2 <- rlnorm(n_customers)
-#' secondqueue <- queue_step(arrival_df = firstqueue,
-#'     servers = server_list, service = service_2)
-#'
-#' curve(ecdf(arrival_df$times)(x) * n_customers , from = 0, to = 200,
-#'     xlab = "time", ylab = "Number of customers")
-#' curve(ecdf(firstqueue$times)(x) * n_customers , add = TRUE, col = "red")
-#' curve(ecdf(secondqueue$times)(x) * n_customers, add = TRUE, col = "blue")
-#' legend(100,40, legend = c("Customer input - arrivals",
-#'     "Customer output - firstqueue",
-#'     "Customer output - secondqueue"),
-#'     col = c("black","red","blue"), lwd = 1, cex = 0.8
-#' )
-#'
-#'summary(firstqueue)
-#'summary(secondqueue)
-#' @seealso \code{\link{wait_step}}, \code{\link{lag_step}}, \code{\link{as.server.list}}, \code{\link{as.server.stepfun}}
+#' arrivals <- cumsum(rexp(n_customers, arrival_rate))
+#' service <- rexp(n_customers, service_rate)
+#' queue_obj <- QDC(arrivals, service, servers = 1)
+#' queue_obj
+#' summary(queue_obj)
 #' @export
-QDC <- function(arrivals, service, servers = 1){
+QDC <- function(arrivals, service, servers = 1, adjust = 1){
 
-  departure_output <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE)
+  departures <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE, adjust = 1)
 
   departures_df <- data.frame(
     arrivals = arrivals,
     service = service,
     departures = departures,
-    server = attr(departure_output, "server")
+    server = attr(departures, "server")
   )
 
   queuelength_df <- queue_lengths(
@@ -179,6 +161,7 @@ QDC <- function(arrivals, service, servers = 1){
 #' @param service vector of service times with the same ordering as arrival_df.
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
 #' or an object of class \code{server.list}.
+#' @param adjust non-negative number, an adjustment parameter for scaling the service times.
 #' @return A vector of response times for the input of arrival times and service times.
 #' @examples
 #'
@@ -212,9 +195,9 @@ QDC <- function(arrivals, service, servers = 1){
 #'summary(secondqueue)
 #' @seealso \code{\link{wait_step}}, \code{\link{lag_step}}, \code{\link{as.server.list}}, \code{\link{as.server.stepfun}}
 #' @export
-queue_step <- function(arrival_df, service, servers = 1){
+queue_step <- function(arrival_df, service, servers = 1, adjust = 1){
 
-  output <- queue(arrivals = arrival_df$times, service = service, servers = servers, serveroutput = TRUE)
+  output <- queue(arrivals = arrival_df$times, service = service, servers = servers, serveroutput = TRUE, adjust = 1)
 
   output_df <- data.frame(ID = arrival_df$ID, times = as.numeric(output))
   attr(output_df, "server") <- attr(output, "server")

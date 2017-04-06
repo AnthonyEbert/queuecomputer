@@ -4,7 +4,7 @@
 \alias{queue}
 \title{Compute the departure times of a set of customers in a queue from their arrival and service times.}
 \usage{
-queue(arrivals, service, servers = 1, serveroutput = FALSE)
+queue(arrivals, service, servers = 1, serveroutput = FALSE, adjust = 1)
 }
 \arguments{
 \item{arrivals}{numeric vector of non-negative arrival times}
@@ -15,6 +15,8 @@ queue(arrivals, service, servers = 1, serveroutput = FALSE)
 or an object of class \code{server.list}.}
 
 \item{serveroutput}{boolean whether the server used by each customer should be returned.}
+
+\item{adjust}{non-negative number, an adjustment parameter for scaling the service times.}
 }
 \description{
 \code{queue} is a faster internal version of \code{queue_step}. It is not compatible with the \code{summary.queue_df} method.

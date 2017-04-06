@@ -4,7 +4,7 @@
 \alias{QDC}
 \title{Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.}
 \usage{
-QDC(arrivals, service, servers = 1)
+QDC(arrivals, service, servers = 1, adjust = 1)
 }
 \arguments{
 \item{arrivals}{numeric vector of non-negative arrival times}
@@ -13,6 +13,8 @@ QDC(arrivals, service, servers = 1)
 
 \item{servers}{a non-zero natural number, an object of class \code{server.stepfun}
 or an object of class \code{server.list}.}
+
+\item{adjust}{non-negative number, an adjustment parameter for scaling the service times.}
 }
 \value{
 A vector of response times for the input of arrival times and service times.
@@ -21,37 +23,14 @@ A vector of response times for the input of arrival times and service times.
 Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.
 }
 \examples{
+n_customers <- 1e3
+arrival_rate <- 0.8
+service_rate <- 1
 
-# We simulate two queues in series.
-set.seed(1L)
-n_customers <- 100
-arrival_df <- data.frame(ID = c(1:n_customers), times = rlnorm(n_customers, meanlog = 3))
-service_1 <- rlnorm(n_customers)
-
-
-firstqueue <- queue_step(arrival_df = arrival_df,
-    servers = 2, service = service_1)
-
-server_list <- as.server.stepfun(c(50),c(1,2))
-
-service_2 <- rlnorm(n_customers)
-secondqueue <- queue_step(arrival_df = firstqueue,
-    servers = server_list, service = service_2)
-
-curve(ecdf(arrival_df$times)(x) * n_customers , from = 0, to = 200,
-    xlab = "time", ylab = "Number of customers")
-curve(ecdf(firstqueue$times)(x) * n_customers , add = TRUE, col = "red")
-curve(ecdf(secondqueue$times)(x) * n_customers, add = TRUE, col = "blue")
-legend(100,40, legend = c("Customer input - arrivals",
-    "Customer output - firstqueue",
-    "Customer output - secondqueue"),
-    col = c("black","red","blue"), lwd = 1, cex = 0.8
-)
-
-summary(firstqueue)
-summary(secondqueue)
-}
-\seealso{
-\code{\link{wait_step}}, \code{\link{lag_step}}, \code{\link{as.server.list}}, \code{\link{as.server.stepfun}}
+arrivals <- cumsum(rexp(n_customers, arrival_rate))
+service <- rexp(n_customers, service_rate)
+queue_obj <- QDC(arrivals, service, servers = 1)
+queue_obj
+summary(queue_obj)
 }
 

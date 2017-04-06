@@ -4,9 +4,12 @@
 #' @importFrom dplyr %>%
 #' @param arrivals vector of arrival times
 #' @param service vector of service times
-#' @param departure vector of departure times
+#' @param departures vector of departure times
 #' @examples
 #' library(ggplot2)
+#' library(dplyr)
+#' library(queuecomputer)
+#'
 #' set.seed(1L)
 #' n_customers <- 100
 #'
@@ -114,7 +117,18 @@ average_queue <- function(times, queuelength){
   (diff(times) %*% queuelength) / (times[length(times)] - times[1])
 }
 
-#' Summary queue
+#' Summarise queue lengths
+#' @param times numeric vector of times
+#' @param queuelength numeric vector of queue lengths
+#' @examples
+#' n <- 1e3
+#' arrivals <- cumsum(rexp(n))
+#' service <- rexp(n)
+#' departures <- queue(arrivals, service, 1)
+#'
+#' queuedata <- queue_lengths(arrivals, service, departures)
+#' ql_summary(queuedata$times, queuedata$queuelength)
+#' @export
 ql_summary <- function(times, queuelength){
   x <- dplyr::data_frame(
     times = c(0,times), queuelength = c(0,queuelength)
@@ -130,8 +144,6 @@ ql_summary <- function(times, queuelength){
 }
 
 
-#' Summary details
-#'
 summary_details <- function(arrivals, service, departures){
   serviced_customers = is.finite(queue_df$times)
   sc <- serviced_customers
@@ -144,7 +156,6 @@ summary_details <- function(arrivals, service, departures){
 }
 
 
-#' summarise it all
 summary_all <- function(arrivals, service, departures){
   queue_lengths(arrivals, service, departures) %>% summary_queue()
 }

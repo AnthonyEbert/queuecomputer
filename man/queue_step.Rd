@@ -4,7 +4,7 @@
 \alias{queue_step}
 \title{Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.}
 \usage{
-queue_step(arrival_df, service, servers = 1)
+queue_step(arrival_df, service, servers = 1, adjust = 1)
 }
 \arguments{
 \item{arrival_df}{dataframe with column names ID and times . The ID column is a key
@@ -15,6 +15,8 @@ arrival times of the customers.}
 
 \item{servers}{a non-zero natural number, an object of class \code{server.stepfun}
 or an object of class \code{server.list}.}
+
+\item{adjust}{non-negative number, an adjustment parameter for scaling the service times.}
 }
 \value{
 A vector of response times for the input of arrival times and service times.

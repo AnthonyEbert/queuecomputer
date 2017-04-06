@@ -117,24 +117,28 @@ integrate_stepfun <- function(x, y, last = 1000){
 
 #' Summary method for queue_list object
 #' @export
+#' @param object an object of class \code{queue_list}, the result of a call to \code{queue_step}.
+#' @param ... futher arguments to be passed to or from other methods.
 summary.queue_list <- function(object, ...){
 
   # Missed customers and initial input
 
   missed_customers = length(
-    is.infinite(object$departures_df$departures)
+    which(
+      is.infinite(object$departures_df$departures)
+    )
   )
 
   departures_df <- object$departures_df %>%
-    select(is.finite(departures))
+    dplyr::filter(is.finite(departures))
   queuelength_df <- object$queuelength_df %>%
-    select(is.finite(times))
-  servers_input <- servers_input
+    dplyr::filter(is.finite(times))
+  servers_input <- object$servers_input
 
   # Compute response times and waiting times
 
   departures_df <- departures_df %>%
-    mutate(
+    dplyr::mutate(
       response = departures - arrivals,
       waiting = departures - arrivals - service
     )
@@ -145,7 +149,12 @@ summary.queue_list <- function(object, ...){
     queuelength_df$times, queuelength_df$queuelength
   )
 
+  output_list <- list(
+    missed_customers = missed_customers,
+    qlength_sum = qlength_sum
+  )
 
+  return(output_list)
 
 }
 
