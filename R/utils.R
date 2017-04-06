@@ -143,6 +143,7 @@ as.server.list <- function(times, init){
 #' @param arrival_dist a distribution whose support is strictly positive. Either as an object or a non-empty character string. It represents the distribution of arrival times.
 #' @param service_rate a strictly positive number representing the rate parameter in the exponential distribution for the service times.
 #' @param time a number greater than or equal to zero.
+#' @export
 create_batches <- function(data, arrival_dist, service_rate = NULL, time = 0){
 
   output_df <- dplyr::data_frame(arrivals = time + do_func_ignore_things(data, arrival_dist))
