@@ -66,7 +66,7 @@ output <- queueoutput_df \%>\%
 
 
 ggplot(output) +
-  aes(x = time, y = QueueLength) + geom_step() +
+  aes(x = times, y = queuelength) + geom_step() +
   facet_grid(~route)
 }
 

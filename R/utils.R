@@ -145,16 +145,13 @@ as.server.list <- function(times, init){
 #' @param time a number greater than or equal to zero.
 create_batches <- function(data, arrival_dist, service_rate = NULL, time = 0){
 
-  output_df <- data_frame(arrivals = time + do_func_ignore_things(data, arrival_dist))
+  output_df <- dplyr::data_frame(arrivals = time + do_func_ignore_things(data, arrival_dist))
 
   if(is.null(service_rate) == FALSE){
-    output_df <- output_df %>% mutate(
-      service = rexp(data$n, service_rate)
+    output_df <- output_df %>% dplyr::mutate(
+      service = stats::rexp(data$n, service_rate)
     )
   }
-
-  prob = p_route$prob
-
   return(output_df)
 }
 
@@ -188,19 +185,13 @@ check_queueinput <- function(arrivals, service, departures = NULL){
 generate_input <- function(mag = 3){
   n <- 10^mag
   arrivals <- cumsum(rexp(n))
-  service <- rexp(n)
+  service <- stats::rexp(n)
   departures <- queue(arrivals, service, 1)
   QDC_obj <- QDC(arrivals, service, 1)
 
   output <- list(arrivals = arrivals, service = service, departures = departures, QDC_obj = QDC_obj)
 
   return(output)
-}
-
-generate_queuedata <- function(mag = 3){
-  generate_input(mag = 3)
-  queuedata <- queue_lengths(arrivals, service, departures)
-  return(queuedata)
 }
 
 

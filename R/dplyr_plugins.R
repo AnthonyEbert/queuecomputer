@@ -2,6 +2,7 @@
 #' Compute queue lengths from arrival, service and departure data
 #' @export
 #' @importFrom dplyr %>%
+#' @importFrom stats rexp
 #' @param arrivals vector of arrival times
 #' @param service vector of service times
 #' @param departures vector of departure times
@@ -55,9 +56,15 @@
 #'
 #'
 #' ggplot(output) +
-#'   aes(x = time, y = QueueLength) + geom_step() +
+#'   aes(x = times, y = queuelength) + geom_step() +
 #'   facet_grid(~route)
 queue_lengths <- function(arrivals, service = 0, departures){
+
+  value <- NULL
+  key <- NULL
+  state <- NULL
+  times <- NULL
+  queuelength <- NULL
 
   if(length(service) == 1){
     stopifnot(service == 0)
@@ -134,6 +141,11 @@ ql_summary <- function(times, queuelength){
     times = c(0,times), queuelength = c(0,queuelength)
   )
 
+  diff_times <- NULL
+  proportion <- NULL
+  # summary_queue <- NULL
+  # queue_df
+
   return(
     x %>%
     dplyr::mutate(diff_times = c(diff(times), 0)) %>%
@@ -144,22 +156,16 @@ ql_summary <- function(times, queuelength){
 }
 
 
-summary_details <- function(arrivals, service, departures){
-  serviced_customers = is.finite(queue_df$times)
-  sc <- serviced_customers
-
-  response_time <- departures[sc] - arrivals[sc]
-  waiting_time <- departures[sc] - service[sc] - arrivals[sc]
-
-  mean_response_time <- mean(response_time)
-  mean_waiting_time <- mean(waiting_time)
-}
-
-
-summary_all <- function(arrivals, service, departures){
-  queue_lengths(arrivals, service, departures) %>% summary_queue()
-}
-
+# summary_details <- function(arrivals, service, departures){
+#   serviced_customers = is.finite(queue_df$times)
+#   sc <- serviced_customers
+#
+#   response_time <- departures[sc] - arrivals[sc]
+#   waiting_time <- departures[sc] - service[sc] - arrivals[sc]
+#
+#   mean_response_time <- mean(response_time)
+#   mean_waiting_time <- mean(waiting_time)
+# }
 
 
 
