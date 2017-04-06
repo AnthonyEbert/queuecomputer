@@ -123,24 +123,26 @@ summary.queue_list <- function(object, ...){
 
   # Missed customers and initial input
 
+  departures <- object$departures_df$departures
+
   missed_customers = length(
     which(
-      is.infinite(object$departures_df$departures)
+      is.infinite(departures)
     )
   )
 
   departures_df <- object$departures_df %>%
     dplyr::filter(is.finite(departures))
   queuelength_df <- object$queuelength_df %>%
-    dplyr::filter(is.finite(times))
+    dplyr::filter(is.finite(departures_df$times))
   servers_input <- object$servers_input
 
   # Compute response times and waiting times
 
   departures_df <- departures_df %>%
-    dplyr::mutate(
-      response = departures - arrivals,
-      waiting = departures - arrivals - service
+    dplyr::mutate_(
+      "response = departures - arrivals",
+      "waiting = departures - arrivals - service"
     )
 
   # Summarise queuelengths

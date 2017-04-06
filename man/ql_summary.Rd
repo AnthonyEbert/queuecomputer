@@ -2,11 +2,25 @@
 % Please edit documentation in R/dplyr_plugins.R
 \name{ql_summary}
 \alias{ql_summary}
-\title{Summary queue}
+\title{Summarise queue lengths}
 \usage{
 ql_summary(times, queuelength)
 }
+\arguments{
+\item{times}{numeric vector of times}
+
+\item{queuelength}{numeric vector of queue lengths}
+}
 \description{
-Summary queue
+Summarise queue lengths
+}
+\examples{
+n <- 1e3
+arrivals <- cumsum(rexp(n))
+service <- rexp(n)
+departures <- queue(arrivals, service, 1)
+
+queuedata <- queue_lengths(arrivals, service, departures)
+ql_summary(queuedata$times, queuedata$queuelength)
 }
 

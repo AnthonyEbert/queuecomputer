@@ -126,11 +126,14 @@ QDC <- function(arrivals, service, servers = 1, adjust = 1){
 
   departures <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE, adjust = 1)
 
-  departures_df <- data.frame(
+  server <- attr(departures, "server")
+  attributes(departures) <- NULL
+
+  departures_df <- dplyr::data_frame(
     arrivals = arrivals,
     service = service,
     departures = departures,
-    server = attr(departures, "server")
+    server = server
   )
 
   queuelength_df <- queue_lengths(
