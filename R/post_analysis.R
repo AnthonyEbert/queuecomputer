@@ -134,7 +134,7 @@ summary.queue_list <- function(object, ...){
   departures_df <- object$departures_df %>%
     dplyr::filter(is.finite(departures))
   queuelength_df <- object$queuelength_df %>%
-    dplyr::filter(is.finite(departures_df$times))
+    dplyr::filter(is.finite(queuelength_df$times))
   servers_input <- object$servers_input
 
   # Compute response times and waiting times
