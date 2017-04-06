@@ -95,8 +95,12 @@ queue_lengths <- function(arrivals, service = 0, departures){
   #   time = value
   # )
 
+  ord <- order(queuedata$value, queuedata$key, method = "radix")
+
+  queuedata <- queuedata[ord, ]
+
   queuedata <- dplyr::mutate(
-    dplyr::arrange(queuedata, value, key),
+    queuedata,
     queuelength = cumsum(state),
     times = value
   )
