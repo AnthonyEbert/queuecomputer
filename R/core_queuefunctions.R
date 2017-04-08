@@ -133,6 +133,8 @@ QDC <- function(arrivals, service, servers = 1, adjust = 1){
     arrivals = arrivals,
     service = service,
     departures = departures,
+    waiting = departures - arrivals - service,
+    system_time = departures - arrivals,
     server = server
   )
 

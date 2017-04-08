@@ -4,12 +4,21 @@
 \alias{plot.queue_list}
 \title{plot method}
 \usage{
-\method{plot}{queue_list}(x)
+\method{plot}{queue_list}(x, server_same = TRUE)
 }
 \arguments{
 \item{x}{an object of class \code{queue_list}}
 }
 \description{
 plot method
+}
+\examples{
+n_customers <- 1e3
+arrival_rate <- 0.8
+service_rate <- 1
+arrivals <- cumsum(rexp(n_customers, arrival_rate))
+service <- rexp(n_customers, service_rate)
+queue_obj <- QDC(arrivals, service, servers = 1)
+plot(queue_obj)
 }
 
