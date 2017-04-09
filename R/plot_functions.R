@@ -12,7 +12,7 @@
 #' queue_obj <- QDC(arrivals, service, servers = 1)
 #' plot(queue_obj)
 plot.queue_list <- function(x, server_same = TRUE, which = c(1:4)){
-  require(ggplot2)
+  requireNamespace(ggplot2, quietly = TRUE)
 
   stopifnot(is.numeric(which) & all(which > 0) & which <= 5)
 
@@ -65,7 +65,6 @@ plot_aw <- function(departures_df){
 }
 
 plot_status <- function(departures_df){
-  require(ggplot2)
 
   departures_df <- departures_df %>% dplyr::mutate(
     start_service = departures - service
