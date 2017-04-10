@@ -9,23 +9,31 @@
 \arguments{
 \item{x}{an object of class \code{queue_list}}
 
-\item{which}{Numeric vector of integers from 1 to 7 which represents which plots are to be created. See \link{examples}}
+\item{which}{Numeric vector of integers from 1 to 7 which represents which plots are to be created. See examples.}
 
-\item{annotated}{logical, if \code{TRUE} annotations will be added to the plot}
+\item{annotated}{logical, if \code{TRUE} annotations will be added to the plot.}
+
+\item{...}{other parameters to be passed through to plotting functions.}
 }
 \description{
 ggplot method for output from queueing model
 }
 \examples{
 if(require(ggplot2, quietly = TRUE)){
-    n_customers <- 50
-    arrival_rate <- 1.8
-    service_rate <- 1
-    arrivals <- cumsum(rexp(n_customers, arrival_rate))
-    service <- rexp(n_customers, service_rate)
-    queue_obj <- QDC(arrivals, service, servers = 2)
-    plot(queue_obj)
+
+n_customers <- 50
+arrival_rate <- 1.8
+service_rate <- 1
+arrivals <- cumsum(rexp(n_customers, arrival_rate))
+service <- rexp(n_customers, service_rate)
+queue_obj <- QDC(arrivals, service, servers = 2)
+plot(queue_obj)
+
 }
+
+\\donotrun{
+
+library(ggplot2)
 
 ## density plots of arrival and departure times
 plot(queue_obj, which = 1)
@@ -44,5 +52,8 @@ plot(queue_obj, which = 5)
 
 ## empirical distribution plot of arrival and departure times
 plot(queue_obj, which = 6)
+
+}
+
 }
 

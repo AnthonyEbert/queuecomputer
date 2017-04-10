@@ -1,20 +1,28 @@
 
 
 #' ggplot method for output from queueing model
+#' @importFrom dplyr row_number
 #' @export
 #' @param x an object of class \code{queue_list}
-#' @param which Numeric vector of integers from 1 to 7 which represents which plots are to be created. See \link{examples}
-#' @param annotated logical, if \code{TRUE} annotations will be added to the plot
+#' @param which Numeric vector of integers from 1 to 7 which represents which plots are to be created. See examples.
+#' @param annotated logical, if \code{TRUE} annotations will be added to the plot.
+#' @param ... other parameters to be passed through to plotting functions.
 #' @examples
 #' if(require(ggplot2, quietly = TRUE)){
-#'     n_customers <- 50
-#'     arrival_rate <- 1.8
-#'     service_rate <- 1
-#'     arrivals <- cumsum(rexp(n_customers, arrival_rate))
-#'     service <- rexp(n_customers, service_rate)
-#'     queue_obj <- QDC(arrivals, service, servers = 2)
-#'     plot(queue_obj)
+#'
+#' n_customers <- 50
+#' arrival_rate <- 1.8
+#' service_rate <- 1
+#' arrivals <- cumsum(rexp(n_customers, arrival_rate))
+#' service <- rexp(n_customers, service_rate)
+#' queue_obj <- QDC(arrivals, service, servers = 2)
+#' plot(queue_obj)
+#'
 #' }
+#'
+#' \donotrun{
+#'
+#' library(ggplot2)
 #'
 #' ## density plots of arrival and departure times
 #' plot(queue_obj, which = 1)
@@ -33,11 +41,10 @@
 #'
 #' ## empirical distribution plot of arrival and departure times
 #' plot(queue_obj, which = 6)
+#'
+#' }
+#'
 plot.queue_list <- function(x, which = c(2:6), annotated = TRUE, ...){
-
-  assign(names(x$departures_df, x$queue), NULL)
-  ymin <- NULL
-  ymax <- NULL
 
   if(requireNamespace("ggplot2", quietly = TRUE)){
     loadNamespace
@@ -58,12 +65,12 @@ plot.queue_list <- function(x, which = c(2:6), annotated = TRUE, ...){
 plot_loop <- function(x, i, annotated){
 
   switch(i,
-         plot_departures(x$departures_df, annotated),
-         plot_dep_histogram(x$departures_df, annotated),
-         plot_waiting(x$departures_df, annotated),
-         plot_queues(x$queuelength_df, annotated),
-         plot_status(x$departures_df, annotated),
-         plot_empiricaldist(x$departures_df, annotated)
+         plot_departures(x, annotated),
+         plot_dep_histogram(x, annotated),
+         plot_waiting(x, annotated),
+         plot_queues(x, annotated),
+         plot_status(x, annotated),
+         plot_empiricaldist(x, annotated)
 
   )
 }
@@ -71,7 +78,12 @@ plot_loop <- function(x, i, annotated){
 
 plot_departures <- function(x, annotated){
 
-  melted <- departures_df %>% dplyr::select(arrivals, departures) %>% reshape2::melt()
+  value <- NULL
+  variable <- NULL
+
+  departures_df <- x$departures_df
+
+  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% reshape2::melt()
   output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = variable) + ggplot2::geom_density()
 
   edited_output <- output + ggplot2::xlab("Time") +
@@ -81,7 +93,12 @@ plot_departures <- function(x, annotated){
 }
 
 plot_dep_histogram <- function(x, annotated){
-  melted <- departures_df %>% dplyr::select(arrivals, departures) %>% reshape2::melt()
+
+  value <- NULL
+
+  departures_df <- x$departures_df
+
+  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% reshape2::melt()
   output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value) + ggplot2::geom_histogram(bins = 10, color = "black") + ggplot2::facet_grid(.~variable)
   edited_output <- output + ggplot2::xlab("Time") +
     ggplot2::ggtitle("Histogram of arrival and departure times")
@@ -90,7 +107,11 @@ plot_dep_histogram <- function(x, annotated){
 }
 
 plot_waiting <- function(x, annotated){
-  melted <- departures_df %>% dplyr::select(waiting, system_time) %>% reshape2::melt()
+
+  value <- variable <- NULL
+  departures_df <- x$departures_df
+
+  melted <- departures_df %>% dplyr::select_("waiting", "system_time") %>% reshape2::melt()
   output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = variable) + ggplot2::geom_density()
   edited_output <- output + ggplot2::xlab("Time") +
     ggplot2::ggtitle("Density plot of waiting and system times")
@@ -100,20 +121,28 @@ plot_waiting <- function(x, annotated){
 
 plot_queues <- function(x, annotated){
 
-  output <- ggplot2::ggplot(queuelength_df) + ggplot2::aes(x = times, y = queuelength) + ggplot2::geom_step()
-  edited_output <- output + ggplot2::ylab("Queue length") + ggplot2::xlab("Time") +
-    ggplot2::ggtitle("Step function plot of queue length")
+  times <- queuelength <- NULL
+  queuelength_df <- x$queuelength_df
+  systemlength_df <- x$systemlength_df
+
+  queuelength_df$type = "customers in queue"
+  systemlength_df$type = "customers in entire system"
+
+  input <- dplyr::bind_rows(queuelength_df, systemlength_df)
+
+  output <- ggplot2::ggplot(input) + ggplot2::aes(x = times, y = queuelength, colour = type) + ggplot2::geom_step()
+  edited_output <- output + ggplot2::ylab("Number of customers") + ggplot2::xlab("Time") +
+    ggplot2::ggtitle("Step function plot of customers in queue and system")
 
   switch(as.numeric(annotated) + 1, return(output), return(edited_output))
 }
 
-# plot_aw <- function(departures_df){
-#   output <- ggplot2::ggplot(departures_df) + ggplot2::aes(x = arrivals, y = waiting) + ggplot2::geom_point()
-#   edited_output <- output
-#   return(edited_output)
-# }
-
 plot_status <- function(x, annotated){
+
+  departures <- service <- arrivals <- NULL
+  start_service <- server <- ymin <- ymax <- status <- NULL
+
+  departures_df <- x$departures_df
 
   departures_df <- departures_df %>% dplyr::mutate(
     start_service = departures - service
@@ -134,7 +163,7 @@ plot_status <- function(x, annotated){
       ymin = start_service,
       ymax = departures,
       type = "customers",
-      status = paste0("server ", server) %>% factor()
+      status = "service"
     )
 
   server_df <- departures_df %>%
@@ -142,8 +171,8 @@ plot_status <- function(x, annotated){
       x = server,
       ymin = start_service,
       ymax = departures,
-      type = "server utilization",
-      status = paste0("server ", server) %>% factor()
+      type = "servers",
+      status = "service"
     )
 
   tidydata_for_line <- dplyr::bind_rows(start_df, end_df, server_df)
@@ -159,8 +188,12 @@ plot_status <- function(x, annotated){
 
 }
 
-plot_empiricaldist <- function(departures_df){
-  melted <- departures_df %>% dplyr::select(arrivals, departures) %>% reshape2::melt()
+plot_empiricaldist <- function(x, annotated){
+
+  value <- variable <- NULL
+  departures_df <- x$departures_df
+
+  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% reshape2::melt()
 
   output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = variable) + ggplot2::stat_ecdf()
 

@@ -142,9 +142,14 @@ QDC <- function(arrivals, service, servers = 1, adjust = 1){
     arrivals, service, departures
   )
 
+  systemlength_df <- queue_lengths(
+    arrivals, departures = departures
+  )
+
   output <- list(
     departures_df = departures_df,
     queuelength_df = queuelength_df,
+    systemlength_df = systemlength_df,
     servers_input = servers
   )
 

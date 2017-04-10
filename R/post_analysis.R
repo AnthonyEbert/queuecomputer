@@ -102,7 +102,7 @@ print.summary_queue_df <- function(x, ...){
 integrate_stepfun <- function(x, y, last = 1000){
   x <- c(0,x,last)
   x_diff <- diff(x)
-  return(y %*% x_diff)
+  return((y %*% x_diff) %>% as.numeric)
 }
 
 
@@ -121,7 +121,7 @@ integrate_stepfun <- function(x, y, last = 1000){
 #' @param ... futher arguments to be passed to or from other methods.
 summary.queue_list <- function(object, ...){
 
-  # Missed customers and initial input
+  # Non-standard evaluation binding
 
   arrivals <- NULL
   service <- NULL
@@ -130,15 +130,19 @@ summary.queue_list <- function(object, ...){
   waiting <- NULL
   times <- NULL
 
+  # Missed customers and initial input
+
   missed_customers = length(
     which(
-      is.infinite(departures)
+      is.infinite(object$departures_df$departures)
     )
   )
 
   departures_df <- object$departures_df %>%
     dplyr::filter(is.finite(departures))
   queuelength_df <- object$queuelength_df %>%
+    dplyr::filter(is.finite(times))
+  systemlength_df <- object$systemlength_df %>%
     dplyr::filter(is.finite(times))
   servers_input <- object$servers_input
 
@@ -150,15 +154,60 @@ summary.queue_list <- function(object, ...){
       waiting = departures - arrivals - service
     )
 
+  departures_df$server <- factor(departures_df$server)
+  departures_sum <- summary(departures_df)
+
   # Summarise queuelengths
 
   qlength_sum <- ql_summary(
     queuelength_df$times, queuelength_df$queuelength
   )
 
+  slength_sum <- ql_summary(
+    systemlength_df$times, systemlength_df$queuelength
+  )
+
+  # Utilisation
+
+  max_time <- max(departures_df$departures)
+
+  if("numeric" %in% class(object$servers_input)){
+
+    n_server <- object$servers_input
+
+    service_available <- integrate_stepfun(x = c(1), y = c(n_server, n_server),
+      last = max_time)
+
+    service_rendered <- sum(departures_df$service)
+
+    utilization <- service_rendered/service_available
+  }
+
+
+  if("server.stepfun" %in% class(object$servers_input)){
+
+    x = object$servers_input$x
+    y = object$servers_input$y
+
+    if(y[length(x)] == 0){
+      last_server_time = x[length(x)]
+    } else {
+      last_server_time = 0
+    }
+
+    service_available <- integrate_stepfun(x = x, y = y, last = max(max_time, last_server_time))
+
+    service_rendered <- sum(departures_df$service)
+
+    utilization <- service_rendered/service_available
+  }
+
   output_list <- list(
     missed_customers = missed_customers,
-    qlength_sum = qlength_sum
+    qlength_sum = qlength_sum,
+    slength_sum = slength_sum,
+    departures_sum = departures_sum,
+    utilization = utilization
   )
 
   return(output_list)
