@@ -13,7 +13,7 @@
 #' servers = as.server.stepfun(3.1, c(2, 1)))
 #' @seealso
 #' \code{\link{queue_step}}
-#' @useDynLib queuecomputer
+#' @useDynLib queuecomputer, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @export
 queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust = 1){
