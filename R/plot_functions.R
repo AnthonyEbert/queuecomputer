@@ -20,7 +20,7 @@
 #'
 #' }
 #'
-#' \donotrun{
+#' \dontrun{
 #'
 #' library(ggplot2)
 #'
@@ -121,7 +121,7 @@ plot_waiting <- function(x, annotated){
 
 plot_queues <- function(x, annotated){
 
-  times <- queuelength <- NULL
+  times <- queuelength <- type <- NULL
   queuelength_df <- x$queuelength_df
   systemlength_df <- x$systemlength_df
 
@@ -139,7 +139,7 @@ plot_queues <- function(x, annotated){
 
 plot_status <- function(x, annotated){
 
-  departures <- service <- arrivals <- NULL
+  departures <- service <- arrivals <- type <- NULL
   start_service <- server <- ymin <- ymax <- status <- NULL
 
   departures_df <- x$departures_df
@@ -197,7 +197,7 @@ plot_empiricaldist <- function(x, annotated){
 
   output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = variable) + ggplot2::stat_ecdf()
 
-  edited_output <- output + xlab("Time") + ylab("Empirical cumulative distribution function") +
+  edited_output <- output + ggplot2::xlab("Time") + ggplot2::ylab("Empirical cumulative distribution function") +
     ggplot2::ggtitle("empirical distribution plot of arrival and departure times")
 
   switch(as.numeric(annotated) + 1, return(output), return(edited_output))

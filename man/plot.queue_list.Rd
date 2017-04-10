@@ -31,7 +31,7 @@ plot(queue_obj)
 
 }
 
-\\donotrun{
+\dontrun{
 
 library(ggplot2)
 
