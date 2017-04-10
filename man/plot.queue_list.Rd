@@ -2,23 +2,47 @@
 % Please edit documentation in R/plot_functions.R
 \name{plot.queue_list}
 \alias{plot.queue_list}
-\title{plot method}
+\title{ggplot method for output from queueing model}
 \usage{
-\method{plot}{queue_list}(x, server_same = TRUE)
+\method{plot}{queue_list}(x, which = c(2:6), annotated = TRUE, ...)
 }
 \arguments{
 \item{x}{an object of class \code{queue_list}}
+
+\item{which}{Numeric vector of integers from 1 to 7 which represents which plots are to be created. See \link{examples}}
+
+\item{annotated}{logical, if \code{TRUE} annotations will be added to the plot}
 }
 \description{
-plot method
+ggplot method for output from queueing model
 }
 \examples{
-n_customers <- 1e3
-arrival_rate <- 0.8
-service_rate <- 1
-arrivals <- cumsum(rexp(n_customers, arrival_rate))
-service <- rexp(n_customers, service_rate)
-queue_obj <- QDC(arrivals, service, servers = 1)
-plot(queue_obj)
+if(require(ggplot2, quietly = TRUE)){
+    n_customers <- 50
+    arrival_rate <- 1.8
+    service_rate <- 1
+    arrivals <- cumsum(rexp(n_customers, arrival_rate))
+    service <- rexp(n_customers, service_rate)
+    queue_obj <- QDC(arrivals, service, servers = 2)
+    plot(queue_obj)
+}
+
+## density plots of arrival and departure times
+plot(queue_obj, which = 1)
+
+## histograms of arrival and departure times
+plot(queue_obj, which = 2)
+
+## density plots of waiting and system times
+plot(queue_obj, which = 3)
+
+## step function of queue length
+plot(queue_obj, which = 4)
+
+## line range plot of customer and server status
+plot(queue_obj, which = 5)
+
+## empirical distribution plot of arrival and departure times
+plot(queue_obj, which = 6)
 }
 
