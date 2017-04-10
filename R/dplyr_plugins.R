@@ -172,7 +172,49 @@ ql_summary <- function(times, queuelength){
 # }
 
 
+#' Creates batches of customer arrivals from a dataframe within a \code{dplyr::do} command
+#'
+#' @param data a named list object.
+#' @param arrival_dist a distribution whose support is strictly positive. Either as an object or a non-empty character string. It represents the distribution of arrival times.
+#' @param service_rate a strictly positive number representing the rate parameter in the exponential distribution for the service times.
+#' @param time a number greater than or equal to zero.
+#' @export
+#' @examples
+#'
+#' library(dplyr)
+#' flight_schedule <- data_frame(
+#' flight = c("F1", "F2"),
+#' time = c(0, 50),
+#' n = c(100, 100),
+#' shape = c(5, 5),
+#' rate = c(1 , 1),
+#' log_mu = c(1 , 1)
+#' )
+#'
+#' passenger_df <- flight_schedule %>% group_by(flight) %>%
+#' do(create_batches(., arrival_dist = "rgamma",
+#'     service_rate = 0.4,
+#'     time = .$time)
+#' )
+#'
+#' queue_obj <- with(passenger_df,
+#'     QDC(arrivals, service, servers = 5)
+#' )
+#' if(require(ggplot2, quietly = TRUE)){
+#' plot(queue_obj)
+#' }
+#'
+create_batches <- function(data, arrival_dist, service_rate = NULL, time = 0){
 
+  output_df <- dplyr::data_frame(arrivals = time + do_func_ignore_things(data, arrival_dist))
+
+  if(is.null(service_rate) == FALSE){
+    output_df <- output_df %>% dplyr::mutate(
+      service = stats::rexp(data$n, service_rate)
+    )
+  }
+  return(output_df)
+}
 
 
 

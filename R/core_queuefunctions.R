@@ -13,7 +13,7 @@
 #' servers = as.server.stepfun(3.1, c(2, 1)))
 #' @seealso
 #' \code{\link{queue_step}}
-#' @useDynLib queuecomputer
+#' @useDynLib queuecomputer, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @export
 queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust = 1){
@@ -133,6 +133,8 @@ QDC <- function(arrivals, service, servers = 1, adjust = 1){
     arrivals = arrivals,
     service = service,
     departures = departures,
+    waiting = departures - arrivals - service,
+    system_time = departures - arrivals,
     server = server
   )
 
@@ -140,9 +142,14 @@ QDC <- function(arrivals, service, servers = 1, adjust = 1){
     arrivals, service, departures
   )
 
+  systemlength_df <- queue_lengths(
+    arrivals, departures = departures
+  )
+
   output <- list(
     departures_df = departures_df,
     queuelength_df = queuelength_df,
+    systemlength_df = systemlength_df,
     servers_input = servers
   )
 
