@@ -161,6 +161,9 @@ summary.queue_list <- function(object, ...){
   departures_df$server <- factor(departures_df$server)
   departures_sum <- summary(departures_df)
 
+  mwt <- mean(departures_df$waiting)
+  mrt <- mean(departures_df$response)
+
   # Summarise queuelengths
 
   qlength_sum <- ql_summary(
@@ -217,6 +220,8 @@ summary.queue_list <- function(object, ...){
     qlength_mean = qlength_mean,
     slength_sum = slength_sum,
     slength_mean = slength_mean,
+    mrt = mrt,
+    mwt = mwt,
     departures_sum = departures_sum,
     utilization = utilization
   )
