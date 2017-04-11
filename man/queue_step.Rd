@@ -25,35 +25,34 @@ A vector of response times for the input of arrival times and service times.
 Compute the departure times and queue lengths for a queueing system from arrival and service times.
 }
 \examples{
-# We simulate two queues in series.
-set.seed(1L)
-n_customers <- 100
 
-arrivals <- rlnorm(n_customers, meanlog = 3)
-service_1 <- rlnorm(n_customers)
+# With two servers
+set.seed(1)
+n <- 100
+
+arrivals <- cumsum(rexp(n, 3))
+service <- rexp(n)
 
 
-firstqueue <- queue_step(arrivals,
-    servers = 2, service = service_1)
+queue_obj <- queue_step(arrivals,
+    service = service_1, servers = 2)
 
-server_list <- as.server.stepfun(c(50),c(1,2))
 
-service_2 <- rlnorm(n_customers)
-secondqueue <- queue_step(firstqueue,
-    servers = server_list, service = service_2)
+summary(queue_obj)
+plot(queue_obj, which = 5)
 
-curve(ecdf(arrivals)(x) * n_customers , from = 0, to = 200,
-    xlab = "time", ylab = "Number of customers")
-curve(ecdf(firstqueue$departures_df$departures)(x) * n_customers , add = TRUE, col = "red")
-curve(ecdf(secondqueue$departures_df$departures)(x) * n_customers, add = TRUE, col = "blue")
-legend(100,40, legend = c("Customer input - arrivals",
-    "Customer output - firstqueue",
-    "Customer output - secondqueue"),
-    col = c("black","red","blue"), lwd = 1, cex = 0.8
-)
+# It seems like the customers have a long wait. Let's put two more servers on after time 20
 
-summary(firstqueue)
-summary(secondqueue)
+
+server_list <- as.server.stepfun(c(20),c(2,4))
+
+queue_obj2 <- queue_step(arrivals,
+    service = service,
+    servers = server_list)
+
+summary(queue_obj2)
+plot(queue_obj2, which = 5)
+
 
 }
 \seealso{

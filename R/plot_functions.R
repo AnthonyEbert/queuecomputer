@@ -180,8 +180,9 @@ plot_status <- function(x, annotated){
   output <- ggplot2::ggplot(tidydata_for_line) +
     ggplot2::aes(x = x, ymin = ymin, ymax = ymax, col = status) +
     ggplot2::geom_linerange()
-  edited_output <- output + ggplot2::xlab("customer") +
-    ggplot2::ylab("Time") + ggplot2::facet_grid(.~type, scales = "free_x") + ggplot2::scale_x_discrete() + ggplot2::theme(axis.text.x = ggplot2::element_blank()) +
+
+  edited_output <- output +
+    ggplot2::ylab("Time") + ggplot2::facet_grid(.~type, scales = "free_x") + ggplot2::scale_x_discrete() + ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.title.x = ggplot2::element_blank()) +
     ggplot2::ggtitle("Line range plot of customer and server status")
 
   switch(as.numeric(annotated) + 1, return(output), return(edited_output))

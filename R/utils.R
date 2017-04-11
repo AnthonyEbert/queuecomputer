@@ -178,10 +178,11 @@ generate_input <- function(mag = 3){
   return(output)
 }
 
+#' print method for objects of class \code{queue_list}
 #' @export
+#' @param x an object of class \code{queue_list} produced by the \code{\link{queue_step}} function.
 print.queue_list <- function(x, ...){
   print(x$departures_df, ...)
-  print(str(x[2:length(x)], ...))
 }
 
 
