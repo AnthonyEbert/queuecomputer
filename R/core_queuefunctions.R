@@ -135,13 +135,14 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #'
 #'
 #' queue_obj <- queue_step(arrivals,
-#'     service = service_1, servers = 2)
+#'     service = service, servers = 2)
 #'
 #'
 #' summary(queue_obj)
 #' plot(queue_obj, which = 5)
 #'
-#' # It seems like the customers have a long wait. Let's put two more servers on after time 20
+#' # It seems like the customers have a long wait.
+#' # Let's put two more servers on after time 20
 #'
 #'
 #' server_list <- as.server.stepfun(c(20),c(2,4))

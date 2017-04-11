@@ -130,6 +130,10 @@ summary.queue_list <- function(object, ...){
   waiting <- NULL
   times <- NULL
 
+  # Number of customers
+
+  n <- length(object$departures_df$departures)
+
   # Missed customers and initial input
 
   missed_customers = length(
@@ -167,6 +171,10 @@ summary.queue_list <- function(object, ...){
     systemlength_df$times, systemlength_df$queuelength
   )
 
+  qlength_mean <- average_queue(queuelength_df$times, queuelength_df$queuelength)
+
+  slength_mean <- average_queue(systemlength_df$times, systemlength_df$queuelength)
+
   # Utilisation
 
   max_time <- max(departures_df$departures)
@@ -203,9 +211,12 @@ summary.queue_list <- function(object, ...){
   }
 
   output_list <- list(
+    number_customers = n,
     missed_customers = missed_customers,
     qlength_sum = qlength_sum,
+    qlength_mean = qlength_mean,
     slength_sum = slength_sum,
+    slength_mean = slength_mean,
     departures_sum = departures_sum,
     utilization = utilization
   )

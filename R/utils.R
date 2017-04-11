@@ -171,9 +171,8 @@ generate_input <- function(mag = 3){
   arrivals <- cumsum(rexp(n))
   service <- stats::rexp(n)
   departures <- queue(arrivals, service, 1)
-  QDC_obj <- QDC(arrivals, service, 1)
 
-  output <- list(arrivals = arrivals, service = service, departures = departures, QDC_obj = QDC_obj)
+  output <- list(arrivals = arrivals, service = service, departures = departures)
 
   return(output)
 }
