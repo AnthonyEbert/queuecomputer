@@ -2,19 +2,19 @@
 % Please edit documentation in R/core_queuefunctions.R
 \name{queue_step}
 \alias{queue_step}
-\title{Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.}
+\title{Compute the departure times and queue lengths for a queueing system from arrival and service times.}
 \usage{
-queue_step(arrival_df, service, servers = 1, adjust = 1)
+queue_step(arrivals, service, servers = 1, labels = NULL, adjust = 1)
 }
 \arguments{
-\item{arrival_df}{dataframe with column names ID and times . The ID column is a key
-for the customers. The times column is of class \code{numeric} and represents the
-arrival times of the customers.}
+\item{arrivals}{numeric vector of non-negative arrival times}
 
-\item{service}{vector of service times with the same ordering as arrival_df.}
+\item{service}{numeric vector of service times with the same ordering as arrival_df.}
 
 \item{servers}{a non-zero natural number, an object of class \code{server.stepfun}
 or an object of class \code{server.list}.}
+
+\item{labels}{character vector of customer labels.}
 
 \item{adjust}{non-negative number, an adjustment parameter for scaling the service times.}
 }
@@ -22,30 +22,30 @@ or an object of class \code{server.list}.}
 A vector of response times for the input of arrival times and service times.
 }
 \description{
-Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.
+Compute the departure times and queue lengths for a queueing system from arrival and service times.
 }
 \examples{
-
 # We simulate two queues in series.
 set.seed(1L)
 n_customers <- 100
-arrival_df <- data.frame(ID = c(1:n_customers), times = rlnorm(n_customers, meanlog = 3))
+
+arrivals <- rlnorm(n_customers, meanlog = 3)
 service_1 <- rlnorm(n_customers)
 
 
-firstqueue <- queue_step(arrival_df = arrival_df,
+firstqueue <- queue_step(arrivals,
     servers = 2, service = service_1)
 
 server_list <- as.server.stepfun(c(50),c(1,2))
 
 service_2 <- rlnorm(n_customers)
-secondqueue <- queue_step(arrival_df = firstqueue,
+secondqueue <- queue_step(firstqueue,
     servers = server_list, service = service_2)
 
-curve(ecdf(arrival_df$times)(x) * n_customers , from = 0, to = 200,
+curve(ecdf(arrivals)(x) * n_customers , from = 0, to = 200,
     xlab = "time", ylab = "Number of customers")
-curve(ecdf(firstqueue$times)(x) * n_customers , add = TRUE, col = "red")
-curve(ecdf(secondqueue$times)(x) * n_customers, add = TRUE, col = "blue")
+curve(ecdf(firstqueue$departures_df$departures)(x) * n_customers , add = TRUE, col = "red")
+curve(ecdf(secondqueue$departures_df$departures)(x) * n_customers, add = TRUE, col = "blue")
 legend(100,40, legend = c("Customer input - arrivals",
     "Customer output - firstqueue",
     "Customer output - secondqueue"),
@@ -54,8 +54,9 @@ legend(100,40, legend = c("Customer input - arrivals",
 
 summary(firstqueue)
 summary(secondqueue)
+
 }
 \seealso{
-\code{\link{wait_step}}, \code{\link{lag_step}}, \code{\link{as.server.list}}, \code{\link{as.server.stepfun}}
+\code{\link{queue}}, \code{\link{summary.queue_list}}, \code{\link{plot.queue_list}}
 }
 

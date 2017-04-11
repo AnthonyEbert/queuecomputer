@@ -2,7 +2,7 @@
 % Please edit documentation in R/core_queuefunctions.R
 \name{queue}
 \alias{queue}
-\title{Compute the departure times of a set of customers in a queue from their arrival and service times.}
+\title{Compute the departure times for a set of customers in a queue from their arrival and service times.}
 \usage{
 queue(arrivals, service, servers = 1, serveroutput = FALSE, adjust = 1)
 }

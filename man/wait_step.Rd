@@ -4,15 +4,15 @@
 \alias{wait_step}
 \title{Compute maximum time for each row from two vectors of arrival times.}
 \usage{
-wait_step(arrival_df, service)
+wait_step(arrivals, service)
 }
 \arguments{
+\item{service}{A vector of times which represent the arrival times of the second type
+of customers. The ordering of this vector should have the same ordering as \code{arrival_df}.}
+
 \item{arrival_df}{A dataframe with column names ID and times . The ID column is a key
 for the customers. The times column is of class \code{numeric} and represents the
 arrival times of the customers.}
-
-\item{service}{A vector of times which represent the arrival times of the second type
-of customers. The ordering of this vector should have the same ordering as \code{arrival_df}.}
 }
 \value{
 The maximum time from two vectors of arrival times.
