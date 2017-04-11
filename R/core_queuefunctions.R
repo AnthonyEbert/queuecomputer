@@ -197,6 +197,8 @@ queue_step <- function(arrivals, service, servers = 1, labels = NULL, adjust = 1
   )
 
   output <- list(
+    departures = departures,
+    server = server,
     departures_df = departures_df,
     queuelength_df = queuelength_df,
     systemlength_df = systemlength_df,

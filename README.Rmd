@@ -87,19 +87,6 @@ head(queue_2$departures_df)
 summary(queue_1)
 
 summary(queue_2)
-
-curve(ecdf(arrivals_1)(x) * 2*n , from = 0, to = 1500,
-    xlab = "time", ylab = "Number of customers")
-curve(ecdf(depart(queue_1))(x) * 2*n , add = TRUE, col = "red")
-curve(ecdf(arrivals_2)(x) * 2*n, add = TRUE, col = "blue")
-curve(ecdf(depart(queue_2))(x) * 2*n, add = TRUE, col = "green")
-legend(600,70, legend = c("Customer arrivals to firstqeue",
-    "Customer output - firstqueue",
-    "Customer arrivals to second queue", 
-    "Customer output - secondqueue"),
-    col = c("black","red","blue", "green"), lwd = 1, cex = 0.8
-)
-
 ```
 
 ## More information
