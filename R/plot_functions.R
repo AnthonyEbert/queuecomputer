@@ -47,7 +47,6 @@
 plot.queue_list <- function(x, which = c(2:6), annotated = TRUE, ...){
 
   if(requireNamespace("ggplot2", quietly = TRUE)){
-    #loadNamespace
 
     stopifnot(is.numeric(which) & all(which > 0) & which <= 6 & all(which %% 1 == 0))
 
@@ -83,8 +82,8 @@ plot_departures <- function(x, annotated){
 
   departures_df <- x$departures_df
 
-  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% reshape2::melt()
-  output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = variable) + ggplot2::geom_density()
+  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% tidyr::gather()
+  output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = key) + ggplot2::geom_density()
 
   edited_output <- output + ggplot2::xlab("Time") +
     ggplot2::ggtitle("Density plot of arrival and departure times")
@@ -98,8 +97,8 @@ plot_dep_histogram <- function(x, annotated){
 
   departures_df <- x$departures_df
 
-  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% reshape2::melt()
-  output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value) + ggplot2::geom_histogram(bins = 10, color = "black") + ggplot2::facet_grid(.~variable)
+  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% tidyr::gather()
+  output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value) + ggplot2::geom_histogram(bins = 10, color = "black") + ggplot2::facet_grid(.~key)
   edited_output <- output + ggplot2::xlab("Time") +
     ggplot2::ggtitle("Histogram of arrival and departure times")
 
@@ -111,8 +110,8 @@ plot_waiting <- function(x, annotated){
   value <- variable <- NULL
   departures_df <- x$departures_df
 
-  melted <- departures_df %>% dplyr::select_("waiting", "system_time") %>% reshape2::melt()
-  output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = variable) + ggplot2::geom_density()
+  melted <- departures_df %>% dplyr::select_("waiting", "system_time") %>% tidyr::gather()
+  output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = key) + ggplot2::geom_density()
   edited_output <- output + ggplot2::xlab("Time") +
     ggplot2::ggtitle("Density plot of waiting and system times")
 
@@ -194,9 +193,9 @@ plot_empiricaldist <- function(x, annotated){
   value <- variable <- NULL
   departures_df <- x$departures_df
 
-  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% reshape2::melt()
+  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% tidyr::gather()
 
-  output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = variable) + ggplot2::stat_ecdf()
+  output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = key) + ggplot2::stat_ecdf()
 
   edited_output <- output + ggplot2::xlab("Time") + ggplot2::ylab("Empirical cumulative distribution function") +
     ggplot2::ggtitle("empirical distribution plot of arrival and departure times")

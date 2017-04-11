@@ -68,6 +68,7 @@ as.server.list(list(10, c(15,30), 10), c(1,0,0))
 It is simple to set up a chain of queueing elements with `queuecomputer`. Suppose passengers must walk to a queue, then wait for service and then wait for their bags. 
 
 ```{r}
+library(queuecomputer)
 library(dplyr)
 
 set.seed(500)
@@ -85,17 +86,29 @@ departures_1 <- lag_step(arrivals, service_l)
 departures_2 <- queue(departures_1, service = service_q, servers = 2)
 departures_3 <- wait_step(departures_2, arrivals_b)
 
-departure_df <- data.frame(arrivals = arrivals, departures_1 = departures_1, departures_2 = departures_2, departures_3 = departures_3) %>% reshape2::melt()
-
-if(require(ggplot2, quietly = TRUE)){
-  qplot(value, data = departure_df, colour = variable, geom = "density") + xlab("time")
-}
-
-# The queue elements can be chained together with the %>% operator. 
+# Or the queue elements can be chained together with the %>% operator. 
 
 departures <- lag_step(arrivals, service_l) %>% queue_step(service = service_q, servers = 2) %>% wait_step(arrivals_b)
 
 all(departures == departures_3)
+
+# Plot densities for this tandem queueing network
+
+colours <- rainbow(4)
+plot(density(arrivals, from = 0), 
+  col = colours[1], xlim = c(0, 220), ylim = c(0, 0.015), 
+  main = "Density plot")
+lines(density(departures_1, from = 0), col = colours[2])
+lines(density(departures_2, from = 0), col = colours[3])
+lines(density(departures_3, from = 0), col = colours[4])
+legend(150,0.012, legend = c("Start walk",
+    "Finish walk",
+    "Finish service", 
+    "Pick up bag"),
+    col = colours, lwd = 1, cex = 0.8
+)
+
+
 
 ```
 
