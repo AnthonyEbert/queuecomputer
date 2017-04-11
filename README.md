@@ -59,114 +59,190 @@ library(dplyr)
 
 set.seed(1)
 
-arrival_df1 <- data.frame(ID = c(1:200), times = c(100 + cumsum(rexp(100)), 500 + cumsum(rexp(100))))
-service1 <- rexp(200, 1/2.5)
+n <- 100
 
-queue_1 <- queue_step(arrival_df = arrival_df1, service = service1, servers = 2)
+arrivals_1 <- c(100 + cumsum(rexp(n)), 500 + cumsum(rexp(n)))
+service_1 <- rexp(2*n, 1/2.5)
 
-walktimes <- rexp(200, 1/100)
+queue_1 <- queue_step(arrivals = arrivals_1, service = service_1, servers = 2)
 
-arrival_df2 <- lag_step(arrival_df = queue_1, service = walktimes)
-service2 <- rexp(200, 1/3)
+walktimes <- rexp(2*n, 1/100)
 
-queue_2 <- queue_step(arrival_df = arrival_df2, service = service2, servers = 1)
+arrivals_2 <- lag_step(arrivals = queue_1, service = walktimes)
+service_2 <- rexp(2*n, 1/3)
 
-head(arrival_df1)
-#>   ID    times
-#> 1  1 100.7552
-#> 2  2 101.9368
-#> 3  3 102.0825
-#> 4  4 102.2223
-#> 5  5 102.6584
-#> 6  6 105.5534
-head(queue_1)
-#>   ID    times
-#> 1  1 100.9442
-#> 2  2 104.5025
-#> 3  3 103.7696
-#> 4  4 105.7710
-#> 5  5 104.9376
-#> 6  6 107.2370
-head(arrival_df2)
-#>   ID    times
-#> 1  1 120.3923
-#> 2  2 105.6711
-#> 3  3 227.5242
-#> 4  4 175.9008
-#> 5  5 339.9853
-#> 6  6 108.7119
-head(queue_2)
-#>   ID    times
-#> 1  1 125.5523
-#> 2  2 107.2552
-#> 3  3 290.7928
-#> 4  4 186.2768
-#> 5  5 404.4597
-#> 6  6 109.9423
+queue_2 <- queue_step(arrivals = arrivals_2, service = service_2, servers = 1)
+
+head(arrivals_1)
+#> [1] 100.7552 101.9368 102.0825 102.2223 102.6584 105.5534
+head(queue_1$departures_df)
+#> # A tibble: 6 × 6
+#>   arrivals   service departures       waiting system_time server
+#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <dbl>
+#> 1 100.7552 0.1890576   100.9442 -6.383782e-15   0.1890576      1
+#> 2 101.9368 2.5656478   104.5025  4.440892e-15   2.5656478      2
+#> 3 102.0825 1.6870828   103.7696  0.000000e+00   1.6870828      1
+#> 4 102.2223 2.0013664   105.7710  1.547288e+00   3.5486540      1
+#> 5 102.6584 0.4351757   104.9376  1.844077e+00   2.2792529      2
+#> 6 105.5534 1.6836613   107.2370  0.000000e+00   1.6836613      2
+head(arrivals_2)
+#> [1] 120.3923 105.6711 227.5242 175.9008 339.9853 108.7119
+head(queue_2$departures_df)
+#> # A tibble: 6 × 6
+#>   arrivals   service departures       waiting system_time server
+#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <dbl>
+#> 1 120.3923 5.1599751   125.5523 -2.664535e-15    5.159975      1
+#> 2 105.6711 1.5841166   107.2552  0.000000e+00    1.584117      1
+#> 3 227.5242 0.1136285   290.7928  6.315502e+01   63.268650      1
+#> 4 175.9008 2.3516652   186.2768  8.024359e+00   10.376024      1
+#> 5 339.9853 3.1978792   404.4597  6.127651e+01   64.474391      1
+#> 6 108.7119 1.2304520   109.9423  0.000000e+00    1.230452      1
 
 summary(queue_1)
+#> $number_customers
+#> [1] 200
 #> 
-#> Missed customers:
-#>  0
-#> Mean waiting time:
-#>  11.3821
-#> Mean response time:
-#>  13.7479
-#> Utilization factor:
-#>  0.3841
-#> Queue Lengths (%):
-#>       0       1       2       3       4       5       6       7       8 
-#> 63.6000  1.7700  1.9200  1.2800  1.5600  1.3500  0.4870  1.5600  1.3500 
-#>       9      10      11      12      13      14      15      16      17 
-#>  2.8600  3.6200  4.4800  3.1300  2.6000  1.5600  2.2600  1.2000  1.1500 
-#>      18      19      20      21      22      23 
-#>  0.5680  0.5680  0.1460  0.5520  0.0974  0.3410 
+#> $missed_customers
+#> [1] 0
 #> 
-#> System Lengths (%):
-#>       0       1       2       3       4       5       6       7       8 
-#> 60.9000  1.4000  1.3100  1.7700  1.9200  1.2800  1.5600  1.3500  0.4870 
-#>       9      10      11      12      13      14      15      16      17 
-#>  1.5600  1.3500  2.8600  3.6200  4.4800  3.1300  2.6000  1.5600  2.2600 
-#>      18      19      20      21      22      23      24      25 
-#>  1.2000  1.1500  0.5680  0.5680  0.1460  0.5520  0.0974  0.3410
+#> $qlength_sum
+#> # A tibble: 24 × 2
+#>    queuelength  proportion
+#>          <dbl>       <dbl>
+#> 1            0 0.635293164
+#> 2            1 0.017711485
+#> 3            2 0.019022001
+#> 4            3 0.013198290
+#> 5            4 0.015530023
+#> 6            5 0.013069273
+#> 7            6 0.005422745
+#> 8            7 0.015264468
+#> 9            8 0.013490444
+#> 10           9 0.028604615
+#> # ... with 14 more rows
+#> 
+#> $qlength_mean
+#> [1] 3.704555
+#> 
+#> $slength_sum
+#> # A tibble: 26 × 2
+#>    queuelength  proportion
+#>          <dbl>       <dbl>
+#> 1            0 0.609011851
+#> 2            1 0.013772165
+#> 3            2 0.013349133
+#> 4            3 0.017670692
+#> 5            4 0.018978190
+#> 6            5 0.013167892
+#> 7            6 0.015494255
+#> 8            7 0.013039172
+#> 9            8 0.005410256
+#> 10           9 0.015229312
+#> # ... with 16 more rows
+#> 
+#> $slength_mean
+#> [1] 4.464227
+#> 
+#> $mrt
+#> [1] 13.74786
+#> 
+#> $mwt
+#> [1] 11.38213
+#> 
+#> $departures_sum
+#>     arrivals        service            departures       waiting      
+#>  Min.   :100.8   Min.   : 0.004252   Min.   :100.9   Min.   : 0.000  
+#>  1st Qu.:149.5   1st Qu.: 0.712788   1st Qu.:166.8   1st Qu.: 6.928  
+#>  Median :352.5   Median : 1.646313   Median :366.5   Median :12.493  
+#>  Mean   :350.7   Mean   : 2.365731   Mean   :364.4   Mean   :11.382  
+#>  3rd Qu.:544.9   3rd Qu.: 3.240546   3rd Qu.:561.0   3rd Qu.:14.950  
+#>  Max.   :596.9   Max.   :15.828209   Max.   :615.9   Max.   :25.153  
+#>   system_time      server     response      
+#>  Min.   : 0.1891   1: 83   Min.   : 0.1891  
+#>  1st Qu.:10.0196   2:117   1st Qu.:10.0196  
+#>  Median :14.5664           Median :14.5664  
+#>  Mean   :13.7479           Mean   :13.7479  
+#>  3rd Qu.:17.4366           3rd Qu.:17.4366  
+#>  Max.   :31.0380           Max.   :31.0380  
+#> 
+#> $utilization
+#> [1] 0.3841021
 
 summary(queue_2)
+#> $number_customers
+#> [1] 200
 #> 
-#> Missed customers:
-#>  0
-#> Mean waiting time:
-#>  34.0863
-#> Mean response time:
-#>  37.1955
-#> Utilization factor:
-#>  0.5192
-#> Queue Lengths (%):
-#>        0        1        2        3        4        5        6        7 
-#> 54.70000  2.25000  2.57000  3.09000  2.30000  2.44000  0.90200  2.00000 
-#>        8        9       10       11       12       13       14       15 
-#>  1.30000  0.79300  2.12000  2.81000  1.77000  2.67000  1.37000  1.01000 
-#>       16       17       18       19       20       21       22       23 
-#>  1.00000  1.82000  0.88500  0.96000  1.00000  0.93500  0.93500  1.93000 
-#>       24       25       26       27       28       29       30       31 
-#>  2.80000  0.90200  0.75100  0.86000  0.15000  0.81000  0.00835  0.17500 
+#> $missed_customers
+#> [1] 0
 #> 
-#> System Lengths (%):
-#>        0        1        2        3        4        5        6        7 
-#> 48.10000  6.59000  2.25000  2.57000  3.09000  2.30000  2.44000  0.90200 
-#>        8        9       10       11       12       13       14       15 
-#>  2.00000  1.30000  0.79300  2.12000  2.81000  1.77000  2.67000  1.37000 
-#>       16       17       18       19       20       21       22       23 
-#>  1.01000  1.00000  1.82000  0.88500  0.96000  1.00000  0.93500  0.93500 
-#>       24       25       26       27       28       29       30       31 
-#>  1.93000  2.80000  0.90200  0.75100  0.86000  0.15000  0.81000  0.00835 
-#>       32 
-#>  0.17500
+#> $qlength_sum
+#> # A tibble: 32 × 2
+#>    queuelength  proportion
+#>          <dbl>       <dbl>
+#> 1            0 0.545312292
+#> 2            1 0.022278305
+#> 3            2 0.025908718
+#> 4            3 0.030868563
+#> 5            4 0.023298844
+#> 6            5 0.024395660
+#> 7            6 0.009027140
+#> 8            7 0.020010249
+#> 9            8 0.013111985
+#> 10           9 0.008009216
+#> # ... with 22 more rows
+#> 
+#> $qlength_mean
+#> [1] 5.711736
+#> 
+#> $slength_sum
+#> # A tibble: 33 × 2
+#>    queuelength  proportion
+#>          <dbl>       <dbl>
+#> 1            0 0.480839692
+#> 2            1 0.066087407
+#> 3            2 0.022199185
+#> 4            3 0.025816704
+#> 5            4 0.030758934
+#> 6            5 0.023216100
+#> 7            6 0.024309019
+#> 8            7 0.008995081
+#> 9            8 0.019939183
+#> 10           9 0.013065419
+#> # ... with 23 more rows
+#> 
+#> $slength_mean
+#> [1] 6.210611
+#> 
+#> $mrt
+#> [1] 37.19555
+#> 
+#> $mwt
+#> [1] 34.08628
+#> 
+#> $departures_sum
+#>     arrivals         service            departures        waiting     
+#>  Min.   : 105.7   Min.   : 0.005783   Min.   : 107.3   Min.   : 0.00  
+#>  1st Qu.: 235.8   1st Qu.: 1.168675   1st Qu.: 297.2   1st Qu.:10.60  
+#>  Median : 520.7   Median : 2.185065   Median : 522.2   Median :31.00  
+#>  Mean   : 468.0   Mean   : 3.109268   Mean   : 505.2   Mean   :34.09  
+#>  3rd Qu.: 645.8   3rd Qu.: 4.284097   3rd Qu.: 693.7   3rd Qu.:53.76  
+#>  Max.   :1193.6   Max.   :16.737074   Max.   :1197.8   Max.   :84.59  
+#>   system_time      server     response      
+#>  Min.   : 0.1203   1:200   Min.   : 0.1203  
+#>  1st Qu.:14.1416           1st Qu.:14.1416  
+#>  Median :36.0862           Median :36.0862  
+#>  Mean   :37.1955           Mean   :37.1955  
+#>  3rd Qu.:57.2661           3rd Qu.:57.2661  
+#>  Max.   :86.0167           Max.   :86.0167  
+#> 
+#> $utilization
+#> [1] 0.5191603
 
-curve(ecdf(arrival_df1$times)(x) * 200 , from = 0, to = 1500,
+curve(ecdf(arrivals_1)(x) * 2*n , from = 0, to = 1500,
     xlab = "time", ylab = "Number of customers")
-curve(ecdf(queue_1$times)(x) * 200 , add = TRUE, col = "red")
-curve(ecdf(arrival_df2$times)(x) * 200, add = TRUE, col = "blue")
-curve(ecdf(queue_2$times)(x) * 200, add = TRUE, col = "green")
+curve(ecdf(depart(queue_1))(x) * 2*n , add = TRUE, col = "red")
+curve(ecdf(arrivals_2)(x) * 2*n, add = TRUE, col = "blue")
+curve(ecdf(depart(queue_2))(x) * 2*n, add = TRUE, col = "green")
 legend(600,70, legend = c("Customer arrivals to firstqeue",
     "Customer output - firstqueue",
     "Customer arrivals to second queue", 
