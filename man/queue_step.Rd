@@ -52,7 +52,11 @@ queue_obj2 <- queue_step(arrivals,
     servers = server_list)
 
 summary(queue_obj2)
-plot(queue_obj2, which = 5)
+if(require(ggplot2, quietly = TRUE)){
+
+    plot(queue_obj2, which = 5)
+
+}
 
 
 }

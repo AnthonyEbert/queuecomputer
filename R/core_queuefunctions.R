@@ -152,7 +152,11 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #'     servers = server_list)
 #'
 #' summary(queue_obj2)
-#' plot(queue_obj2, which = 5)
+#' if(require(ggplot2, quietly = TRUE)){
+#'
+#'     plot(queue_obj2, which = 5)
+#'
+#' }
 #'
 #'
 #' @seealso

@@ -7,7 +7,6 @@
 #' @param service vector of service times. Leave as zero if you want to compute the number of customers in the system rather than queue length.
 #' @param departures vector of departure times
 #' @examples
-#' library(ggplot2)
 #' library(dplyr)
 #' library(queuecomputer)
 #'
@@ -55,9 +54,11 @@
 #'   do(queue_lengths(.$arrivals, .$service, .$departures))
 #'
 #'
-#' ggplot(output) +
-#'   aes(x = times, y = queuelength) + geom_step() +
-#'   facet_grid(~route)
+#' if(require(ggplot2, quietly = TRUE)){
+#'     ggplot(output) +
+#'       aes(x = times, y = queuelength) + geom_step() +
+#'       facet_grid(~route)
+#' }
 queue_lengths <- function(arrivals, service = 0, departures){
 
   value <- NULL
@@ -211,7 +212,7 @@ ql_summary <- function(times, queuelength){
 #'     queue_step(arrivals, service, servers = 5)
 #' )
 #' if(require(ggplot2, quietly = TRUE)){
-#' plot(queue_obj)
+#'     plot(queue_obj)
 #' }
 #'
 create_batches <- function(data, arrival_dist, service_rate = NULL, time = 0){

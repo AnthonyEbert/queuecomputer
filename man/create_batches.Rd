@@ -40,7 +40,7 @@ queue_obj <- with(passenger_df,
     queue_step(arrivals, service, servers = 5)
 )
 if(require(ggplot2, quietly = TRUE)){
-plot(queue_obj)
+    plot(queue_obj)
 }
 
 }

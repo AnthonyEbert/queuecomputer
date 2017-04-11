@@ -17,7 +17,6 @@ queue_lengths(arrivals, service = 0, departures)
 Compute queue lengths from arrival, service and departure data
 }
 \examples{
-library(ggplot2)
 library(dplyr)
 library(queuecomputer)
 
@@ -65,8 +64,10 @@ output <- queueoutput_df \%>\%
   do(queue_lengths(.$arrivals, .$service, .$departures))
 
 
-ggplot(output) +
-  aes(x = times, y = queuelength) + geom_step() +
-  facet_grid(~route)
+if(require(ggplot2, quietly = TRUE)){
+    ggplot(output) +
+      aes(x = times, y = queuelength) + geom_step() +
+      facet_grid(~route)
+}
 }
 
