@@ -1,4 +1,12 @@
 
+# queuecomputer 0.8.1
+
+## New features: 
+
+* Much faster summary method
+* Plotting methods for queues
+* New function `create_batches` to easily create batch arrival systems. 
+
 # queuecomputer 0.6.1
 
 ## New features:
