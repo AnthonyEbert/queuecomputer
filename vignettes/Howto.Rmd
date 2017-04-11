@@ -68,7 +68,6 @@ as.server.list(list(10, c(15,30), 10), c(1,0,0))
 It is simple to set up a chain of queueing elements with `queuecomputer`. Suppose passengers must walk to a queue, then wait for service and then wait for their bags. 
 
 ```{r}
-library(ggplot2)
 library(dplyr)
 
 set.seed(500)
@@ -88,7 +87,9 @@ departures_3 <- wait_step(departures_2, arrivals_b)
 
 departure_df <- data.frame(arrivals = arrivals, departures_1 = departures_1, departures_2 = departures_2, departures_3 = departures_3) %>% reshape2::melt()
 
-qplot(value, data = departure_df, colour = variable, geom = "density") + xlab("time")
+if(require(ggplot2, quietly = TRUE)){
+  qplot(value, data = departure_df, colour = variable, geom = "density") + xlab("time")
+}
 
 # The queue elements can be chained together with the %>% operator. 
 

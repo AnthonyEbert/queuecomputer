@@ -14,13 +14,13 @@ Imports:
     stats,
     Rcpp,
     tidyr,
-    dplyr
+    dplyr, 
+    reshape2
 RoxygenNote: 5.0.1.9000
 Suggests:
     knitr,
     rmarkdown,
     testthat,
-    reshape2,
     ggplot2
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo (>= 0.7.500.0.0)
