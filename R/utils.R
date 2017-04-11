@@ -191,5 +191,12 @@ print.queue_list <- function(x, ...){
   print(x$departures_df, ...)
 }
 
+#' head method for objects of class \code{queue_list}
+#' @export
+#' @param x an object of class \code{queue_list} produced by the \code{\link{queue_step}} function.
+#' @param ... further arguments to be passed to other methods
+head.queue_list <- function(x, ...){
+  head(x$departures_df, ...)
+}
 
 
