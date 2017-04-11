@@ -12,7 +12,21 @@
 \item{...}{futher arguments to be passed to or from other methods.}
 }
 \value{
-A list of performance statistics for the queue. "Mean waiting time": The mean time each customer had to wait in queue for service. "Mean response time": The mean time that each customer spends in the system (departure time - arrival time). "Utilization factor": The ratio of available time for all servers and time all servers were used. It can be greater than one if a customer arrives near the end of a shift and keeps a server busy. "Queue Lengths" and "System Lengths", the proportion of time for each queue length or number of customers in the system.
+A list of performance statistics for the queue:
+
+"Total customers": Total customers in sinulation,
+
+"Missed customers": Customers who never saw a server,
+
+"Mean waiting time": The mean time each customer had to wait in queue for service,
+
+"Mean response time": The mean time that each customer spends in the system (departure time - arrival time),
+
+"Utilization factor": The ratio of available time for all servers and time all servers were used. It can be greater than one if a customer arrives near the end of a shift and keeps a server busy,
+
+"Mean queue length": Average queue length, and
+
+"Mean number of customers in system": Average number of customers in queue or currently being served.
 }
 \description{
 Print method for output of \code{summary.queue_list}.
