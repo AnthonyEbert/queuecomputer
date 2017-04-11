@@ -7,7 +7,7 @@
 create_batches(data, arrival_dist, service_rate = NULL, time = 0)
 }
 \arguments{
-\item{data}{a named list object.}
+\item{data}{a dataframe with parameters for each batch}
 
 \item{arrival_dist}{a distribution whose support is strictly positive. Either as an object or a non-empty character string. It represents the distribution of arrival times.}
 

@@ -7,7 +7,7 @@
 lag_step(arrivals, service)
 }
 \arguments{
-\item{arrivals}{either a numeric vector or an object of class \code{queue_list}. It represents the arrival times.}
+\item{arrivals}{Either a numeric vector or an object of class \code{queue_list}. It represents the arrival times.}
 
 \item{service}{A vector of service times with the same ordering as arrivals}
 }

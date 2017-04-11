@@ -184,7 +184,7 @@ ql_summary <- function(times, queuelength){
 
 #' Creates batches of customer arrivals from a dataframe within a \code{dplyr::do} command
 #'
-#' @param data a named list object.
+#' @param data a dataframe with parameters for each batch
 #' @param arrival_dist a distribution whose support is strictly positive. Either as an object or a non-empty character string. It represents the distribution of arrival times.
 #' @param service_rate a strictly positive number representing the rate parameter in the exponential distribution for the service times.
 #' @param time a number greater than or equal to zero.

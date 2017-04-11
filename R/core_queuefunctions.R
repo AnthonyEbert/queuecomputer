@@ -211,7 +211,7 @@ queue_step <- function(arrivals, service, servers = 1, labels = NULL, adjust = 1
 
 
 #' Add lag to vector of arrival times.
-#' @param arrivals either a numeric vector or an object of class \code{queue_list}. It represents the arrival times.
+#' @param arrivals Either a numeric vector or an object of class \code{queue_list}. It represents the arrival times.
 #' @param service A vector of service times with the same ordering as arrivals
 #' @return A vector of response times for the input of arrival times and service times.
 #' @examples
@@ -243,18 +243,16 @@ lag_step <- function(arrivals, service){
 
 
 #' Compute maximum time for each row from two vectors of arrival times.
-#' @param arrival_df A dataframe with column names ID and times . The ID column is a key
-#'     for the customers. The times column is of class \code{numeric} and represents the
-#'     arrival times of the customers.
+#' @param arrivals Either a numeric vector or an object of class \code{queue_list}. It represents the arrival times.
 #' @param service A vector of times which represent the arrival times of the second type
-#'  of customers. The ordering of this vector should have the same ordering as \code{arrival_df}.
+#'  of customers. The ordering of this vector should have the same ordering as \code{arrivals}.
 #' @return The maximum time from two vectors of arrival times.
 #' @details A good real-world example of this is finding the departure times for passengers
 #'  after they pick up their bags from the baggage carosel. The time at which they leave is
 #'  the maximum of the passenger and bag arrival times.
 #' @examples
 #'set.seed(500)
-#'arrivals <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 4))
+#'arrivals <- rlnorm(100, meanlog = 4)
 #'service <- rlnorm(100)
 #'
 #'#Airport example ------------------------
@@ -285,7 +283,7 @@ lag_step <- function(arrivals, service){
 #'arrivals2 <- reduce_bags(bags.df, 100)$times
 #'
 #'# Find the time when customers can leave with their bags.
-#'wait_step(arrival_df = arrivals, service = arrivals2)
+#'wait_step(arrivals = arrivals, service = arrivals2)
 #' @seealso \code{\link{lag_step}}, \code{\link{queue_step}}.
 #' @export
 wait_step <- function(arrivals, service){
