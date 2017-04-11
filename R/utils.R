@@ -191,3 +191,6 @@ print.queue_list <- function(x, ...){
   print(x$departures_df, ...)
 }
 
+
+
+

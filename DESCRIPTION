@@ -14,9 +14,7 @@ Imports:
     stats,
     Rcpp,
     tidyr,
-    dplyr, 
-    reshape2, 
-    utils
+    dplyr
 RoxygenNote: 5.0.1.9000
 Suggests:
     knitr,

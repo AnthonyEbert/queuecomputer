@@ -46,7 +46,6 @@ In this example of a queueing network, customers must pass through two queues. T
 ``` r
 library(queuecomputer)
 library(ggplot2)
-library(reshape2)
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'

@@ -78,7 +78,7 @@ plot_loop <- function(x, i, annotated){
 plot_departures <- function(x, annotated){
 
   value <- NULL
-  variable <- NULL
+  key <- NULL
 
   departures_df <- x$departures_df
 
@@ -107,7 +107,7 @@ plot_dep_histogram <- function(x, annotated){
 
 plot_waiting <- function(x, annotated){
 
-  value <- variable <- NULL
+  value <- key <- NULL
   departures_df <- x$departures_df
 
   melted <- departures_df %>% dplyr::select_("waiting", "system_time") %>% tidyr::gather()
@@ -190,7 +190,7 @@ plot_status <- function(x, annotated){
 
 plot_empiricaldist <- function(x, annotated){
 
-  value <- variable <- NULL
+  value <- key <- NULL
   departures_df <- x$departures_df
 
   melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% tidyr::gather()
