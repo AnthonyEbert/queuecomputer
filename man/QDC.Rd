@@ -4,15 +4,17 @@
 \alias{QDC}
 \title{Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.}
 \usage{
-QDC(arrivals, service, servers = 1, adjust = 1)
+QDC(arrivals, service, servers = 1, labels = NULL, adjust = 1)
 }
 \arguments{
 \item{arrivals}{numeric vector of non-negative arrival times}
 
-\item{service}{vector of service times with the same ordering as arrival_df.}
+\item{service}{numeric vector of service times with the same ordering as arrival_df.}
 
 \item{servers}{a non-zero natural number, an object of class \code{server.stepfun}
 or an object of class \code{server.list}.}
+
+\item{labels}{character vector of customer labels.}
 
 \item{adjust}{non-negative number, an adjustment parameter for scaling the service times.}
 }

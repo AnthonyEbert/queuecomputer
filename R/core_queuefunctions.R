@@ -106,9 +106,10 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #'
 #'
 #' @param arrivals numeric vector of non-negative arrival times
-#' @param service vector of service times with the same ordering as arrival_df.
+#' @param service numeric vector of service times with the same ordering as arrival_df.
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
 #' or an object of class \code{server.list}.
+#' @param labels character vector of customer labels.
 #' @param adjust non-negative number, an adjustment parameter for scaling the service times.
 #' @return A vector of response times for the input of arrival times and service times.
 #' @examples
@@ -122,21 +123,41 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #' queue_obj
 #' summary(queue_obj)
 #' @export
-QDC <- function(arrivals, service, servers = 1, adjust = 1){
+QDC <- function(arrivals, service, servers = 1, labels = NULL, adjust = 1){
+
+  if("queue_list" %in% class(arrivals)){
+    if(is.null(arrivals$departures_df$labels) == FALSE){
+      labels <- arrivals$departures_df$labels
+      stopifnot(length(labels) == length(arrivals))
+    }
+    arrivals <- arrivals$departures_df$departures
+  }
 
   departures <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE, adjust = 1)
 
   server <- attr(departures, "server")
   attributes(departures) <- NULL
 
-  departures_df <- dplyr::data_frame(
-    arrivals = arrivals,
-    service = service,
-    departures = departures,
-    waiting = departures - arrivals - service,
-    system_time = departures - arrivals,
-    server = server
-  )
+  if(is.null(labels) == FALSE){
+    departures_df <- dplyr::data_frame(
+      labels = labels,
+      arrivals = arrivals,
+      service = service,
+      departures = departures,
+      waiting = departures - arrivals - service,
+      system_time = departures - arrivals,
+      server = server
+    )
+  } else {
+    departures_df <- dplyr::data_frame(
+      arrivals = arrivals,
+      service = service,
+      departures = departures,
+      waiting = departures - arrivals - service,
+      system_time = departures - arrivals,
+      server = server
+    )
+  }
 
   queuelength_df <- queue_lengths(
     arrivals, service, departures
@@ -152,7 +173,6 @@ QDC <- function(arrivals, service, servers = 1, adjust = 1){
     systemlength_df = systemlength_df,
     servers_input = servers
   )
-
 
   class(output) <- c("queue_list", "list")
 

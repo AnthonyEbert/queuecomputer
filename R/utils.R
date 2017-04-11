@@ -178,6 +178,10 @@ generate_input <- function(mag = 3){
   return(output)
 }
 
-
+#' @export
+print.queue_list <- function(x, ...){
+  print(x$departures_df, ...)
+  print(str(x[2:length(x)], ...))
+}
 
 
