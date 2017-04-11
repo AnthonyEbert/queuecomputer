@@ -1,8 +1,11 @@
 
 
+library(testthat)
+library(queuecomputer)
+library(dplyr)
+
 base::load(file = "../create_batch_test.RData")
 
-library(dplyr)
 set.seed(1)
 
 flight_schedule <- data_frame(
@@ -26,8 +29,6 @@ test_that("create_batches", {
 
 ## Queue length test
 
-base::load(file = "../queue_length_obj.RData")
-
 set.seed(2)
 
 n_customers <- 1e3
@@ -41,6 +42,5 @@ queue_obj <- queue_step(arrivals, service, servers = 2)
 queue_length_obj2 <- queue_lengths(arrivals, service, departures)
 
 test_that("Queue_lengths", {
-  expect_equal(queue_length_obj, queue_length_obj2)
-  expect_equal(queue_obj$queuelength_df, queue_length_obj)
+  expect_equal(queue_obj$queuelength_df, queue_length_obj2)
 })
