@@ -1,6 +1,6 @@
 #
 
-#' Compute the departure times of a set of customers in a queue from their arrival and service times.
+#' Compute the departure times and queue lengths for a queueing system from arrival and service times.
 #' @param arrivals numeric vector of non-negative arrival times
 #' @param service numeric vector of non-negative service times
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
