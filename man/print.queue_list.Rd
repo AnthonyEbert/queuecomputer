@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{an object of class \code{queue_list} produced by the \code{\link{queue_step}} function.}
+
+\item{...}{further arguments to be passed to other methods}
 }
 \description{
 print method for objects of class \code{queue_list}

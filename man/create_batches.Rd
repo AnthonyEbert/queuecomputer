@@ -37,7 +37,7 @@ do(create_batches(., arrival_dist = "rgamma",
 )
 
 queue_obj <- with(passenger_df,
-    QDC(arrivals, service, servers = 5)
+    queue_step(arrivals, service, servers = 5)
 )
 if(require(ggplot2, quietly = TRUE)){
 plot(queue_obj)

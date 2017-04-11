@@ -177,9 +177,16 @@ generate_input <- function(mag = 3){
   return(output)
 }
 
+integrate_stepfun <- function(x, y, last = 1000){
+  x <- c(0,x,last)
+  x_diff <- diff(x)
+  return((y %*% x_diff) %>% as.numeric)
+}
+
 #' print method for objects of class \code{queue_list}
 #' @export
 #' @param x an object of class \code{queue_list} produced by the \code{\link{queue_step}} function.
+#' @param ... further arguments to be passed to other methods
 print.queue_list <- function(x, ...){
   print(x$departures_df, ...)
 }

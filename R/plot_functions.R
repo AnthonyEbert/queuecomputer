@@ -15,7 +15,7 @@
 #' service_rate <- 1
 #' arrivals <- cumsum(rexp(n_customers, arrival_rate))
 #' service <- rexp(n_customers, service_rate)
-#' queue_obj <- QDC(arrivals, service, servers = 2)
+#' queue_obj <- queue_step(arrivals, service, servers = 2)
 #' plot(queue_obj)
 #'
 #' }
@@ -47,7 +47,7 @@
 plot.queue_list <- function(x, which = c(2:6), annotated = TRUE, ...){
 
   if(requireNamespace("ggplot2", quietly = TRUE)){
-    loadNamespace
+    #loadNamespace
 
     stopifnot(is.numeric(which) & all(which > 0) & which <= 6 & all(which %% 1 == 0))
 
