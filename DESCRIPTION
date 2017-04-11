@@ -1,6 +1,6 @@
 Package: queuecomputer
 Title: Computationally Efficient Queue Simulation
-Version: 0.7.0.9003
+Version: 0.8.0.9000
 Authors@R: person("Anthony", "Ebert", email = "anthonyebert+CRAN@gmail.com",
                    role = c("aut", "cre"))
 Description: Implementation of a computationally efficient method for
@@ -15,7 +15,7 @@ Imports:
     Rcpp,
     tidyr,
     dplyr
-RoxygenNote: 5.0.1
+RoxygenNote: 5.0.1.9000
 Suggests:
     knitr,
     rmarkdown,

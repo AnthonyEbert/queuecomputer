@@ -7,7 +7,7 @@
 create_batches(data, arrival_dist, service_rate = NULL, time = 0)
 }
 \arguments{
-\item{data}{a named list object.}
+\item{data}{a dataframe with parameters for each batch}
 
 \item{arrival_dist}{a distribution whose support is strictly positive. Either as an object or a non-empty character string. It represents the distribution of arrival times.}
 
@@ -37,7 +37,7 @@ do(create_batches(., arrival_dist = "rgamma",
 )
 
 queue_obj <- with(passenger_df,
-    QDC(arrivals, service, servers = 5)
+    queue_step(arrivals, service, servers = 5)
 )
 if(require(ggplot2, quietly = TRUE)){
 plot(queue_obj)

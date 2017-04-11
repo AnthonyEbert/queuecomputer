@@ -4,14 +4,12 @@
 \alias{lag_step}
 \title{Add lag to vector of arrival times.}
 \usage{
-lag_step(arrival_df, service)
+lag_step(arrivals, service)
 }
 \arguments{
-\item{arrival_df}{A dataframe with column names ID and times . The ID column is a key
-for the customers. The times column is of class \code{numeric} and represents the
-arrival times of the customers.}
+\item{arrivals}{Either a numeric vector or an object of class \code{queue_list}. It represents the arrival times.}
 
-\item{service}{A vector of service times with the same ordering as arrival_df.}
+\item{service}{A vector of service times with the same ordering as arrivals}
 }
 \value{
 A vector of response times for the input of arrival times and service times.
@@ -21,16 +19,16 @@ Add lag to vector of arrival times.
 }
 \examples{
 # Create arrival times
-arrival_df <- data.frame(ID = c(1:100), times = rlnorm(100, meanlog = 3))
+arrivals <- rlnorm(100, meanlog = 3)
 
 # Create service times
 service <- rlnorm(100)
-lag_step(arrival_df = arrival_df, service = service)
+lag_step(arrivals = arrivals, service = service)
 
 # lag_step is equivalent to queue_step with a large number of queues, but it's faster to compute.
 
-cbind(queue_step(arrival_df = arrival_df, service = service, servers = 100),
-lag_step(arrival_df = arrival_df, service = service))
+cbind(queue(arrivals, service = service, servers = 100),
+lag_step(arrivals = arrivals, service = service))
 }
 \seealso{
 \code{\link{wait_step}}, \code{\link{queue_step}}.
