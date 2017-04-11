@@ -4,7 +4,7 @@
 #' @importFrom dplyr %>%
 #' @importFrom stats rexp
 #' @param arrivals vector of arrival times
-#' @param service vector of service times
+#' @param service vector of service times. Leave as zero if you want to compute the number of customers in the system rather than queue length.
 #' @param departures vector of departure times
 #' @examples
 #' library(ggplot2)

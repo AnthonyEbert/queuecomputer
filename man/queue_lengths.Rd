@@ -9,7 +9,7 @@ queue_lengths(arrivals, service = 0, departures)
 \arguments{
 \item{arrivals}{vector of arrival times}
 
-\item{service}{vector of service times}
+\item{service}{vector of service times. Leave as zero if you want to compute the number of customers in the system rather than queue length.}
 
 \item{departures}{vector of departure times}
 }
