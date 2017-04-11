@@ -171,13 +171,25 @@ generate_input <- function(mag = 3){
   arrivals <- cumsum(rexp(n))
   service <- stats::rexp(n)
   departures <- queue(arrivals, service, 1)
-  QDC_obj <- QDC(arrivals, service, 1)
 
-  output <- list(arrivals = arrivals, service = service, departures = departures, QDC_obj = QDC_obj)
+  output <- list(arrivals = arrivals, service = service, departures = departures)
 
   return(output)
 }
 
+integrate_stepfun <- function(x, y, last = 1000){
+  x <- c(0,x,last)
+  x_diff <- diff(x)
+  return((y %*% x_diff) %>% as.numeric)
+}
+
+#' print method for objects of class \code{queue_list}
+#' @export
+#' @param x an object of class \code{queue_list} produced by the \code{\link{queue_step}} function.
+#' @param ... further arguments to be passed to other methods
+print.queue_list <- function(x, ...){
+  print(x$departures_df, ...)
+}
 
 
 

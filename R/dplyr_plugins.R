@@ -4,7 +4,7 @@
 #' @importFrom dplyr %>%
 #' @importFrom stats rexp
 #' @param arrivals vector of arrival times
-#' @param service vector of service times
+#' @param service vector of service times. Leave as zero if you want to compute the number of customers in the system rather than queue length.
 #' @param departures vector of departure times
 #' @examples
 #' library(ggplot2)
@@ -76,7 +76,7 @@ queue_lengths <- function(arrivals, service = 0, departures){
   queuedata <- tidyr::gather(
     data.frame(
       input = arrivals,
-      output = departures - service + 1e-8
+      output = departures - service
     ),
     factor_key = TRUE
   )
@@ -107,6 +107,12 @@ queue_lengths <- function(arrivals, service = 0, departures){
 
   queuedata <- dplyr::select(queuedata, times, queuelength)
 
+  zerodata <- data.frame(
+    times = 0, queuelength = 0
+  )
+
+  queuedata <- dplyr::bind_rows(zerodata, queuedata)
+
   return(queuedata)
 
 }
@@ -124,8 +130,7 @@ queue_lengths <- function(arrivals, service = 0, departures){
 #' average_queue(queuedata$times, queuedata$queuelength)
 #' @export
 average_queue <- function(times, queuelength){
-  times <- c(0, times)
-  (diff(times) %*% queuelength) / (times[length(times)] - times[1])
+  ((c(diff(times),0) %*% queuelength) / (times[length(times)] - times[1])) %>% as.numeric()
 }
 
 #' Summarise queue lengths
@@ -141,8 +146,10 @@ average_queue <- function(times, queuelength){
 #' ql_summary(queuedata$times, queuedata$queuelength)
 #' @export
 ql_summary <- function(times, queuelength){
+  n <- length(times)
+
   x <- dplyr::data_frame(
-    times = c(0,times), queuelength = c(0,queuelength)
+    times = times, queuelength = queuelength
   )
 
   diff_times <- NULL
@@ -150,13 +157,16 @@ ql_summary <- function(times, queuelength){
   # summary_queue <- NULL
   # queue_df
 
-  return(
-    x %>%
+  x <- x %>%
     dplyr::mutate(diff_times = c(diff(times), 0)) %>%
     dplyr::group_by(queuelength) %>%
     dplyr::summarise(proportion = sum(diff_times)) %>%
-    dplyr::mutate(proportion = proportion / sum(proportion))
-  )
+    dplyr::ungroup()
+
+  tot <- sum(x$proportion)
+  x$proportion <- x$proportion / tot
+
+  return(x)
 }
 
 
@@ -174,7 +184,7 @@ ql_summary <- function(times, queuelength){
 
 #' Creates batches of customer arrivals from a dataframe within a \code{dplyr::do} command
 #'
-#' @param data a named list object.
+#' @param data a dataframe with parameters for each batch
 #' @param arrival_dist a distribution whose support is strictly positive. Either as an object or a non-empty character string. It represents the distribution of arrival times.
 #' @param service_rate a strictly positive number representing the rate parameter in the exponential distribution for the service times.
 #' @param time a number greater than or equal to zero.
@@ -198,7 +208,7 @@ ql_summary <- function(times, queuelength){
 #' )
 #'
 #' queue_obj <- with(passenger_df,
-#'     QDC(arrivals, service, servers = 5)
+#'     queue_step(arrivals, service, servers = 5)
 #' )
 #' if(require(ggplot2, quietly = TRUE)){
 #' plot(queue_obj)

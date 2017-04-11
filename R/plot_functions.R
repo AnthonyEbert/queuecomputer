@@ -15,7 +15,7 @@
 #' service_rate <- 1
 #' arrivals <- cumsum(rexp(n_customers, arrival_rate))
 #' service <- rexp(n_customers, service_rate)
-#' queue_obj <- QDC(arrivals, service, servers = 2)
+#' queue_obj <- queue_step(arrivals, service, servers = 2)
 #' plot(queue_obj)
 #'
 #' }
@@ -47,7 +47,7 @@
 plot.queue_list <- function(x, which = c(2:6), annotated = TRUE, ...){
 
   if(requireNamespace("ggplot2", quietly = TRUE)){
-    loadNamespace
+    #loadNamespace
 
     stopifnot(is.numeric(which) & all(which > 0) & which <= 6 & all(which %% 1 == 0))
 
@@ -180,8 +180,9 @@ plot_status <- function(x, annotated){
   output <- ggplot2::ggplot(tidydata_for_line) +
     ggplot2::aes(x = x, ymin = ymin, ymax = ymax, col = status) +
     ggplot2::geom_linerange()
-  edited_output <- output + ggplot2::xlab("customer") +
-    ggplot2::ylab("Time") + ggplot2::facet_grid(.~type, scales = "free_x") + ggplot2::scale_x_discrete() + ggplot2::theme(axis.text.x = ggplot2::element_blank()) +
+
+  edited_output <- output +
+    ggplot2::ylab("Time") + ggplot2::facet_grid(.~type, scales = "free_x") + ggplot2::scale_x_discrete() + ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.title.x = ggplot2::element_blank()) +
     ggplot2::ggtitle("Line range plot of customer and server status")
 
   switch(as.numeric(annotated) + 1, return(output), return(edited_output))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/core_queuefunctions.R
 \name{queue}
 \alias{queue}
-\title{Compute the departure times of a set of customers in a queue from their arrival and service times.}
+\title{Compute the departure times for a set of customers in a queue from their arrival and service times.}
 \usage{
 queue(arrivals, service, servers = 1, serveroutput = FALSE, adjust = 1)
 }
@@ -19,11 +19,24 @@ or an object of class \code{server.list}.}
 \item{adjust}{non-negative number, an adjustment parameter for scaling the service times.}
 }
 \description{
-\code{queue} is a faster internal version of \code{queue_step}. It is not compatible with the \code{summary.queue_df} method.
+\code{queue} is a faster internal version of \code{queue_step}. It is not compatible with the \code{summary.queue_list} method or the \code{plot.queue_list} method.
 }
 \examples{
-queue(rep(1, 7), service = rep(0.2, 7),
-servers = as.server.stepfun(3.1, c(2, 1)))
+n <- 1e2
+arrivals <- cumsum(rexp(n, 1.8))
+service <- rexp(n)
+
+departures <- queue(
+    arrivals, service, servers = 2)
+
+head(departures)
+curve(ecdf(departures)(x) * n,
+    from = 0, to = max(departures),
+    xlab = "Time", ylab = "Number of customers")
+curve(ecdf(arrivals)(x) * n,
+    from = 0, to = max(departures),
+    col = "red", add = TRUE)
+
 }
 \seealso{
 \code{\link{queue_step}}
