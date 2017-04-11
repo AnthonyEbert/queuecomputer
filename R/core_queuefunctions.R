@@ -1,6 +1,6 @@
 #
 
-#' Compute the departure times and queue lengths for a queueing system from arrival and service times.
+#' Compute the departure times for a set of customers in a queue from their arrival and service times.
 #' @param arrivals numeric vector of non-negative arrival times
 #' @param service numeric vector of non-negative service times
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
@@ -102,8 +102,7 @@ queue_pass.server.list <- function(arrivals, service, servers){
 
 
 
-#' Compute the queue departure times of customers given a set of arrival times, a set of service times, and a resource schedule.
-#'
+#' Compute the departure times and queue lengths for a queueing system from arrival and service times.
 #'
 #' @param arrivals numeric vector of non-negative arrival times
 #' @param service numeric vector of service times with the same ordering as arrival_df.
@@ -128,7 +127,7 @@ QDC <- function(arrivals, service, servers = 1, labels = NULL, adjust = 1){
   if("queue_list" %in% class(arrivals)){
     if(is.null(arrivals$departures_df$labels) == FALSE){
       labels <- arrivals$departures_df$labels
-      stopifnot(length(labels) == length(arrivals))
+      stopifnot(length(labels) == length(ar))
     }
     arrivals <- arrivals$departures_df$departures
   }
