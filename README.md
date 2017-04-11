@@ -99,159 +99,37 @@ head(queue_2$departures_df)
 #> 6 108.7119 1.2304520   109.9423  0.000000e+00    1.230452      1
 
 summary(queue_1)
-#> $number_customers
-#> [1] 200
-#> 
-#> $missed_customers
-#> [1] 0
-#> 
-#> $qlength_sum
-#> # A tibble: 24 × 2
-#>    queuelength  proportion
-#>          <dbl>       <dbl>
-#> 1            0 0.635293164
-#> 2            1 0.017711485
-#> 3            2 0.019022001
-#> 4            3 0.013198290
-#> 5            4 0.015530023
-#> 6            5 0.013069273
-#> 7            6 0.005422745
-#> 8            7 0.015264468
-#> 9            8 0.013490444
-#> 10           9 0.028604615
-#> # ... with 14 more rows
-#> 
-#> $qlength_mean
-#> [1] 3.704555
-#> 
-#> $slength_sum
-#> # A tibble: 26 × 2
-#>    queuelength  proportion
-#>          <dbl>       <dbl>
-#> 1            0 0.609011851
-#> 2            1 0.013772165
-#> 3            2 0.013349133
-#> 4            3 0.017670692
-#> 5            4 0.018978190
-#> 6            5 0.013167892
-#> 7            6 0.015494255
-#> 8            7 0.013039172
-#> 9            8 0.005410256
-#> 10           9 0.015229312
-#> # ... with 16 more rows
-#> 
-#> $slength_mean
-#> [1] 4.464227
-#> 
-#> $mrt
-#> [1] 13.74786
-#> 
-#> $mwt
-#> [1] 11.38213
-#> 
-#> $departures_sum
-#>     arrivals        service            departures       waiting      
-#>  Min.   :100.8   Min.   : 0.004252   Min.   :100.9   Min.   : 0.000  
-#>  1st Qu.:149.5   1st Qu.: 0.712788   1st Qu.:166.8   1st Qu.: 6.928  
-#>  Median :352.5   Median : 1.646313   Median :366.5   Median :12.493  
-#>  Mean   :350.7   Mean   : 2.365731   Mean   :364.4   Mean   :11.382  
-#>  3rd Qu.:544.9   3rd Qu.: 3.240546   3rd Qu.:561.0   3rd Qu.:14.950  
-#>  Max.   :596.9   Max.   :15.828209   Max.   :615.9   Max.   :25.153  
-#>   system_time      server     response      
-#>  Min.   : 0.1891   1: 83   Min.   : 0.1891  
-#>  1st Qu.:10.0196   2:117   1st Qu.:10.0196  
-#>  Median :14.5664           Median :14.5664  
-#>  Mean   :13.7479           Mean   :13.7479  
-#>  3rd Qu.:17.4366           3rd Qu.:17.4366  
-#>  Max.   :31.0380           Max.   :31.0380  
-#> 
-#> $utilization
-#> [1] 0.3841021
+#> Total customers:
+#>  200
+#> Missed customers:
+#>  0
+#> Mean waiting time:
+#>  11.4
+#> Mean response time:
+#>  13.7
+#> Utilization factor:
+#>  0.384
+#> Mean queue length:
+#>  3.7
+#> Mean number of customers in system:
+#>  4.46
 
 summary(queue_2)
-#> $number_customers
-#> [1] 200
-#> 
-#> $missed_customers
-#> [1] 0
-#> 
-#> $qlength_sum
-#> # A tibble: 32 × 2
-#>    queuelength  proportion
-#>          <dbl>       <dbl>
-#> 1            0 0.545312292
-#> 2            1 0.022278305
-#> 3            2 0.025908718
-#> 4            3 0.030868563
-#> 5            4 0.023298844
-#> 6            5 0.024395660
-#> 7            6 0.009027140
-#> 8            7 0.020010249
-#> 9            8 0.013111985
-#> 10           9 0.008009216
-#> # ... with 22 more rows
-#> 
-#> $qlength_mean
-#> [1] 5.711736
-#> 
-#> $slength_sum
-#> # A tibble: 33 × 2
-#>    queuelength  proportion
-#>          <dbl>       <dbl>
-#> 1            0 0.480839692
-#> 2            1 0.066087407
-#> 3            2 0.022199185
-#> 4            3 0.025816704
-#> 5            4 0.030758934
-#> 6            5 0.023216100
-#> 7            6 0.024309019
-#> 8            7 0.008995081
-#> 9            8 0.019939183
-#> 10           9 0.013065419
-#> # ... with 23 more rows
-#> 
-#> $slength_mean
-#> [1] 6.210611
-#> 
-#> $mrt
-#> [1] 37.19555
-#> 
-#> $mwt
-#> [1] 34.08628
-#> 
-#> $departures_sum
-#>     arrivals         service            departures        waiting     
-#>  Min.   : 105.7   Min.   : 0.005783   Min.   : 107.3   Min.   : 0.00  
-#>  1st Qu.: 235.8   1st Qu.: 1.168675   1st Qu.: 297.2   1st Qu.:10.60  
-#>  Median : 520.7   Median : 2.185065   Median : 522.2   Median :31.00  
-#>  Mean   : 468.0   Mean   : 3.109268   Mean   : 505.2   Mean   :34.09  
-#>  3rd Qu.: 645.8   3rd Qu.: 4.284097   3rd Qu.: 693.7   3rd Qu.:53.76  
-#>  Max.   :1193.6   Max.   :16.737074   Max.   :1197.8   Max.   :84.59  
-#>   system_time      server     response      
-#>  Min.   : 0.1203   1:200   Min.   : 0.1203  
-#>  1st Qu.:14.1416           1st Qu.:14.1416  
-#>  Median :36.0862           Median :36.0862  
-#>  Mean   :37.1955           Mean   :37.1955  
-#>  3rd Qu.:57.2661           3rd Qu.:57.2661  
-#>  Max.   :86.0167           Max.   :86.0167  
-#> 
-#> $utilization
-#> [1] 0.5191603
-
-curve(ecdf(arrivals_1)(x) * 2*n , from = 0, to = 1500,
-    xlab = "time", ylab = "Number of customers")
-curve(ecdf(depart(queue_1))(x) * 2*n , add = TRUE, col = "red")
-curve(ecdf(arrivals_2)(x) * 2*n, add = TRUE, col = "blue")
-curve(ecdf(depart(queue_2))(x) * 2*n, add = TRUE, col = "green")
-legend(600,70, legend = c("Customer arrivals to firstqeue",
-    "Customer output - firstqueue",
-    "Customer arrivals to second queue", 
-    "Customer output - secondqueue"),
-    col = c("black","red","blue", "green"), lwd = 1, cex = 0.8
-)
+#> Total customers:
+#>  200
+#> Missed customers:
+#>  0
+#> Mean waiting time:
+#>  34.1
+#> Mean response time:
+#>  37.2
+#> Utilization factor:
+#>  0.519
+#> Mean queue length:
+#>  5.71
+#> Mean number of customers in system:
+#>  6.21
 ```
-
-![](README-unnamed-chunk-3-1.png)
 
 More information
 ----------------

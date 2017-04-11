@@ -114,6 +114,8 @@ summary.queue_list <- function(object, ...){
     utilization = utilization
   )
 
+  class(output_list) <- c("summary_queue_list", "list")
+
   return(output_list)
 
 }
@@ -125,7 +127,29 @@ summary.queue_list <- function(object, ...){
 
 
 
+#' Print method for output of \code{summary.queue_list}.
+#' @param x an object of class \code{summary_queue_list}, the result of a call to \code{summary.queue_list()}.
+#' @param ... futher arguments to be passed to or from other methods.
+#' @return A list of performance statistics for the queue. "Mean waiting time": The mean time each customer had to wait in queue for service. "Mean response time": The mean time that each customer spends in the system (departure time - arrival time). "Utilization factor": The ratio of available time for all servers and time all servers were used. It can be greater than one if a customer arrives near the end of a shift and keeps a server busy. "Queue Lengths" and "System Lengths", the proportion of time for each queue length or number of customers in the system.
+#' @examples
+#' n <- 1e3
+#' arrivals <- cumsum(rexp(n, 1.8))
+#' service <- rexp(n)
+#'
+#' queue_obj <- queue_step(arrivals, service, servers = 2)
+#' summary(queue_obj)
+#' @export
+print.summary_queue_list <- function(x, ...){
+  sig <- 3
 
+  cat("Total customers:\n", paste(x$n, ...))
+  cat("\nMissed customers:\n", paste(x$missed_customers), ...)
+  cat("\nMean waiting time:\n", paste(signif(x$mwt, sig)), ...)
+  cat("\nMean response time:\n", paste(signif(x$mrt, sig)), ...)
+  cat("\nUtilization factor:\n", paste(signif(x$utilization, sig)), ...)
+  cat("\nMean queue length:\n", paste(signif(x$qlength_mean, sig)), ...)
+  cat("\nMean number of customers in system:\n", paste(signif(x$slength_mean, sig)), ...)
+}
 
 
 
