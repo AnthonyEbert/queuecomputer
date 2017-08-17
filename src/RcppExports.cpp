@@ -20,7 +20,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // qloop_qq
-NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector x, NumericVector y);
+List qloop_qq(NumericVector times, NumericVector service, NumericVector x, NumericVector y);
 RcppExport SEXP queuecomputer_qloop_qq(SEXP timesSEXP, SEXP serviceSEXP, SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -32,4 +32,15 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(qloop_qq(times, service, x, y));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"queuecomputer_qloop_numeric", (DL_FUNC) &queuecomputer_qloop_numeric, 3},
+    {"queuecomputer_qloop_qq", (DL_FUNC) &queuecomputer_qloop_qq, 4},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_queuecomputer(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

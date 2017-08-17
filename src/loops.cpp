@@ -33,7 +33,7 @@ NumericVector qloop_numeric(NumericVector times, NumericVector service, int n_se
 }
 
 // [[Rcpp::export]]
-NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector x, NumericVector y) {
+List qloop_qq(NumericVector times, NumericVector service, NumericVector x, NumericVector y) {
 
   int n_servers = max(y);
 
@@ -46,7 +46,8 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
   }
 
   int n = times.size();
-  vec output = vec((n+1) * 2 - 1);
+  vec output = vec(n);
+  Col<int> server_output = Col<int>(n);
   output.fill(datum::inf);
   int queue = 0;
   double next_time = x[0];
@@ -90,7 +91,7 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
     queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
 
     output[i] = queue_times[queue];
-    output[i + n] = queue + 1;
+    server_output[i] = queue + 1;
 
     // in case user presses stop.
     if( i % 100 == 0 )
@@ -110,7 +111,27 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
 
   }
 
-  return(wrap(output));
+
+
+
+  // List output_obj;
+  // output_obj["times"] = wrap(output);
+  // output_obj["servers"] = wrap(server_output);
+
+  std::vector<double> output_stl;
+  std::vector<int> server_stl;
+
+  output_stl = arma::conv_to<std::vector<double> >::from(output);
+  server_stl = arma::conv_to<std::vector<int> >::from(server_output);
+
+  // Rcpp::Named("servers") = server_stl)
+
+  Rcpp::List output_obj;
+  output_obj["times"] = wrap(output);
+  output_obj["server"] = wrap(server_output);
+  output_obj["state"] = wrap(queue_times);
+
+  return(output_obj);
 
 }
 
