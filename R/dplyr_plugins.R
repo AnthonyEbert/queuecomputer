@@ -104,8 +104,9 @@ queue_lengths <- function(arrivals, service = 0, departures){
     queuedata,
     queuelength = cumsum(state),
     times = value
-  ) %>%
-    dplyr::select(times, queuelength)
+  )
+
+  queuedata <- queuedata[c("Species", "Petal.Width")]
 
   zerodata <- data.frame(
     times = 0, queuelength = 0
