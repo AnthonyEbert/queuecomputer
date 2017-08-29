@@ -106,7 +106,7 @@ queue_lengths <- function(arrivals, service = 0, departures){
     times = value
   )
 
-  queuedata <- queuedata[c("Species", "Petal.Width")]
+  queuedata <- queuedata[c("times", "queuelength")]
 
   zerodata <- data.frame(
     times = 0, queuelength = 0
