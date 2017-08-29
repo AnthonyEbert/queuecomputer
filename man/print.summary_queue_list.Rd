@@ -39,4 +39,3 @@ service <- rexp(n)
 queue_obj <- queue_step(arrivals, service, servers = 2)
 summary(queue_obj)
 }
-

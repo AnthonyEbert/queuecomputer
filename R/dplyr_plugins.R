@@ -106,7 +106,7 @@ queue_lengths <- function(arrivals, service = 0, departures){
     times = value
   )
 
-  queuedata <- dplyr::select(queuedata, times, queuelength)
+  #queuedata <- dplyr::select(queuedata, times, queuelength)
 
   zerodata <- data.frame(
     times = 0, queuelength = 0

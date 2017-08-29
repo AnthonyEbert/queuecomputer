@@ -23,4 +23,3 @@ queue_obj <- queue_step(arrivals, service)
 depart(queue_obj)
 queue_obj$departures_df$departures
 }
-

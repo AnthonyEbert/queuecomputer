@@ -63,4 +63,3 @@ if(require(ggplot2, quietly = TRUE)){
 \seealso{
 \code{\link{queue}}, \code{\link{summary.queue_list}}, \code{\link{plot.queue_list}}
 }
-

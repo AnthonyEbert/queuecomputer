@@ -14,4 +14,3 @@
 \description{
 print method for objects of class \code{queue_list}
 }
-

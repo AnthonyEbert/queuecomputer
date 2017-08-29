@@ -37,4 +37,3 @@ servers
 \seealso{
 \code{\link{as.server.list}}, \code{\link{queue_step}}, \code{\link{stepfun}}.
 }
-
