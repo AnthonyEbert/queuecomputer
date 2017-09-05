@@ -74,31 +74,33 @@ queue_lengths <- function(arrivals, service = 0, departures){
     check_queueinput(arrivals, service, departures)
   }
 
-  queuedata <- tidyr::gather(
-    data.frame(
-      input = arrivals,
-      output = departures - service
-    ),
-    factor_key = TRUE
+  queuedata <- data.frame(
+    key = as.factor(c(rep("input", length(arrivals)), rep("output", length(arrivals)))),
+    value = c(arrivals, departures - service),
+    state = c(rep(1, length(arrivals)), rep(-1, length(arrivals)))
   )
-
-  state_df <- data.frame(
-    key = as.factor(c("input", "output")),
-    state = c(1, -1)
-  )
-
-  queuedata <- suppressMessages(
-    dplyr::left_join(queuedata, state_df)
-  )
-
-  # queuedata <- queuedata %>% arrange(value, key) %>% mutate(
-  #   QueueLength = cumsum(state),
-  #   time = value
-  # )
 
   ord <- order(queuedata$value, queuedata$key, method = "radix")
 
   queuedata <- queuedata[ord, ]
+
+
+  # queuedata <- tidyr::gather(
+  #   data.frame(
+  #     input = arrivals,
+  #     output = departures - service
+  #   ),
+  #   factor_key = TRUE
+  # )
+  #
+  # state_df <- data.frame(
+  #   key = as.factor(c("input", "output")),
+  #   state = c(1, -1)
+  # )
+  #
+  # queuedata <- suppressMessages(
+  #   dplyr::left_join(queuedata, state_df)
+  # )
 
   queuedata <- dplyr::mutate(
     queuedata,

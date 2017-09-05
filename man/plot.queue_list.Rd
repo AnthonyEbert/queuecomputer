@@ -56,4 +56,3 @@ plot(queue_obj, which = 6)
 }
 
 }
-

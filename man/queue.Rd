@@ -41,4 +41,3 @@ curve(ecdf(arrivals)(x) * n,
 \seealso{
 \code{\link{queue_step}}
 }
-

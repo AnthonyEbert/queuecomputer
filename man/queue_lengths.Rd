@@ -70,4 +70,3 @@ if(require(ggplot2, quietly = TRUE)){
       facet_grid(~route)
 }
 }
-
