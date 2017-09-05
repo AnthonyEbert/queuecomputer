@@ -75,46 +75,18 @@ queue_lengths <- function(arrivals, service = 0, departures){
   }
 
   queuedata <- data.frame(
-    key = as.factor(c(rep("input", length(arrivals)), rep("output", length(arrivals)))),
-    value = c(arrivals, departures - service),
-    state = c(rep(1, length(arrivals)), rep(-1, length(arrivals)))
+    key = c(0, rep("input", length(arrivals)), rep("output", length(arrivals))),
+    times = c(0, arrivals, departures - service),
+    state = c(0, rep(1, length(arrivals)), rep(-1, length(arrivals)))
   )
 
-  ord <- order(queuedata$value, queuedata$key, method = "radix")
+  ord <- order(queuedata$times, queuedata$key, method = "radix")
 
-  queuedata <- queuedata[ord, ]
+  queuedata <- queuedata[c("times", "state")][ord, ]
 
-
-  # queuedata <- tidyr::gather(
-  #   data.frame(
-  #     input = arrivals,
-  #     output = departures - service
-  #   ),
-  #   factor_key = TRUE
-  # )
-  #
-  # state_df <- data.frame(
-  #   key = as.factor(c("input", "output")),
-  #   state = c(1, -1)
-  # )
-  #
-  # queuedata <- suppressMessages(
-  #   dplyr::left_join(queuedata, state_df)
-  # )
-
-  queuedata <- dplyr::mutate(
-    queuedata,
-    queuelength = cumsum(state),
-    times = value
-  )
+  queuedata$queuelength <- cumsum(queuedata$state)
 
   queuedata <- queuedata[c("times", "queuelength")]
-
-  zerodata <- data.frame(
-    times = 0, queuelength = 0
-  )
-
-  queuedata <- dplyr::bind_rows(zerodata, queuedata)
 
   return(queuedata)
 
