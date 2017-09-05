@@ -61,12 +61,6 @@
 #' }
 queue_lengths <- function(arrivals, service = 0, departures){
 
-  value <- NULL
-  key <- NULL
-  state <- NULL
-  times <- NULL
-  queuelength <- NULL
-
   if(length(service) == 1){
     stopifnot(service == 0)
     check_queueinput(arrivals, service = departures)
@@ -75,14 +69,13 @@ queue_lengths <- function(arrivals, service = 0, departures){
   }
 
   queuedata <- data.frame(
-    key = c(0, rep("input", length(arrivals)), rep("output", length(arrivals))),
     times = c(0, arrivals, departures - service),
     state = c(0, rep(1, length(arrivals)), rep(-1, length(arrivals)))
   )
 
-  ord <- order(queuedata$times, queuedata$key, method = "radix")
+  ord <- order(queuedata$times, queuedata$state * -1, method = "radix")
 
-  queuedata <- queuedata[c("times", "state")][ord, ]
+  queuedata <- queuedata[ord, ]
 
   queuedata$queuelength <- cumsum(queuedata$state)
 
