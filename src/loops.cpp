@@ -22,7 +22,7 @@ NumericVector qloop_numeric(NumericVector times, NumericVector service, int n_se
     queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
     output[i] = queue_times[queue];
     output[i + n] = queue + 1;
-    if( i % 100 == 0 )
+    if( i % 512 == 0 )
     {
       Rcpp::checkUserInterrupt();
     }
@@ -93,7 +93,7 @@ NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector
     output[i + n] = queue + 1;
 
     // in case user presses stop.
-    if( i % 100 == 0 )
+    if( i % 512 == 0 )
     {
       Rcpp::checkUserInterrupt();
     }
