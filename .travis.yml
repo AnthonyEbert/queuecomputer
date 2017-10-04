@@ -3,6 +3,7 @@ cache: packages
 r:
   - release
   - devel
+sudo: required
 
 r_packages:
   - covr
