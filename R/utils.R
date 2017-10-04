@@ -166,15 +166,19 @@ check_queueinput <- function(arrivals, service, departures = NULL){
 
 
 
-generate_input <- function(mag = 3){
+generate_input <- function(mag = 3, full = FALSE){
+  arrivals <- NULL
+  service <- NULL
+  departures <- NULL
+
   n <- 10^mag
-  arrivals <- cumsum(rexp(n))
-  service <- stats::rexp(n)
-  departures <- queue(arrivals, service, 1)
+  arrivals <<- cumsum(rexp(n, 1.9))
+  service <<- stats::rexp(n)
+  if(full){
+    departures <<- queue(arrivals, service, 1)
+  }
 
-  output <- list(arrivals = arrivals, service = service, departures = departures)
-
-  return(output)
+  return()
 }
 
 integrate_stepfun <- function(x, y, last = 1000){

@@ -6,6 +6,7 @@
 #' @param arrivals vector of arrival times
 #' @param service vector of service times. Leave as zero if you want to compute the number of customers in the system rather than queue length.
 #' @param departures vector of departure times
+#' @param epsilon numeric small number added to departures to prevent negative queue lengths
 #' @examples
 #' library(dplyr)
 #' library(queuecomputer)
@@ -59,7 +60,30 @@
 #'       aes(x = times, y = queuelength) + geom_step() +
 #'       facet_grid(~route)
 #' }
-queue_lengths <- function(arrivals, service = 0, departures){
+queue_lengths <- function(arrivals, service = 0, departures, epsilon = 1e-10){
+
+  if(length(service) == 1){
+    stopifnot(service == 0)
+    check_queueinput(arrivals, service = departures)
+  } else {
+    check_queueinput(arrivals, service, departures)
+  }
+
+  qd_times = c(0, arrivals, departures - service + epsilon)
+  qd_state = c(0L, rep.int(1L, length(arrivals)), rep.int(-1L, length(arrivals)))
+
+  out <- sort.int(qd_times, index.return = TRUE)
+
+  queuedata <- data.frame(
+    times = out$x,
+    queuelength = cumsum(.subset(qd_state, out$ix))
+  )
+
+  return(queuedata)
+
+}
+
+queue_lengths_old <- function(arrivals, service = 0, departures){
 
   if(length(service) == 1){
     stopifnot(service == 0)
@@ -71,7 +95,7 @@ queue_lengths <- function(arrivals, service = 0, departures){
   queuedata <- data.frame(
     times = c(0, arrivals, departures - service),
     state = c(0L, rep.int(1L, length(arrivals)), rep.int(-1L, length(arrivals))
-  ))
+    ))
 
   ord <- order(queuedata$times, queuedata$state * -1L, method = "radix")
 
