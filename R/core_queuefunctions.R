@@ -56,7 +56,7 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust =
   }
 
   if(serveroutput){
-    attr(departures, "server") <- queue_vector
+    attr(departures, "server") <- as.integer(queue_vector)
   }
 
   return(departures)

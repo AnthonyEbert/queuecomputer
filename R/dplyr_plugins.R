@@ -70,10 +70,10 @@ queue_lengths <- function(arrivals, service = 0, departures){
 
   queuedata <- data.frame(
     times = c(0, arrivals, departures - service),
-    state = c(0, rep(1, length(arrivals)), rep(-1, length(arrivals)))
-  )
+    state = c(0L, rep.int(1L, length(arrivals)), rep.int(-1L, length(arrivals))
+  ))
 
-  ord <- order(queuedata$times, queuedata$state * -1, method = "radix")
+  ord <- order(queuedata$times, queuedata$state * -1L, method = "radix")
 
   queuedata <- queuedata[ord, ]
 
