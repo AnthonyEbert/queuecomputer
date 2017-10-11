@@ -42,15 +42,14 @@ next_function <- function(sf,time){
 #' @export
 as.server.stepfun <- function(x, y){
 
-  stopifnot(all(y%%1 == 0) & all(y >= 0)) # y's are integers
-  stopifnot(!is.unsorted(x))              # x's are ordered
-  stopifnot(length(x) >= 1)               # x is not of length zero
-  stopifnot(length(y) == length(x) + 1)   # stepfun condition
-  stopifnot(sum(y) != 0)                  # There is at least one server
-  # stopifnot(y[length(y)] != 0)          # Last y value is not zero (removed)
-  stopifnot(all(x >= 0))                  # All x's are positive
-  stopifnot(all(is.finite(c(x,y))))       # All x's and y's are finite
-  stopifnot(is.numeric(c(x,y)))           # All x's and y's are numeric
+  stopifnot(all(y%%1 == 0) & all(y >= 0))     # y's are integers
+  stopifnot(!is.unsorted(x, strictly = TRUE)) # x's are ordered
+  stopifnot(length(x) >= 1)                   # x is not of length zero
+  stopifnot(length(y) == length(x) + 1)       # stepfun condition
+  stopifnot(sum(y) != 0)                      # There is at least one server
+  stopifnot(all(x >= 0))                      # All x's are positive
+  stopifnot(all(is.finite(c(x,y))))           # All x's and y's are finite
+  stopifnot(is.numeric(c(x,y)))               # All x's and y's are numeric
 
   output <- list()
   class(output) <- c("list", "server.stepfun")

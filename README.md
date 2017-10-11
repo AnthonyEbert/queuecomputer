@@ -75,9 +75,9 @@ queue_2 <- queue_step(arrivals = arrivals_2, service = service_2, servers = 1)
 head(arrivals_1)
 #> [1] 100.7552 101.9368 102.0825 102.2223 102.6584 105.5534
 head(queue_1$departures_df)
-#> # A tibble: 6 × 6
+#> # A tibble: 6 x 6
 #>   arrivals   service departures       waiting system_time server
-#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <dbl>
+#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <int>
 #> 1 100.7552 0.1890576   100.9442 -6.383782e-15   0.1890576      1
 #> 2 101.9368 2.5656478   104.5025  4.440892e-15   2.5656478      2
 #> 3 102.0825 1.6870828   103.7696  0.000000e+00   1.6870828      1
@@ -87,9 +87,9 @@ head(queue_1$departures_df)
 head(arrivals_2)
 #> [1] 120.3923 105.6711 227.5242 175.9008 339.9853 108.7119
 head(queue_2$departures_df)
-#> # A tibble: 6 × 6
+#> # A tibble: 6 x 6
 #>   arrivals   service departures       waiting system_time server
-#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <dbl>
+#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <int>
 #> 1 120.3923 5.1599751   125.5523 -2.664535e-15    5.159975      1
 #> 2 105.6711 1.5841166   107.2552  0.000000e+00    1.584117      1
 #> 3 227.5242 0.1136285   290.7928  6.315502e+01   63.268650      1
@@ -107,7 +107,7 @@ summary(queue_1)
 #> Mean response time:
 #>  13.7
 #> Utilization factor:
-#>  0.384
+#>  0.38410206651912
 #> Mean queue length:
 #>  3.7
 #> Mean number of customers in system:
@@ -123,7 +123,7 @@ summary(queue_2)
 #> Mean response time:
 #>  37.2
 #> Utilization factor:
-#>  0.519
+#>  0.519160307775743
 #> Mean queue length:
 #>  5.71
 #> Mean number of customers in system:
