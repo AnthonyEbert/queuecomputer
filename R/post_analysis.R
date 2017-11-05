@@ -101,6 +101,13 @@ summary.queue_list <- function(object, ...){
     utilization <- service_rendered/service_available
   }
 
+  if("server.list" %in% class(object$servers_input)){
+
+    utilization <- NA
+
+    warning("Not yet implemented for server.list")
+  }
+
   output_list <- list(
     number_customers = n,
     missed_customers = missed_customers,
@@ -160,7 +167,7 @@ print.summary_queue_list <- function(x, ...){
   cat("\nMissed customers:\n", paste(x$missed_customers), ...)
   cat("\nMean waiting time:\n", paste(signif(x$mwt, sig)), ...)
   cat("\nMean response time:\n", paste(signif(x$mrt, sig)), ...)
-  cat("\nUtilization factor:\n", paste(signif(x$utilization, sig)), ...)
+  cat("\nUtilization factor:\n", paste(x$utilization, ...))
   cat("\nMean queue length:\n", paste(signif(x$qlength_mean, sig)), ...)
   cat("\nMean number of customers in system:\n", paste(signif(x$slength_mean, sig)), ...)
 }

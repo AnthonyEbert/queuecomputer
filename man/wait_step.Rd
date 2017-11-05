@@ -61,4 +61,3 @@ wait_step(arrivals = arrivals, service = arrivals2)
 \seealso{
 \code{\link{lag_step}}, \code{\link{queue_step}}.
 }
-

@@ -26,4 +26,3 @@ as.server.list(list(10, c(15,30)), c(1,0))
 \seealso{
 \code{\link{as.server.stepfun}}, \code{\link{queue_step}}
 }
-

@@ -4,7 +4,7 @@
 \alias{queue_lengths}
 \title{Compute queue lengths from arrival, service and departure data}
 \usage{
-queue_lengths(arrivals, service = 0, departures)
+queue_lengths(arrivals, service = 0, departures, epsilon = 1e-10)
 }
 \arguments{
 \item{arrivals}{vector of arrival times}
@@ -12,6 +12,8 @@ queue_lengths(arrivals, service = 0, departures)
 \item{service}{vector of service times. Leave as zero if you want to compute the number of customers in the system rather than queue length.}
 
 \item{departures}{vector of departure times}
+
+\item{epsilon}{numeric small number added to departures to prevent negative queue lengths}
 }
 \description{
 Compute queue lengths from arrival, service and departure data
@@ -70,4 +72,3 @@ if(require(ggplot2, quietly = TRUE)){
       facet_grid(~route)
 }
 }
-

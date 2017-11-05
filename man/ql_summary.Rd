@@ -23,4 +23,3 @@ departures <- queue(arrivals, service, 1)
 queuedata <- queue_lengths(arrivals, service, departures)
 ql_summary(queuedata$times, queuedata$queuelength)
 }
-

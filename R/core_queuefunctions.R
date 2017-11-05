@@ -56,7 +56,7 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust =
   }
 
   if(serveroutput){
-    attr(departures, "server") <- queue_vector
+    attr(departures, "server") <- as.integer(queue_vector)
   }
 
   return(departures)
@@ -314,7 +314,7 @@ wait_step <- function(arrivals, service){
 #' depart(queue_obj)
 #' queue_obj$departures_df$departures
 depart <- function(x){
-  if("numeric" %in% class(x)){
+  if("numeric" %in% class(x) | "integer" %in% class(x)){
     departures <- x
   } else {
     departures <- x$departures_df$departures

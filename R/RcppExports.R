@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 qloop_numeric <- function(times, service, n_servers) {
-    .Call('queuecomputer_qloop_numeric', PACKAGE = 'queuecomputer', times, service, n_servers)
+    .Call(`_queuecomputer_qloop_numeric`, times, service, n_servers)
 }
 
 qloop_qq <- function(times, service, x, y) {
-    .Call('queuecomputer_qloop_qq', PACKAGE = 'queuecomputer', times, service, x, y)
+    .Call(`_queuecomputer_qloop_qq`, times, service, x, y)
 }
 

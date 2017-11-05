@@ -6,6 +6,7 @@
 #' @param arrivals vector of arrival times
 #' @param service vector of service times. Leave as zero if you want to compute the number of customers in the system rather than queue length.
 #' @param departures vector of departure times
+#' @param epsilon numeric small number added to departures to prevent negative queue lengths
 #' @examples
 #' library(dplyr)
 #' library(queuecomputer)
@@ -59,13 +60,7 @@
 #'       aes(x = times, y = queuelength) + geom_step() +
 #'       facet_grid(~route)
 #' }
-queue_lengths <- function(arrivals, service = 0, departures){
-
-  value <- NULL
-  key <- NULL
-  state <- NULL
-  times <- NULL
-  queuelength <- NULL
+queue_lengths <- function(arrivals, service = 0, departures, epsilon = 1e-10){
 
   if(length(service) == 1){
     stopifnot(service == 0)
@@ -74,45 +69,41 @@ queue_lengths <- function(arrivals, service = 0, departures){
     check_queueinput(arrivals, service, departures)
   }
 
-  queuedata <- tidyr::gather(
-    data.frame(
-      input = arrivals,
-      output = departures - service
-    ),
-    factor_key = TRUE
+  qd_times = c(0, arrivals, departures - service + epsilon)
+  qd_state = c(0L, rep.int(1L, length(arrivals)), rep.int(-1L, length(arrivals)))
+
+  out <- sort.int(qd_times, index.return = TRUE)
+
+  queuedata <- data.frame(
+    times = out$x,
+    queuelength = cumsum(.subset(qd_state, out$ix))
   )
 
-  state_df <- data.frame(
-    key = as.factor(c("input", "output")),
-    state = c(1, -1)
-  )
+  return(queuedata)
 
-  queuedata <- suppressMessages(
-    dplyr::left_join(queuedata, state_df)
-  )
+}
 
-  # queuedata <- queuedata %>% arrange(value, key) %>% mutate(
-  #   QueueLength = cumsum(state),
-  #   time = value
-  # )
+queue_lengths_old <- function(arrivals, service = 0, departures){
 
-  ord <- order(queuedata$value, queuedata$key, method = "radix")
+  if(length(service) == 1){
+    stopifnot(service == 0)
+    check_queueinput(arrivals, service = departures)
+  } else {
+    check_queueinput(arrivals, service, departures)
+  }
+
+  queuedata <- data.frame(
+    times = c(0, arrivals, departures - service),
+    state = c(0L, rep.int(1L, length(arrivals)), rep.int(-1L, length(arrivals))
+    ))
+
+  ord <- order(queuedata$times, queuedata$state * -1L, method = "radix")
 
   queuedata <- queuedata[ord, ]
 
-  queuedata <- dplyr::mutate(
-    queuedata,
-    queuelength = cumsum(state),
-    times = value
-  )
+  queuedata$queuelength <- cumsum(queuedata$state)
 
-  queuedata <- dplyr::select(queuedata, times, queuelength)
-
-  zerodata <- data.frame(
-    times = 0, queuelength = 0
-  )
-
-  queuedata <- dplyr::bind_rows(zerodata, queuedata)
+  queuedata <- queuedata[c("times", "queuelength")]
 
   return(queuedata)
 

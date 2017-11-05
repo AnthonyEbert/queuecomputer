@@ -8,12 +8,12 @@
  */
 
 /* .Call calls */
-extern SEXP queuecomputer_qloop_numeric(SEXP, SEXP, SEXP);
-extern SEXP queuecomputer_qloop_qq(SEXP, SEXP, SEXP, SEXP);
+extern SEXP _queuecomputer_qloop_numeric(SEXP, SEXP, SEXP);
+extern SEXP _queuecomputer_qloop_qq(SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-  {"queuecomputer_qloop_numeric", (DL_FUNC) &queuecomputer_qloop_numeric, 3},
-  {"queuecomputer_qloop_qq",      (DL_FUNC) &queuecomputer_qloop_qq,      4},
+  {"_queuecomputer_qloop_numeric", (DL_FUNC) &_queuecomputer_qloop_numeric, 3},
+  {"_queuecomputer_qloop_qq",      (DL_FUNC) &_queuecomputer_qloop_qq,      4},
   {NULL, NULL, 0}
 };
 

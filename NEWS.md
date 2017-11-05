@@ -1,4 +1,15 @@
 
+# queuecomputer 0.8.2
+
+## New features:
+
+* Much faster queue lengths computation
+
+## Bug fixes
+* `queue_step` no longer errors if arrivals is an integer vector
+* `summary.queue_list` now returns a warning rather than an error if a `server.list` object is inputted. 
+
+
 # queuecomputer 0.8.1
 
 ## New features: 
