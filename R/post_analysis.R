@@ -103,7 +103,9 @@ summary.queue_list <- function(object, ...){
 
   if("server.list" %in% class(object$servers_input)){
 
-    utilization <- "Not yet implemented for server.list"
+    utilization <- NA
+
+    warning("Not yet implemented for server.list")
   }
 
   output_list <- list(
