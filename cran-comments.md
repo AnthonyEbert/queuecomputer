@@ -1,6 +1,6 @@
 ## Test environments
-* local Debian "jessie" install, R 3.3.3
-* local MacOS install, R 3.3.3
+* local Debian "stretch" install, R 3.4.1
+* local MacOS install, R 3.4.2
 * win-builder 
 
 ## R CMD check results

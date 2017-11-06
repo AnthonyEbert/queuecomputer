@@ -3,7 +3,7 @@
 
 ## New features:
 
-* Much faster queue lengths computation
+* Much faster queue lengths computation. This means `queue_step()` is faster. The speed of `queue()` is unaffected. 
 
 ## Bug fixes
 * `queue_step` no longer errors if arrivals is an integer vector
