@@ -44,6 +44,10 @@ The focus on this package is:
 
 It is up to the user to provide arrival and service times, and therefore very complicated distributions can be simulated (by the user) and tested with this package. 
 
+For detailed information regarding the algorithm used in this package see our arXiv preprint: 
+
+Ebert, A., Wu, P., Mengersen, K., & Ruggeri, F. (2017). [Computationally Efficient Simulation of Queues: The R Package queuecomputer](https://arxiv.org/abs/1703.02151). arXiv preprint arXiv:1703.02151.
+
 ## Installation
 
 ```{r, eval = FALSE}
@@ -87,10 +91,6 @@ summary(queue_1)
 
 summary(queue_2)
 ```
-
-## More information
-
-For more information on how to use the package see the package vignettes or the R help files. 
 
 ## Acknowledgements
 

@@ -28,6 +28,10 @@ The focus on this package is:
 
 It is up to the user to provide arrival and service times, and therefore very complicated distributions can be simulated (by the user) and tested with this package.
 
+For detailed information regarding the algorithm used in this package see our arXiv preprint:
+
+Ebert, A., Wu, P., Mengersen, K., & Ruggeri, F. (2017). [Computationally Efficient Simulation of Queues: The R Package queuecomputer](https://arxiv.org/abs/1703.02151). arXiv preprint arXiv:1703.02151.
+
 Installation
 ------------
 
@@ -77,7 +81,7 @@ head(arrivals_1)
 head(queue_1$departures_df)
 #> # A tibble: 6 x 6
 #>   arrivals   service departures       waiting system_time server
-#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <int>
+#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <dbl>
 #> 1 100.7552 0.1890576   100.9442 -6.383782e-15   0.1890576      1
 #> 2 101.9368 2.5656478   104.5025  4.440892e-15   2.5656478      2
 #> 3 102.0825 1.6870828   103.7696  0.000000e+00   1.6870828      1
@@ -89,7 +93,7 @@ head(arrivals_2)
 head(queue_2$departures_df)
 #> # A tibble: 6 x 6
 #>   arrivals   service departures       waiting system_time server
-#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <int>
+#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <dbl>
 #> 1 120.3923 5.1599751   125.5523 -2.664535e-15    5.159975      1
 #> 2 105.6711 1.5841166   107.2552  0.000000e+00    1.584117      1
 #> 3 227.5242 0.1136285   290.7928  6.315502e+01   63.268650      1
@@ -107,7 +111,7 @@ summary(queue_1)
 #> Mean response time:
 #>  13.7
 #> Utilization factor:
-#>  0.38410206651912
+#>  0.384
 #> Mean queue length:
 #>  3.7
 #> Mean number of customers in system:
@@ -123,17 +127,12 @@ summary(queue_2)
 #> Mean response time:
 #>  37.2
 #> Utilization factor:
-#>  0.519160307775743
+#>  0.519
 #> Mean queue length:
 #>  5.71
 #> Mean number of customers in system:
 #>  6.21
 ```
-
-More information
-----------------
-
-For more information on how to use the package see the package vignettes or the R help files.
 
 Acknowledgements
 ----------------
