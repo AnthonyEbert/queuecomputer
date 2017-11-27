@@ -186,6 +186,46 @@ integrate_stepfun <- function(x, y, last = 1000){
   return((y %*% x_diff) %>% as.numeric)
 }
 
+#' Integrate step function over interval
+#' @param x numeric vector giving the times of changes in number of servers.
+#' @param y numeric vector one longer than \code{x} giving the number of servers
+#' available between x values.
+#' @param from start of integration
+#' @param to end of intergration
+#' @examples
+#' x_knots <- c(7.5, 15, 25, 40)
+#' y <- c(5, 4, 2, 6, 4)
+#'
+#' curve(stepfun(x_knots, y)(x), from = 0, to = 100)
+#' abline(v = 10, col = "red")
+#' abline(v = 30, col = "red")
+#'
+#' integrate_stepfun_interval(x_knots, y, from = 10, to = 30)
+#'
+#' # Time-average number of servers available in interval
+#' integrate_stepfun_interval(x_knots, y, from = 10, to = 30) / (30 - 10)
+#' @export
+integrate_stepfun_interval <- function(x, y, from = 0, to = 1000){
+  stopifnot(from <= to)
+  stopifnot(length(x) == (length(y) - 1))
+
+  discard_x_small <- which(x < from)
+  if(!is.null(discard_x_small) & length(discard_x_small) != 0){
+    x_keep <- x[-discard_x_small]
+    y_keep <- y[-discard_x_small]
+  }
+
+  discard_x_large <- which(x_keep > to)
+  if(!is.null(discard_x_large) & length(discard_x_large) != 0){
+    x_keep <- x_keep[-discard_x_large]
+    y_keep <- y_keep[-(discard_x_large+1)]
+  }
+
+  x <- c(from,x_keep,to)
+  x_diff <- diff(x)
+  return((y_keep %*% x_diff) %>% as.numeric)
+}
+
 #' print method for objects of class \code{queue_list}
 #' @export
 #' @param x an object of class \code{queue_list} produced by the \code{\link{queue_step}} function.
