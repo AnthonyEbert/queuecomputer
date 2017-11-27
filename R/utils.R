@@ -209,6 +209,9 @@ integrate_stepfun_interval <- function(x, y, from = 0, to = 1000){
   stopifnot(from <= to)
   stopifnot(length(x) == (length(y) - 1))
 
+  x_keep <- x
+  y_keep <- y
+
   discard_x_small <- which(x < from)
   if(!is.null(discard_x_small) & length(discard_x_small) != 0){
     x_keep <- x[-discard_x_small]
