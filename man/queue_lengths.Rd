@@ -4,7 +4,7 @@
 \alias{queue_lengths}
 \title{Compute queue lengths from arrival, service and departure data}
 \usage{
-queue_lengths(arrivals, service = 0, departures, epsilon = 1e-10)
+queue_lengths(arrivals, service = 0, departures, epsilon = 1e-10, ...)
 }
 \arguments{
 \item{arrivals}{vector of arrival times}
@@ -14,6 +14,8 @@ queue_lengths(arrivals, service = 0, departures, epsilon = 1e-10)
 \item{departures}{vector of departure times}
 
 \item{epsilon}{numeric small number added to departures to prevent negative queue lengths}
+
+\item{...}{additional arguments - does nothing, for compatability}
 }
 \description{
 Compute queue lengths from arrival, service and departure data

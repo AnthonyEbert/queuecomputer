@@ -7,6 +7,7 @@
 #' @param service vector of service times. Leave as zero if you want to compute the number of customers in the system rather than queue length.
 #' @param departures vector of departure times
 #' @param epsilon numeric small number added to departures to prevent negative queue lengths
+#' @param ... additional arguments - does nothing, for compatability
 #' @examples
 #' library(dplyr)
 #' library(queuecomputer)
@@ -60,7 +61,7 @@
 #'       aes(x = times, y = queuelength) + geom_step() +
 #'       facet_grid(~route)
 #' }
-queue_lengths <- function(arrivals, service = 0, departures, epsilon = 1e-10){
+queue_lengths <- function(arrivals, service = 0, departures, epsilon = 1e-10, ...){
 
   if(length(service) == 1){
     stopifnot(service == 0)
@@ -76,8 +77,11 @@ queue_lengths <- function(arrivals, service = 0, departures, epsilon = 1e-10){
 
   queuedata <- data.frame(
     times = out$x,
-    queuelength = cumsum(.subset(qd_state, out$ix))
+    value = cumsum(.subset(qd_state, out$ix))
   )
+
+  # For compatability
+  queuedata$queuelength <- queuedata$value
 
   return(queuedata)
 
