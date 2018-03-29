@@ -1,8 +1,11 @@
 Package: queuecomputer
 Title: Computationally Efficient Queue Simulation
 Version: 0.8.2
-Authors@R: person("Anthony", "Ebert", email = "anthonyebert+CRAN@gmail.com",
-                   role = c("aut", "cre"))
+Authors@R: c(person("Anthony", "Ebert", email = "anthonyebert+CRAN@gmail.com",
+                   role = c("aut", "cre")), 
+             person("Kerrie", "Mengersen", email = "k.mengersen@qut.edu.au", role = "ths"), 
+             person("Paul", "Wu", email = "p.wu@qut.edu.au", role = "ths"), 
+             person("Fabrizio", "Ruggeri", email = "fabrizio@mi.imati.cnr.it", role = "ths"))
 Description: Implementation of a computationally efficient method for
     simulating queues with arbitrary arrival and service times.
 Depends:
