@@ -27,8 +27,8 @@ x <- c(10, 40)
 y <- c(1, 2, 1)
 queue_obj <- queue_step(arrivals, service, servers = as.server.stepfun(x,y))
 
-output <- busy_server_stepfun(queue_obj$systemlength_df, stepfun(x,y))
+#output <- busy_util_stepfun(queue_obj$systemlength_df, stats::stepfun(x,y))
 
-plot(output$busy_stepfun)
-plot(output$util_stepfun)
+#plot(output$busy_stepfun, type = "l")
+#plot(output$util_stepfun, type = "l")
 }
