@@ -7,7 +7,7 @@
 using namespace Rcpp;
 
 // qloop_numeric
-NumericVector qloop_numeric(NumericVector times, NumericVector service, int n_servers);
+List qloop_numeric(NumericVector times, NumericVector service, int n_servers);
 RcppExport SEXP _queuecomputer_qloop_numeric(SEXP timesSEXP, SEXP serviceSEXP, SEXP n_serversSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -20,7 +20,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // qloop_qq
-NumericVector qloop_qq(NumericVector times, NumericVector service, NumericVector x, NumericVector y);
+List qloop_qq(NumericVector times, NumericVector service, NumericVector x, NumericVector y);
 RcppExport SEXP _queuecomputer_qloop_qq(SEXP timesSEXP, SEXP serviceSEXP, SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

@@ -46,8 +46,8 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust =
 
   output <- queue_pass(arrivals = arrivals, service = service, servers = servers)
 
-  departures <- output[1:length(arrivals)]
-  queue_vector <- (output[I(length(arrivals) + 1):I(length(output) - 1)])
+  departures <- output$times
+  queue_vector <- output$server
 
   if(ordstatement){
     new_ord <- order(ord)
