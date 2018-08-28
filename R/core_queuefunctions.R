@@ -48,6 +48,7 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust =
 
   departures <- output$times
   queue_vector <- output$server
+  state_output <- output$state
 
   if(ordstatement){
     new_ord <- order(ord)
@@ -57,6 +58,7 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust =
 
   if(serveroutput){
     attr(departures, "server") <- as.integer(queue_vector)
+    attr(departures, "state") <- as.vector(state_output)
   }
 
   return(departures)
@@ -169,6 +171,7 @@ queue_step <- function(arrivals, service, servers = 1, labels = NULL, adjust = 1
   departures <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE, adjust = 1)
 
   server <- attr(departures, "server")
+  state <- attr(departures, "state")
   attributes(departures) <- NULL
 
   if(is.null(labels) == FALSE){
@@ -206,7 +209,8 @@ queue_step <- function(arrivals, service, servers = 1, labels = NULL, adjust = 1
     departures_df = departures_df,
     queuelength_df = queuelength_df,
     systemlength_df = systemlength_df,
-    servers_input = servers
+    servers_input = servers,
+    state = state
   )
 
   class(output) <- c("queue_list", "list")
