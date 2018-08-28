@@ -51,7 +51,7 @@ List qloop_numeric(NumericVector times, NumericVector service, int n_servers) {
 }
 
 // [[Rcpp::export]]
-List qloop_qq(NumericVector times, NumericVector service, NumericVector x, NumericVector y) {
+List qloop_qq(NumericVector times, NumericVector service, NumericVector x, IntegerVector y) {
 
   int n_servers = max(y);
 

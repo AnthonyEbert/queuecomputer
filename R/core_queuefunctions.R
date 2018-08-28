@@ -6,7 +6,6 @@
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
 #' or an object of class \code{server.list}.
 #' @param serveroutput boolean whether the server used by each customer should be returned.
-#' @param adjust non-negative number, an adjustment parameter for scaling the service times.
 #' @description \code{queue} is a faster internal version of \code{queue_step}. It is not compatible with the \code{summary.queue_list} method or the \code{plot.queue_list} method.
 #' @examples
 #' n <- 1e2
@@ -29,9 +28,9 @@
 #' @useDynLib queuecomputer, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @export
-queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust = 1){
+queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
 
-  service = service * adjust
+  service = service
   check_queueinput(arrivals, service)
 
   ordstatement <- is.unsorted(arrivals)
