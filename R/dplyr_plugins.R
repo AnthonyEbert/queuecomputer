@@ -100,7 +100,7 @@ queue_lengths <- function(arrivals, service = 0, departures, epsilon = 1e-10, ..
 #' average_queue(queuedata$times, queuedata$queuelength)
 #' @export
 average_queue <- function(times, queuelength){
-  ((c(diff(times),0) %*% queuelength) / (times[length(times)] - times[1])) %>% as.numeric()
+  as.numeric((c(diff(times),0) %*% queuelength) / (times[length(times)] - times[1]))
 }
 
 #' Summarise queue lengths
