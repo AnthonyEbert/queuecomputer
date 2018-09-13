@@ -40,14 +40,12 @@ performance_output <- function(arrivals, service = 0, departures, servers, epsil
   return(output)
 }
 
-#' @export
 p_busy <- function(arrivals, service, departures, epsilon = 1e-10, servers){
   output <- performance_output(arrivals, service, departures, epsilon, servers)
 
   return(output$busy_df)
 }
 
-#' @export
 p_util <- function(arrivals, service, departures, epsilon = 1e-10, servers){
   output <- performance_output(arrivals, service, departures, epsilon, servers)
 
@@ -74,7 +72,7 @@ p_util <- function(arrivals, service, departures, epsilon = 1e-10, servers){
 #' #plot(output$util_stepfun, type = "l")
 busy_util_stepfun <- function(systemlength_df, servers, return_stepfun = TRUE, shorten = TRUE){
 
-  sys_length_stepfun <- stats::stepfun(systemlength_df$times[-1], systemlength_df$value)
+  sys_length_stepfun <- stats::stepfun(systemlength_df$times[-1], systemlength_df$queuelength)
 
   x_new <- unique(sort(c(stats::knots(sys_length_stepfun), stats::knots(servers))))
   y_new_busy <- rep(NA, length(x_new))

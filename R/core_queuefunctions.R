@@ -110,7 +110,9 @@ queue_pass.server.list <- function(arrivals, service, servers){
     output[i] <- queue_times[queue]
     queue_vector[i] <- queue
   }
-  return(c(output, queue_vector, NA))
+
+  output <- list(times = output, server = queue_vector, state = queue_times)
+  return(output)
 }
 
 
@@ -124,7 +126,6 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
 #' or an object of class \code{server.list}.
 #' @param labels character vector of customer labels.
-#' @param adjust non-negative number, an adjustment parameter for scaling the service times.
 #' @return A vector of response times for the input of arrival times and service times.
 #' @examples
 #'
@@ -164,11 +165,11 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #' @seealso
 #' \code{\link{queue}}, \code{\link{summary.queue_list}}, \code{\link{plot.queue_list}}
 #' @export
-queue_step <- function(arrivals, service, servers = 1, labels = NULL, adjust = 1){
+queue_step <- function(arrivals, service, servers = 1, labels = NULL){
 
   arrivals <- depart(arrivals)
 
-  departures <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE, adjust = 1)
+  departures <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE)
 
   server <- attr(departures, "server")
   state <- attr(departures, "state")

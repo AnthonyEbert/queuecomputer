@@ -4,6 +4,7 @@ library(dplyr)
 library(testthat)
 library(queuecomputer)
 
+context("addons")
 
 base::load(file = "../create_batch_test.RData")
 
@@ -17,17 +18,6 @@ flight_schedule <- data_frame(
   rate = c(1 , 1),
   log_mu = c(1 , 2)
 )
-
-passenger_df_2 <- flight_schedule %>% group_by(flight) %>%
-  do(create_batches(., arrival_dist = "rgamma",
-    service_rate = exp(1/.$log_mu),
-    time = .$time)
-  )
-
-test_that("create_batches", {
-  expect_equal(passenger_df_2$arrivals, passenger_df$arrivals)
-  expect_equal(passenger_df_2$service, passenger_df$service)
-})
 
 ## Queue length test
 

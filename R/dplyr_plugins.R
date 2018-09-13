@@ -77,11 +77,11 @@ queue_lengths <- function(arrivals, service = 0, departures, epsilon = 1e-10, ..
 
   queuedata <- data.frame(
     times = out$x,
-    value = cumsum(.subset(qd_state, out$ix))
+    queuelength = cumsum(.subset(qd_state, out$ix))
   )
 
   # For compatability
-  queuedata$queuelength <- queuedata$value
+  #queuedata$queuelength <- queuedata$value
 
   return(queuedata)
 

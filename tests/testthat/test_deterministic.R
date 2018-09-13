@@ -2,6 +2,8 @@
 library(testthat)
 library(queuecomputer)
 
+context("deterministic")
+
 # Same computation as newdataframe
 
 ##New data -------------------------
