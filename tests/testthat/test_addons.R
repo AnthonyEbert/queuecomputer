@@ -29,10 +29,18 @@ arrivals <- cumsum(rexp(n_customers, 1.8))
 service <- rexp(n_customers)
 
 departures <- queue(arrivals, service, servers = 2)
-queue_obj <- queue_step(arrivals, service, servers = 2)
+queue_obj <- queue_step(arrivals, service, servers = 2, labels = 1:n_customers)
 
 queue_length_obj2 <- queue_lengths(arrivals, service, departures)
 
 test_that("Queue_lengths", {
   expect_equal(queue_obj$queuelength_df, queue_length_obj2)
 })
+
+plot_obj <- plot(queue_obj)
+
+if(require(ggplot2)){
+  test_that("plot_object", {
+    expect_equal(class(plot_obj), "list")
+  })
+}
