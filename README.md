@@ -1,5 +1,5 @@
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer) [![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer) [![Build Status](https://travis-ci.org/AnthonyEbert/queuecomputer.svg?branch=simple_exports2)](https://travis-ci.org/AnthonyEbert/queuecomputer) [![codecov](https://codecov.io/gh/AnthonyEbert/queuecomputer/branch/master/graph/badge.svg)](https://codecov.io/gh/AnthonyEbert/queuecomputer)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer) [![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer) [![Build Status](https://travis-ci.org/AnthonyEbert/queuecomputer.svg)](https://travis-ci.org/AnthonyEbert/queuecomputer) [![codecov](https://codecov.io/gh/AnthonyEbert/queuecomputer/branch/master/graph/badge.svg)](https://codecov.io/gh/AnthonyEbert/queuecomputer)
 
 <!-- --- -->
 <!-- output: html -->
@@ -80,26 +80,26 @@ head(arrivals_1)
 #> [1] 100.7552 101.9368 102.0825 102.2223 102.6584 105.5534
 head(queue_1$departures_df)
 #> # A tibble: 6 x 6
-#>   arrivals   service departures       waiting system_time server
-#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <dbl>
-#> 1 100.7552 0.1890576   100.9442 -6.383782e-15   0.1890576      1
-#> 2 101.9368 2.5656478   104.5025  4.440892e-15   2.5656478      2
-#> 3 102.0825 1.6870828   103.7696  0.000000e+00   1.6870828      1
-#> 4 102.2223 2.0013664   105.7710  1.547288e+00   3.5486540      1
-#> 5 102.6584 0.4351757   104.9376  1.844077e+00   2.2792529      2
-#> 6 105.5534 1.6836613   107.2370  0.000000e+00   1.6836613      2
+#>   arrivals service departures   waiting system_time server
+#>      <dbl>   <dbl>      <dbl>     <dbl>       <dbl>  <int>
+#> 1     101.   0.189       101. -6.38e-15       0.189      1
+#> 2     102.   2.57        105.  4.44e-15       2.57       2
+#> 3     102.   1.69        104.  0.             1.69       1
+#> 4     102.   2.00        106.  1.55e+ 0       3.55       1
+#> 5     103.   0.435       105.  1.84e+ 0       2.28       2
+#> 6     106.   1.68        107.  0.             1.68       2
 head(arrivals_2)
 #> [1] 120.3923 105.6711 227.5242 175.9008 339.9853 108.7119
 head(queue_2$departures_df)
 #> # A tibble: 6 x 6
-#>   arrivals   service departures       waiting system_time server
-#>      <dbl>     <dbl>      <dbl>         <dbl>       <dbl>  <dbl>
-#> 1 120.3923 5.1599751   125.5523 -2.664535e-15    5.159975      1
-#> 2 105.6711 1.5841166   107.2552  0.000000e+00    1.584117      1
-#> 3 227.5242 0.1136285   290.7928  6.315502e+01   63.268650      1
-#> 4 175.9008 2.3516652   186.2768  8.024359e+00   10.376024      1
-#> 5 339.9853 3.1978792   404.4597  6.127651e+01   64.474391      1
-#> 6 108.7119 1.2304520   109.9423  0.000000e+00    1.230452      1
+#>   arrivals service departures   waiting system_time server
+#>      <dbl>   <dbl>      <dbl>     <dbl>       <dbl>  <int>
+#> 1     120.   5.16        126. -2.66e-15        5.16      1
+#> 2     106.   1.58        107.  0.              1.58      1
+#> 3     228.   0.114       291.  6.32e+ 1       63.3       1
+#> 4     176.   2.35        186.  8.02e+ 0       10.4       1
+#> 5     340.   3.20        404.  6.13e+ 1       64.5       1
+#> 6     109.   1.23        110.  0.              1.23      1
 
 summary(queue_1)
 #> Total customers:
@@ -111,7 +111,7 @@ summary(queue_1)
 #> Mean response time:
 #>  13.7
 #> Utilization factor:
-#>  0.384
+#>  0.38410206651912
 #> Mean queue length:
 #>  3.7
 #> Mean number of customers in system:
@@ -127,7 +127,7 @@ summary(queue_2)
 #> Mean response time:
 #>  37.2
 #> Utilization factor:
-#>  0.519
+#>  0.519160307775743
 #> Mean queue length:
 #>  5.71
 #> Mean number of customers in system:
