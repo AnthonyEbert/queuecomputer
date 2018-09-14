@@ -204,7 +204,7 @@ integrate_stepfun <- function(x, y, last = 1000){
 #'
 #' # Time-average number of servers available in interval
 #' integrate_stepfun_interval(x_knots, y, from = 10, to = 30) / (30 - 10)
-#' @export
+#' @noRd
 integrate_stepfun_interval <- function(x, y, from = 0, to = 1000){
   stopifnot(from <= to)
   stopifnot(length(x) == (length(y) - 1))

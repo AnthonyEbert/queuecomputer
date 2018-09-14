@@ -3,7 +3,7 @@
 
 
 #' Performance data
-#' @export
+#' @noRd
 #' @param arrivals arrivals
 #' @param service service
 #' @param departures departures
@@ -54,6 +54,7 @@ p_util <- function(arrivals, service, departures, epsilon = 1e-10, servers){
 
 
 #' busy server stepfun (and server utilisation)
+#' @noRd
 #' @param systemlength_df systemlength_df from queue_step
 #' @param servers server stepfunction
 #' @param return_stepfun return performance measures as stepfunction or alternatively as dataframes
