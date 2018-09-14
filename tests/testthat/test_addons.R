@@ -44,3 +44,5 @@ if(require(ggplot2)){
     expect_equal(class(plot_obj), "list")
   })
 }
+
+queuecomputer:::performance_output(arrivals, service, queue_obj$departures, servers = 2)
