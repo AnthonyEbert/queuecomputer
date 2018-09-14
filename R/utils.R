@@ -181,9 +181,14 @@ generate_input <- function(mag = 3, full = FALSE){
 }
 
 integrate_stepfun <- function(x, y, last = 1000){
+  less_than_last <- which(x <= last)
+  stopifnot(c(1:length(less_than_last)) == less_than_last)
+
+  x <- x[less_than_last]
+  y <- y[c(less_than_last, tail(less_than_last, 1) + 1)]
+
   x <- c(0,x,last)
-  x_diff <- diff(x)
-  return((y %*% x_diff) %>% as.numeric)
+  return((y %*% diff(x)) %>% as.numeric)
 }
 
 #' Integrate step function over interval
