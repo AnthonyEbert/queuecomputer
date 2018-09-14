@@ -6,8 +6,8 @@
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
 #' or an object of class \code{server.list}.
 #' @param serveroutput boolean whether the server used by each customer should be returned.
-#' @param adjust non-negative number, an adjustment parameter for scaling the service times.
-#' @description \code{queue} is a faster internal version of \code{queue_step}. It is not compatible with the \code{summary.queue_list} method or the \code{plot.queue_list} method.
+#' @description \code{queue} is a faster version of \code{queue_step} but the input returned is much simpler. It is not compatible with the \code{summary.queue_list} method or the \code{plot.queue_list} method.
+#' @details If the arrival vector is out of order the function will reorder it. The same reordering will be applied to the service vector, this is so each customer keeps their service time. Once the queue is computed the original order is put back.
 #' @examples
 #' n <- 1e2
 #' arrivals <- cumsum(rexp(n, 1.8))
@@ -29,9 +29,9 @@
 #' @useDynLib queuecomputer, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @export
-queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust = 1){
+queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
 
-  service = service * adjust
+  service = service
   check_queueinput(arrivals, service)
 
   ordstatement <- is.unsorted(arrivals)
@@ -46,8 +46,9 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust =
 
   output <- queue_pass(arrivals = arrivals, service = service, servers = servers)
 
-  departures <- output[1:length(arrivals)]
-  queue_vector <- (output[I(length(arrivals) + 1):I(length(output) - 1)])
+  departures <- output$times
+  queue_vector <- output$server
+  state_output <- output$state
 
   if(ordstatement){
     new_ord <- order(ord)
@@ -57,6 +58,7 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, adjust =
 
   if(serveroutput){
     attr(departures, "server") <- as.integer(queue_vector)
+    attr(departures, "state") <- as.vector(state_output)
   }
 
   return(departures)
@@ -108,7 +110,9 @@ queue_pass.server.list <- function(arrivals, service, servers){
     output[i] <- queue_times[queue]
     queue_vector[i] <- queue
   }
-  return(c(output, queue_vector, NA))
+
+  output <- list(times = output, server = queue_vector, state = queue_times)
+  return(output)
 }
 
 
@@ -122,7 +126,6 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
 #' or an object of class \code{server.list}.
 #' @param labels character vector of customer labels.
-#' @param adjust non-negative number, an adjustment parameter for scaling the service times.
 #' @return A vector of response times for the input of arrival times and service times.
 #' @examples
 #'
@@ -162,13 +165,14 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #' @seealso
 #' \code{\link{queue}}, \code{\link{summary.queue_list}}, \code{\link{plot.queue_list}}
 #' @export
-queue_step <- function(arrivals, service, servers = 1, labels = NULL, adjust = 1){
+queue_step <- function(arrivals, service, servers = 1, labels = NULL){
 
   arrivals <- depart(arrivals)
 
-  departures <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE, adjust = 1)
+  departures <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE)
 
   server <- attr(departures, "server")
+  state <- attr(departures, "state")
   attributes(departures) <- NULL
 
   if(is.null(labels) == FALSE){
@@ -206,7 +210,8 @@ queue_step <- function(arrivals, service, servers = 1, labels = NULL, adjust = 1
     departures_df = departures_df,
     queuelength_df = queuelength_df,
     systemlength_df = systemlength_df,
-    servers_input = servers
+    servers_input = servers,
+    state = state
   )
 
   class(output) <- c("queue_list", "list")

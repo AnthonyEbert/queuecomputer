@@ -4,7 +4,7 @@
 \alias{queue}
 \title{Compute the departure times for a set of customers in a queue from their arrival and service times.}
 \usage{
-queue(arrivals, service, servers = 1, serveroutput = FALSE, adjust = 1)
+queue(arrivals, service, servers = 1, serveroutput = FALSE)
 }
 \arguments{
 \item{arrivals}{numeric vector of non-negative arrival times}
@@ -15,11 +15,12 @@ queue(arrivals, service, servers = 1, serveroutput = FALSE, adjust = 1)
 or an object of class \code{server.list}.}
 
 \item{serveroutput}{boolean whether the server used by each customer should be returned.}
-
-\item{adjust}{non-negative number, an adjustment parameter for scaling the service times.}
 }
 \description{
-\code{queue} is a faster internal version of \code{queue_step}. It is not compatible with the \code{summary.queue_list} method or the \code{plot.queue_list} method.
+\code{queue} is a faster version of \code{queue_step} but the input returned is much simpler. It is not compatible with the \code{summary.queue_list} method or the \code{plot.queue_list} method.
+}
+\details{
+If the arrival vector is out of order the function will reorder it. The same reordering will be applied to the service vector, this is so each customer keeps their service time. Once the queue is computed the original order is put back.
 }
 \examples{
 n <- 1e2
