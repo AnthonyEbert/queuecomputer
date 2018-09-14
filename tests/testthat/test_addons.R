@@ -37,7 +37,7 @@ test_that("Queue_lengths", {
   expect_equal(queue_obj$queuelength_df, queue_length_obj2)
 })
 
-plot_obj <- plot(queue_obj)
+plot_obj <- plot(queue_obj, which = c(1:6))
 
 if(require(ggplot2)){
   test_that("plot_object", {

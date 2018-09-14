@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{an object of class \code{queue_list}}
 
-\item{which}{Numeric vector of integers from 1 to 7 which represents which plots are to be created. See examples.}
+\item{which}{Numeric vector of integers from 1 to 6 which represents which plots are to be created. See examples.}
 
 \item{annotated}{logical, if \code{TRUE} annotations will be added to the plot.}
 
