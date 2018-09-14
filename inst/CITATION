@@ -1,0 +1,13 @@
+
+
+bibentry(
+  header  = "To cite queuecomputer in publications, please use:",
+  bibtype = "Article",
+  title   = "Computationally Efficient Simulation of Queues: The {R} Package queuecomputer",
+  author  = c(person("Anthony", "Ebert"),
+              person("Paul", "Wu"),
+              person("Kerrie", "Mengersen"),
+              person("Fabrizio", "Ruggeri")),
+  year    = "2017",
+  journal = "arXiv:1703.02151"
+)
