@@ -88,14 +88,6 @@ summary.queue_list <- function(object, ...){
     x = object$servers_input$x
     y = object$servers_input$y
 
-    last_server_time = 0
-
-    # if(y[length(x) + 1] == 0){
-    #   last_server_time = x[length(x)]
-    # } else {
-    #   last_server_time = 0
-    # }
-
     service_available <- integrate_stepfun(x = x, y = y, last = max_time)
 
     service_rendered <- sum(departures_df$service)
