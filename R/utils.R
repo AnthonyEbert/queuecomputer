@@ -185,7 +185,7 @@ integrate_stepfun <- function(x, y, last = 1000){
   stopifnot(c(1:length(less_than_last)) == less_than_last)
 
   x <- x[less_than_last]
-  y <- y[c(less_than_last, tail(less_than_last, 1) + 1)]
+  y <- y[c(less_than_last, utils::tail(less_than_last, 1) + 1)]
 
   x <- c(0,x,last)
   return((y %*% diff(x)) %>% as.numeric)
