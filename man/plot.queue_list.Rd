@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_functions.R
 \name{plot.queue_list}
 \alias{plot.queue_list}
-\title{ggplot method for output from queueing model}
+\title{ggplot2 method for output from queueing model}
 \usage{
 \method{plot}{queue_list}(x, which = c(2:6), annotated = TRUE, ...)
 }
@@ -16,7 +16,7 @@
 \item{...}{other parameters to be passed through to plotting functions.}
 }
 \description{
-ggplot method for output from queueing model
+ggplot2 method for output from queueing model
 }
 \examples{
 if(require(ggplot2, quietly = TRUE)){

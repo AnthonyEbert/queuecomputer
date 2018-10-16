@@ -1,6 +1,6 @@
 
 
-#' ggplot method for output from queueing model
+#' ggplot2 method for output from queueing model
 #' @importFrom dplyr row_number
 #' @export
 #' @param x an object of class \code{queue_list}
