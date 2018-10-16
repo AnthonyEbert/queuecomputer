@@ -28,7 +28,7 @@ next_function <- function(sf,time){
 #' @return A \code{list} and \code{server.stepfun} object with x and y as elements.
 #' @details This function uses the analogy of a step function to specify the number of
 #' available servers throughout the day. It is used as input to the \code{\link{queue_step}}
-#' function. Alternativily one may use \code{as.server.list} to specify available servers as
+#' function. Alternatively one may use \code{as.server.list} to specify available servers as
 #' a list, however \code{queue_step} is much faster when \code{as.server.stepfun} is used
 #' as input rather than \code{as.server.list}.
 #' @details If any of the service times are large compared to any element of \code{diff(x)} then the
@@ -104,7 +104,7 @@ server_make <- function(x, y){
 #'
 #' @param times list of numeric vectors giving change times for each server.
 #' @param init vector of 1s and 0s with equal length to \code{times}.
-#' It represents whether the server starts in an availabile \code{(1)} or unavailable \code{(0)} state.
+#' It represents whether the server starts in an available \code{(1)} or unavailable \code{(0)} state.
 #' @return an object of class \code{"server.list"}, which is a list of step functions of range \{0, 1\}.
 #' @seealso \code{\link{as.server.stepfun}}, \code{\link{queue_step}}
 #' @examples

@@ -9,12 +9,12 @@
 \arguments{
 \item{x}{an object of class \code{summary_queue_list}, the result of a call to \code{summary.queue_list()}.}
 
-\item{...}{futher arguments to be passed to or from other methods.}
+\item{...}{further arguments to be passed to or from other methods.}
 }
 \value{
 A list of performance statistics for the queue:
 
-"Total customers": Total customers in sinulation,
+"Total customers": Total customers in simulation,
 
 "Missed customers": Customers who never saw a server,
 

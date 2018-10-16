@@ -15,7 +15,7 @@ queue_lengths(arrivals, service = 0, departures, epsilon = 1e-10, ...)
 
 \item{epsilon}{numeric small number added to departures to prevent negative queue lengths}
 
-\item{...}{additional arguments - does nothing, for compatability}
+\item{...}{additional arguments - does nothing, for compatibility}
 }
 \description{
 Compute queue lengths from arrival, service and departure data

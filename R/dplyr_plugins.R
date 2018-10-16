@@ -7,7 +7,7 @@
 #' @param service vector of service times. Leave as zero if you want to compute the number of customers in the system rather than queue length.
 #' @param departures vector of departure times
 #' @param epsilon numeric small number added to departures to prevent negative queue lengths
-#' @param ... additional arguments - does nothing, for compatability
+#' @param ... additional arguments - does nothing, for compatibility
 #' @examples
 #' library(dplyr)
 #' library(queuecomputer)

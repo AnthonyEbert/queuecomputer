@@ -21,7 +21,7 @@ Create a \code{server.stepfun} object with a roster of times and number of avail
 \details{
 This function uses the analogy of a step function to specify the number of
 available servers throughout the day. It is used as input to the \code{\link{queue_step}}
-function. Alternativily one may use \code{as.server.list} to specify available servers as
+function. Alternatively one may use \code{as.server.list} to specify available servers as
 a list, however \code{queue_step} is much faster when \code{as.server.stepfun} is used
 as input rather than \code{as.server.list}.
 

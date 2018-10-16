@@ -20,7 +20,7 @@ Compute maximum time for each row from two vectors of arrival times.
 }
 \details{
 A good real-world example of this is finding the departure times for passengers
- after they pick up their bags from the baggage carosel. The time at which they leave is
+ after they pick up their bags from the baggage carousel. The time at which they leave is
  the maximum of the passenger and bag arrival times.
 }
 \examples{

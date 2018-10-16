@@ -6,7 +6,7 @@
 #' Summary method for queue_list object
 #' @export
 #' @param object an object of class \code{queue_list}, the result of a call to \code{queue_step}.
-#' @param ... futher arguments to be passed to or from other methods.
+#' @param ... further arguments to be passed to or from other methods.
 summary.queue_list <- function(object, ...){
 
   # Non-standard evaluation binding
@@ -130,10 +130,10 @@ summary.queue_list <- function(object, ...){
 
 #' Print method for output of \code{summary.queue_list}.
 #' @param x an object of class \code{summary_queue_list}, the result of a call to \code{summary.queue_list()}.
-#' @param ... futher arguments to be passed to or from other methods.
+#' @param ... further arguments to be passed to or from other methods.
 #' @return A list of performance statistics for the queue:
 #'
-#' "Total customers": Total customers in sinulation,
+#' "Total customers": Total customers in simulation,
 #'
 #' "Missed customers": Customers who never saw a server,
 #'
