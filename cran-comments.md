@@ -4,7 +4,7 @@
 License change from GPL (>=2) to GPL-2
 
 ## Test environments
-* local Debian "Stretch" install, R 3.4.1
+* local Debian "Stretch" install, R 3.5.1
 * local MacOS install, R 3.5.1
 * win-builder 
 
