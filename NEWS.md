@@ -1,4 +1,16 @@
 
+# queuecomputer 0.8.3
+
+## New features
+
+* Information about final state of servers is returned as `state` list element from queue_step output
+
+## Notes
+
+* adjust argument is removed
+* updated `citation()` information
+* Changed license from GPL (>= 2) to GPL-2 only  
+
 # queuecomputer 0.8.2
 
 ## New features:

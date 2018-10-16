@@ -27,4 +27,4 @@ Suggests:
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo (>= 0.7.500.0.0)
 URL: https://github.com/AnthonyEbert/queuecomputer
-Copyrights: file COPYRIGHTS
+Copyright: file COPYRIGHTS
