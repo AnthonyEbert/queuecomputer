@@ -114,7 +114,7 @@ server_make <- function(x, y){
 #' @export
 as.server.list <- function(times, init){
 
-  stopifnot(class(times) == "list")
+  stopifnot("list" %in% class(times))
   stopifnot(all(init %in% c(1,0)))
   stopifnot(length(times) == length(init))
 

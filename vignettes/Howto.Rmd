@@ -29,7 +29,7 @@ service <- rexp(100)
 
 departures <- queue_step(arrivals = arrivals, service = service)
 
-print(departures, n = 6)
+str(departures,1)
 ```
 
 # Resourcing schedule
@@ -49,7 +49,7 @@ resource_schedule
 
 departures <- queue_step(arrivals = arrivals, service = service, servers = resource_schedule)
 
-print(departures, n = 6)
+str(departures,1)
 ```
 
 The `server.list` object is a list of step functions which represent each server, the range is $\{0,1\}$, where 0 represents unavailable and 1 represents available and the knots represent the times where availability changes. 
