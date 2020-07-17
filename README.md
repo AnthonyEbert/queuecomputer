@@ -1,39 +1,60 @@
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer) [![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer) [![Build Status](https://travis-ci.org/AnthonyEbert/queuecomputer.svg)](https://travis-ci.org/AnthonyEbert/queuecomputer) [![codecov](https://codecov.io/gh/AnthonyEbert/queuecomputer/branch/master/graph/badge.svg)](https://codecov.io/gh/AnthonyEbert/queuecomputer)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
+[![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
+[![Build
+Status](https://travis-ci.org/AnthonyEbert/queuecomputer.svg?branch=master)](https://travis-ci.org/AnthonyEbert/queuecomputer)
+[![codecov](https://codecov.io/gh/AnthonyEbert/queuecomputer/branch/master/graph/badge.svg)](https://codecov.io/gh/AnthonyEbert/queuecomputer)
 
 <!-- --- -->
+
 <!-- output: html -->
+
 <!-- bibliography: references.bib -->
+
 <!-- --- -->
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-queuecomputer
-=============
 
-Overview
---------
+# queuecomputer
 
-queuecomputer implements a new and computationally efficient method for simulating from a general set of queues. The current most popular method for simulating queues is Discete Event Simulation (DES). The top R package for DES is called simmer and the top Python package is called SimPy. We have validated and benchmarked queuecomputer against both these packages and found that queuecomputer is two orders of magnitude faster than either package.
+## Overview
+
+queuecomputer implements a new and computationally efficient method for
+simulating from a general set of queues. The current most popular method
+for simulating queues is Discete Event Simulation (DES). The top R
+package for DES is called simmer and the top Python package is called
+SimPy. We have validated and benchmarked queuecomputer against both
+these packages and found that queuecomputer is two orders of magnitude
+faster than either package.
 
 Simulating arbitrary queues is difficult, however once:
 
-1.  The arrival times A and service times S are known for all customers and,
+1.  The arrival times A and service times S are known for all customers
+    and,
 2.  the server resource schedule is specified
 
-then the departure times D for all customers can be computed deterministically.
+then the departure times D for all customers can be computed
+deterministically.
 
 The focus on this package is:
 
--   fast computation of departure times given arrival and service times, and
--   a flexible framework to allow for extensions such as server effects.
+  - fast computation of departure times given arrival and service times,
+    and
+  - a flexible framework to allow for extensions such as server effects.
 
-It is up to the user to provide arrival and service times, and therefore very complicated distributions can be simulated (by the user) and tested with this package.
+It is up to the user to provide arrival and service times, and therefore
+very complicated distributions can be simulated (by the user) and tested
+with this package.
 
-For detailed information regarding the algorithm used in this package see our arXiv preprint:
+For detailed information regarding the algorithm used in this package
+see our arXiv preprint:
 
-Ebert, A., Wu, P., Mengersen, K., & Ruggeri, F. (2017). [Computationally Efficient Simulation of Queues: The R Package queuecomputer](https://arxiv.org/abs/1703.02151). arXiv preprint arXiv:1703.02151.
+Ebert, A., Wu, P., Mengersen, K., & Ruggeri, F. (2017). [Computationally
+Efficient Simulation of Queues: The R Package
+queuecomputer](https://arxiv.org/abs/1703.02151). arXiv preprint
+arXiv:1703.02151.
 
-Installation
-------------
+## Installation
 
 ``` r
 install.packages('queuecomputer')
@@ -42,10 +63,13 @@ install.packages('queuecomputer')
 devtools::install_github("AnthonyEbert/queuecomputer")
 ```
 
-Usage
------
+## Usage
 
-In this example of a queueing network, customers must pass through two queues. The arrival times to the first queue come in two waves starting at time 100 and time 500. The arrival times to the second queue are the departure times of the first queue plus the time they spent walking to the second queue.
+In this example of a queueing network, customers must pass through two
+queues. The arrival times to the first queue come in two waves starting
+at time 100 and time 500. The arrival times to the second queue are the
+departure times of the first queue plus the time they spent walking to
+the second queue.
 
 ``` r
 library(queuecomputer)
@@ -134,9 +158,14 @@ summary(queue_2)
 #>  6.21
 ```
 
-Acknowledgements
-----------------
+## Acknowledgements
 
-I'd like to thank my supervisors [Professor Kerrie Mengersen](https://bragqut.wordpress.com/mengersen/), [Dr Paul Wu](https://bragqut.wordpress.com/people/research-staff/wu/) and [Professor Fabrizio Ruggeri](http://www.mi.imati.cnr.it/fabrizio/).
+I’d like to thank my supervisors [Professor Kerrie
+Mengersen](https://bragqut.wordpress.com/mengersen/), [Dr Paul
+Wu](https://bragqut.wordpress.com/people/research-staff/wu/) and
+[Professor Fabrizio Ruggeri](http://www.mi.imati.cnr.it/fabrizio/).
 
-This work was supported by the [ARC Centre of Excellence for Mathematical and Statistical Frontiers (ACEMS)](http://acems.org.au/). This work was funded through the ARC Linkage Grant “Improving the Productivity and Efficiency of Australian Airports” (LP140100282).
+This work was supported by the [ARC Centre of Excellence for
+Mathematical and Statistical Frontiers (ACEMS)](http://acems.org.au/).
+This work was funded through the ARC Linkage Grant “Improving the
+Productivity and Efficiency of Australian Airports” (LP140100282).
