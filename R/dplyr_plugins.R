@@ -118,7 +118,7 @@ average_queue <- function(times, queuelength){
 ql_summary <- function(times, queuelength){
   n <- length(times)
 
-  x <- dplyr::data_frame(
+  x <- dplyr::tibble(
     times = times, queuelength = queuelength
   )
 

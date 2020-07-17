@@ -29,18 +29,6 @@ List qloop_numeric(NumericVector times, NumericVector service, int n_servers) {
     }
   }
 
-  // List output_obj;
-  // output_obj["times"] = wrap(output);
-  // output_obj["servers"] = wrap(server_output);
-
-  std::vector<double> output_stl;
-  std::vector<int> server_stl;
-
-  output_stl = arma::conv_to<std::vector<double> >::from(output);
-  server_stl = arma::conv_to<std::vector<int> >::from(server_output);
-
-  // Rcpp::Named("servers") = server_stl)
-
   Rcpp::List output_obj;
   output_obj["times"] = wrap(output);
   output_obj["server"] = wrap(server_output);
@@ -128,18 +116,6 @@ List qloop_qq(NumericVector times, NumericVector service, NumericVector x, Integ
     }
 
   }
-
-  // List output_obj;
-  // output_obj["times"] = wrap(output);
-  // output_obj["servers"] = wrap(server_output);
-
-  std::vector<double> output_stl;
-  std::vector<int> server_stl;
-
-  output_stl = arma::conv_to<std::vector<double> >::from(output);
-  server_stl = arma::conv_to<std::vector<int> >::from(server_output);
-
-  // Rcpp::Named("servers") = server_stl)
 
   Rcpp::List output_obj;
   output_obj["times"] = wrap(output);
