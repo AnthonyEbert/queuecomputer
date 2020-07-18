@@ -82,7 +82,7 @@ plot_departures <- function(x, annotated){
 
   departures_df <- x$departures_df
 
-  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% tidyr::gather()
+  melted <- departures_df %>% dplyr::select(arrivals, departures) %>% tidyr::gather()
   output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = key) + ggplot2::geom_density()
 
   edited_output <- output + ggplot2::xlab("Time") +
@@ -97,7 +97,7 @@ plot_dep_histogram <- function(x, annotated){
 
   departures_df <- x$departures_df
 
-  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% tidyr::gather()
+  melted <- departures_df %>% dplyr::select(arrivals, departures) %>% tidyr::gather()
   output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value) + ggplot2::geom_histogram(bins = 10, color = "black") + ggplot2::facet_grid(.~key)
   edited_output <- output + ggplot2::xlab("Time") +
     ggplot2::ggtitle("Histogram of arrival and departure times")
@@ -110,7 +110,7 @@ plot_waiting <- function(x, annotated){
   value <- key <- NULL
   departures_df <- x$departures_df
 
-  melted <- departures_df %>% dplyr::select_("waiting", "system_time") %>% tidyr::gather()
+  melted <- departures_df %>% dplyr::select(waiting, system_time) %>% tidyr::gather()
   output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = key) + ggplot2::geom_density()
   edited_output <- output + ggplot2::xlab("Time") +
     ggplot2::ggtitle("Density plot of waiting and system times")
@@ -193,7 +193,7 @@ plot_empiricaldist <- function(x, annotated){
   value <- key <- NULL
   departures_df <- x$departures_df
 
-  melted <- departures_df %>% dplyr::select_("arrivals", "departures") %>% tidyr::gather()
+  melted <- departures_df %>% dplyr::select(arrivals, departures) %>% tidyr::gather()
 
   output <- ggplot2::ggplot(melted) + ggplot2::aes(x = value, colour = key) + ggplot2::stat_ecdf()
 

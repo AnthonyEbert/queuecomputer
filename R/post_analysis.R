@@ -164,6 +164,7 @@ print.summary_queue_list <- function(x, ...){
   cat("\nUtilization factor:\n", paste(x$utilization, ...))
   cat("\nMean queue length:\n", paste(signif(x$qlength_mean, sig)), ...)
   cat("\nMean number of customers in system:\n", paste(signif(x$slength_mean, sig)), ...)
+  cat("\n")
 }
 
 

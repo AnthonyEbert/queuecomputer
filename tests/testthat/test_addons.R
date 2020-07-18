@@ -10,7 +10,7 @@ base::load(file = "../create_batch_test.RData")
 
 set.seed(1)
 
-flight_schedule <- data_frame(
+flight_schedule <- dplyr::tibble(
   flight = c("F1", "F2"),
   time = c(0, 50),
   n = c(100, 100),

@@ -52,7 +52,7 @@ as.server.stepfun <- function(x, y){
   stopifnot(is.numeric(c(x,y)))               # All x's and y's are numeric
 
   output <- list()
-  class(output) <- c("list", "server.stepfun")
+  class(output) <- c("server.stepfun", "list")
 
 
   output$x <- x
@@ -95,7 +95,7 @@ server_make <- function(x, y){
 
     output[[i]] <- stats::stepfun(x[newrow[-1]],newplat[i,][newrow])
   }
-  class(output) <- c("list", "server.list")
+  class(output) <- c("server.list", "list")
 
   return(output)
 }
@@ -114,7 +114,7 @@ server_make <- function(x, y){
 #' @export
 as.server.list <- function(times, init){
 
-  stopifnot(class(times) == "list")
+  stopifnot("list" %in% class(times))
   stopifnot(all(init %in% c(1,0)))
   stopifnot(length(times) == length(init))
 
@@ -233,15 +233,3 @@ integrate_stepfun_interval <- function(x, y, from = 0, to = 1000){
   x_diff <- diff(x)
   return((y_keep %*% x_diff) %>% as.numeric)
 }
-
-#' print method for objects of class \code{queue_list}
-#' @export
-#' @param x an object of class \code{queue_list} produced by the \code{\link{queue_step}} function.
-#' @param ... further arguments to be passed to other methods
-print.queue_list <- function(x, ...){
-  print(x$departures_df, ...)
-}
-
-
-
-

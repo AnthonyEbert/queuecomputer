@@ -176,7 +176,7 @@ queue_step <- function(arrivals, service, servers = 1, labels = NULL){
   attributes(departures) <- NULL
 
   if(is.null(labels) == FALSE){
-    departures_df <- dplyr::data_frame(
+    departures_df <- dplyr::tibble(
       labels = labels,
       arrivals = arrivals,
       service = service,
@@ -186,7 +186,7 @@ queue_step <- function(arrivals, service, servers = 1, labels = NULL){
       server = server
     )
   } else {
-    departures_df <- dplyr::data_frame(
+    departures_df <- dplyr::tibble(
       arrivals = arrivals,
       service = service,
       departures = departures,
