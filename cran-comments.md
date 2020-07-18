@@ -1,4 +1,8 @@
 
+# Version 0.9.1
+
+Updated to remove deprecated dplyr functions. 
+
 # Version 0.8.3
 
 License change from GPL (>=2) to GPL-2
