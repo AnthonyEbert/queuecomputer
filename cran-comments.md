@@ -1,4 +1,8 @@
 
+# Version 1.0.0
+
+The DOI in the CITATION is for a new JSS publication that will be registered after publication on CRAN.
+
 # Version 0.9.1
 
 Updated to remove deprecated dplyr functions. 

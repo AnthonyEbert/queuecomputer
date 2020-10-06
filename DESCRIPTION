@@ -1,13 +1,15 @@
 Package: queuecomputer
 Title: Computationally Efficient Queue Simulation
-Version: 0.9.0
+Version: 1.0.0
 Authors@R: c(person("Anthony", "Ebert", email = "anthonyebert+CRAN@gmail.com",
                    role = c("aut", "cre"), comment=c(ORCID="0000-0003-3002-6300")), 
              person("Kerrie", "Mengersen", role = "ths"), 
              person("Paul", "Wu", role = "ths"), 
              person("Fabrizio", "Ruggeri", role = "ths"))
 Description: Implementation of a computationally efficient method for
-    simulating queues with arbitrary arrival and service times.
+    simulating queues with arbitrary arrival and service times. 
+    Please see Ebert, Wu, Mengersen & Ruggeri (2020, <doi:10.18637/jss.v095.i05>) 
+    for further details. 
 Depends:
     R (>= 3.3)
 License: GPL-2 | file LICENSE
@@ -24,8 +26,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat,
-    ggplot2,
-    utf8
+    ggplot2
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo (>= 0.7.500.0.0)
 URL: https://github.com/AnthonyEbert/queuecomputer
