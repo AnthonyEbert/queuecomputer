@@ -47,12 +47,12 @@ very complicated distributions can be simulated (by the user) and tested
 with this package.
 
 For detailed information regarding the algorithm used in this package
-see our arXiv preprint:
+see our paper:
 
-Ebert, A., Wu, P., Mengersen, K., & Ruggeri, F. (2017). [Computationally
-Efficient Simulation of Queues: The R Package
-queuecomputer](https://arxiv.org/abs/1703.02151). arXiv preprint
-arXiv:1703.02151.
+Ebert A, Wu P, Mengersen K, Ruggeri F (2020). “Computationally Efficient
+Simulation of Queues: The R Package queuecomputer.” *Journal of
+Statistical Software*, *95*(5), 1-29. doi: 10.18637/jss.v095.i05 (URL:
+<https://doi.org/10.18637/jss.v095.i05>).
 
 ## Installation
 
