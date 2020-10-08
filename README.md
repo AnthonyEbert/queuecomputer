@@ -4,6 +4,7 @@
 [![Build
 Status](https://travis-ci.org/AnthonyEbert/queuecomputer.svg?branch=master)](https://travis-ci.org/AnthonyEbert/queuecomputer)
 [![codecov](https://codecov.io/gh/AnthonyEbert/queuecomputer/branch/master/graph/badge.svg)](https://codecov.io/gh/AnthonyEbert/queuecomputer)
+[![DOI](https://img.shields.io/badge/doi-10.18637/jss.v095.i05-informational.svg)](https://doi.org/10.18637/jss.v095.i05)
 
 <!-- --- -->
 
