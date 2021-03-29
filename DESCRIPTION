@@ -1,6 +1,6 @@
 Package: queuecomputer
 Title: Computationally Efficient Queue Simulation
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(person("Anthony", "Ebert", email = "anthonyebert+CRAN@gmail.com",
                    role = c("aut", "cre"), comment=c(ORCID="0000-0003-3002-6300")), 
              person("Kerrie", "Mengersen", role = "ths"), 
@@ -21,7 +21,7 @@ Imports:
     tidyr,
     dplyr,
     utils
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Suggests:
     knitr,
     rmarkdown,

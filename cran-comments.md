@@ -1,4 +1,8 @@
 
+# Version 1.0.1
+
+Fixed bug: if the servers input to `queue_step` is of class integer then utilization was not calculated. Thanks @MarkHanly 
+
 # Version 1.0.0
 
 The DOI in the CITATION is for a new JSS publication that will be registered after publication on CRAN.

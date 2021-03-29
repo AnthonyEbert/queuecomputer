@@ -69,6 +69,10 @@ queue_pass <- function(arrivals, service, servers){
   UseMethod("queue_pass", servers)
 }
 
+queue_pass.integer <- function(arrivals, service, servers){
+  servers <- as.numeric(servers)
+  queue_pass.numeric(arrivals, service, servers)
+}
 
 queue_pass.numeric <- function(arrivals, service, servers){
   stopifnot((servers%%1 == 0) & (servers > 0))
@@ -168,6 +172,10 @@ queue_pass.server.list <- function(arrivals, service, servers){
 queue_step <- function(arrivals, service, servers = 1, labels = NULL){
 
   arrivals <- depart(arrivals)
+
+  if("integer" %in% class(servers)){
+    servers <- as.numeric(servers)
+  }
 
   departures <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE)
 
