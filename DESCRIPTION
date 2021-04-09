@@ -14,7 +14,6 @@ Depends:
     R (>= 3.3)
 License: GPL-2 | file LICENSE
 Encoding: UTF-8
-LazyData: true
 Imports:
     stats,
     Rcpp,
