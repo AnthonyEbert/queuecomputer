@@ -172,6 +172,7 @@ queue_pass.server.list <- function(arrivals, service, servers){
 queue_step <- function(arrivals, service, servers = 1, labels = NULL){
 
   arrivals <- depart(arrivals)
+  service <- as.numeric(service)
 
   if("integer" %in% class(servers)){
     servers <- as.numeric(servers)
@@ -328,9 +329,9 @@ wait_step <- function(arrivals, service){
 #' queue_obj$departures_df$departures
 depart <- function(x){
   if("numeric" %in% class(x) | "integer" %in% class(x)){
-    departures <- x
+    departures <- as.numeric(x)
   } else {
-    departures <- x$departures_df$departures
+    departures <- as.numeric(x$departures_df$departures)
   }
   return(departures)
 }
