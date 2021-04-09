@@ -197,4 +197,41 @@ expect_true(info = "second queue later than first", {
 
 summary(firstqueue)
 
+# Check that integer inputs do not cause problems ----------------
+
+## Integer arrivals ----------------
+
+set.seed(1)
+n_customers <- 100
+arrivals <- cumsum(sample.int(10, n_customers, replace = TRUE))
+service <- rexp(n_customers)
+
+departures_int <- queue_step(arrivals, service, 2)
+departures_numeric <- queue_step(as.numeric(arrivals), service, 2)
+
+testthat::expect_identical(departures_int, departures_numeric)
+
+## Integer service ---------------------
+
+set.seed(1)
+n_customers <- 100
+arrivals <- cumsum(rexp(n_customers))
+service <- sample.int(10, n_customers, replace = TRUE)
+
+departures_int <- queue_step(arrivals, service, 2)
+departures_numeric <- queue_step(arrivals, as.numeric(service), 2)
+
+testthat::expect_identical(departures_int, departures_numeric)
+
+## Integer servers ---------------
+
+set.seed(1)
+n_customers <- 100
+arrivals <- cumsum(rexp(n_customers))
+service <- rexp(n_customers, 2)
+
+departures_int <- queue_step(arrivals, service, 2L)
+departures_numeric <- queue_step(arrivals, service, 2)
+
+testthat::expect_identical(departures_int, departures_numeric)
 
