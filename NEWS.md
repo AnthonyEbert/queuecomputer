@@ -1,3 +1,10 @@
+# queuecomputer 1.1.0
+
+* Fix bug with integer inputs #34, particularly if server input is of class integer. 
+
+# queuecomputer 1.0.0
+
+* Added citation to our published paper. 
 
 # queuecomputer 0.8.3
 
