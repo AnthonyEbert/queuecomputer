@@ -7,13 +7,9 @@ Status](https://travis-ci.org/AnthonyEbert/queuecomputer.svg?branch=master)](htt
 [![DOI](https://img.shields.io/badge/doi-10.18637/jss.v095.i05-informational.svg)](https://doi.org/10.18637/jss.v095.i05)
 
 <!-- --- -->
-
 <!-- output: html -->
-
 <!-- bibliography: references.bib -->
-
 <!-- --- -->
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # queuecomputer
@@ -39,9 +35,9 @@ deterministically.
 
 The focus on this package is:
 
-  - fast computation of departure times given arrival and service times,
+-   fast computation of departure times given arrival and service times,
     and
-  - a flexible framework to allow for extensions such as server effects.
+-   a flexible framework to allow for extensions such as server effects.
 
 It is up to the user to provide arrival and service times, and therefore
 very complicated distributions can be simulated (by the user) and tested
@@ -59,12 +55,98 @@ Statistical Software*, *95*(5), 1-29. doi: 10.18637/jss.v095.i05 (URL:
 
 ``` r
 install.packages('queuecomputer')
-
-# For the in-development version
-devtools::install_github("AnthonyEbert/queuecomputer")
 ```
 
 ## Usage
+
+### Simple example
+
+We demonstrate simulating the first 50 customers from a M/M/2 queue. In
+queueing theory, M/M/2 refers to a queue with exponential inter-arrival
+times, exponential service times and two servers.
+
+``` r
+library(queuecomputer)
+
+n <- 50
+
+arrivals <- cumsum(rexp(n, 1.9))
+service <- rexp(n)
+
+queue_mm2 <- queue_step(arrivals = arrivals, service = service, servers = 2)
+```
+
+You can see the table of customer arrival, service and departure times
+by accessing the `departures_df` object from queue\_mm2.
+
+``` r
+queue_mm2$departures_df
+#> # A tibble: 50 x 6
+#>    arrivals service departures  waiting system_time server
+#>       <dbl>   <dbl>      <dbl>    <dbl>       <dbl>  <int>
+#>  1    0.334  0.0556      0.390 0.            0.0556      1
+#>  2    0.743  0.150       0.893 0.            0.150       2
+#>  3    2.08   2.30        4.38  4.44e-16      2.30        1
+#>  4    2.14   0.761       2.90  1.11e-16      0.761       2
+#>  5    2.86   0.695       3.60  4.74e- 2      0.742       2
+#>  6    2.96   0.369       3.97  6.37e- 1      1.01        2
+#>  7    3.17   0.406       4.38  7.99e- 1      1.21        2
+#>  8    3.84   0.129       4.50  5.39e- 1      0.669       2
+#>  9    4.70   0.856       5.56  1.11e-16      0.856       1
+#> 10    5.39   0.0837      5.47  0.            0.0837      2
+#> # … with 40 more rows
+```
+
+You can see visualisations of the queueing system.
+
+``` r
+plot(queue_mm2)
+#> [[1]]
+```
+
+![](README-unnamed-chunk-5-1.png)<!-- -->
+
+    #> 
+    #> [[2]]
+
+![](README-unnamed-chunk-5-2.png)<!-- -->
+
+    #> 
+    #> [[3]]
+
+![](README-unnamed-chunk-5-3.png)<!-- -->
+
+    #> 
+    #> [[4]]
+
+![](README-unnamed-chunk-5-4.png)<!-- -->
+
+    #> 
+    #> [[5]]
+
+![](README-unnamed-chunk-5-5.png)<!-- -->
+
+A summary of the performance of the queueing system can be computed.
+
+``` r
+summary(queue_mm2)
+#> Total customers:
+#>  50
+#> Missed customers:
+#>  0
+#> Mean waiting time:
+#>  0.97
+#> Mean response time:
+#>  1.84
+#> Utilization factor:
+#>  0.760307734503872
+#> Mean queue length:
+#>  1.69
+#> Mean number of customers in system:
+#>  3.21
+```
+
+### Queueing network
 
 In this example of a queueing network, customers must pass through two
 queues. The arrival times to the first queue come in two waves starting

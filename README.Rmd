@@ -56,12 +56,44 @@ _Journal of Statistical Software_, *95*(5), 1-29. doi:
 
 ```{r, eval = FALSE}
 install.packages('queuecomputer')
-
-# For the in-development version
-devtools::install_github("AnthonyEbert/queuecomputer")
 ```
 
 ## Usage
+
+### Simple example
+
+We demonstrate simulating the first 50 customers from a M/M/2 queue. In queueing theory, M/M/2 refers to a queue with exponential inter-arrival times, exponential service times and two servers. 
+
+```{r}
+library(queuecomputer)
+
+n <- 50
+
+arrivals <- cumsum(rexp(n, 1.9))
+service <- rexp(n)
+
+queue_mm2 <- queue_step(arrivals = arrivals, service = service, servers = 2)
+```
+
+You can see the table of customer arrival, service and departure times by accessing the `departures_df` object from queue_mm2. 
+
+```{r}
+queue_mm2$departures_df
+```
+
+You can see visualisations of the queueing system. 
+
+```{r}
+plot(queue_mm2)
+```
+
+A summary of the performance of the queueing system can be computed. 
+
+```{r}
+summary(queue_mm2)
+```
+
+### Queueing network
 
 In this example of a queueing network, customers must pass through two queues. The arrival times to the first queue come in two waves starting at time 100 and time 500. The arrival times to the second queue are the departure times of the first queue plus the time they spent walking to the second queue. 
 
