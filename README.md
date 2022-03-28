@@ -1,10 +1,12 @@
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
+<!-- badges: start -->
+
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
 [![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
-[![Build
-Status](https://travis-ci.org/AnthonyEbert/queuecomputer.svg?branch=master)](https://travis-ci.org/AnthonyEbert/queuecomputer)
+[![R-CMD-check](https://github.com/AnthonyEbert/queuecomputer/workflows/R-CMD-check/badge.svg)](https://github.com/AnthonyEbert/queuecomputer/actions)
 [![codecov](https://codecov.io/gh/AnthonyEbert/queuecomputer/branch/master/graph/badge.svg)](https://codecov.io/gh/AnthonyEbert/queuecomputer)
 [![DOI](https://img.shields.io/badge/doi-10.18637/jss.v095.i05-informational.svg)](https://doi.org/10.18637/jss.v095.i05)
+<!-- badges: end -->
 
 <!-- --- -->
 <!-- output: html -->
@@ -77,24 +79,24 @@ queue_mm2 <- queue_step(arrivals = arrivals, service = service, servers = 2)
 ```
 
 You can see the table of customer arrival, service and departure times
-by accessing the `departures_df` object from queue\_mm2.
+by accessing the `departures_df` object from queue_mm2.
 
 ``` r
 queue_mm2$departures_df
 #> # A tibble: 50 x 6
-#>    arrivals service departures  waiting system_time server
-#>       <dbl>   <dbl>      <dbl>    <dbl>       <dbl>  <int>
-#>  1    0.334  0.0556      0.390 0.            0.0556      1
-#>  2    0.743  0.150       0.893 0.            0.150       2
-#>  3    2.08   2.30        4.38  4.44e-16      2.30        1
-#>  4    2.14   0.761       2.90  1.11e-16      0.761       2
-#>  5    2.86   0.695       3.60  4.74e- 2      0.742       2
-#>  6    2.96   0.369       3.97  6.37e- 1      1.01        2
-#>  7    3.17   0.406       4.38  7.99e- 1      1.21        2
-#>  8    3.84   0.129       4.50  5.39e- 1      0.669       2
-#>  9    4.70   0.856       5.56  1.11e-16      0.856       1
-#> 10    5.39   0.0837      5.47  0.            0.0837      2
-#> # … with 40 more rows
+#>    arrivals service departures waiting system_time server
+#>       <dbl>   <dbl>      <dbl>   <dbl>       <dbl>  <int>
+#>  1    0.397   0.422      0.820   0           0.422      1
+#>  2    1.02    2.18       3.20    0           2.18       2
+#>  3    1.10    3.22       4.31    0           3.22       1
+#>  4    1.17    0.558      3.76    2.03        2.59       2
+#>  5    1.40    0.595      4.35    2.36        2.95       2
+#>  6    2.92    0.977      5.29    1.39        2.37       1
+#>  7    3.57    0.210      4.56    0.781       0.991      2
+#>  8    3.85    0.309      4.87    0.706       1.02       2
+#>  9    4.36    1.11       5.98    0.512       1.62       2
+#> 10    4.43    0.774      6.07    0.856       1.63       1
+#> # ... with 40 more rows
 ```
 
 You can see visualisations of the queueing system.
@@ -135,15 +137,15 @@ summary(queue_mm2)
 #> Missed customers:
 #>  0
 #> Mean waiting time:
-#>  0.97
+#>  2.91
 #> Mean response time:
-#>  1.84
+#>  3.99
 #> Utilization factor:
-#>  0.760307734503872
+#>  0.897026364068736
 #> Mean queue length:
-#>  1.69
+#>  4.9
 #> Mean number of customers in system:
-#>  3.21
+#>  6.64
 ```
 
 ### Queueing network
@@ -159,11 +161,11 @@ library(queuecomputer)
 library(ggplot2)
 library(dplyr)
 #> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
+#> Vedhæfter pakke: 'dplyr'
+#> De følgende objekter er maskerede fra 'package:stats':
 #> 
 #>     filter, lag
-#> The following objects are masked from 'package:base':
+#> De følgende objekter er maskerede fra 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
 
@@ -191,10 +193,10 @@ head(queue_1$departures_df)
 #>      <dbl>   <dbl>      <dbl>     <dbl>       <dbl>  <int>
 #> 1     101.   0.189       101. -6.38e-15       0.189      1
 #> 2     102.   2.57        105.  4.44e-15       2.57       2
-#> 3     102.   1.69        104.  0.             1.69       1
+#> 3     102.   1.69        104.  0              1.69       1
 #> 4     102.   2.00        106.  1.55e+ 0       3.55       1
 #> 5     103.   0.435       105.  1.84e+ 0       2.28       2
-#> 6     106.   1.68        107.  0.             1.68       2
+#> 6     106.   1.68        107.  0              1.68       2
 head(arrivals_2)
 #> [1] 120.3923 105.6711 227.5242 175.9008 339.9853 108.7119
 head(queue_2$departures_df)
@@ -202,11 +204,11 @@ head(queue_2$departures_df)
 #>   arrivals service departures   waiting system_time server
 #>      <dbl>   <dbl>      <dbl>     <dbl>       <dbl>  <int>
 #> 1     120.   5.16        126. -2.66e-15        5.16      1
-#> 2     106.   1.58        107.  0.              1.58      1
+#> 2     106.   1.58        107.  0               1.58      1
 #> 3     228.   0.114       291.  6.32e+ 1       63.3       1
 #> 4     176.   2.35        186.  8.02e+ 0       10.4       1
 #> 5     340.   3.20        404.  6.13e+ 1       64.5       1
-#> 6     109.   1.23        110.  0.              1.23      1
+#> 6     109.   1.23        110.  0               1.23      1
 
 summary(queue_1)
 #> Total customers:

@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // qloop_numeric
 List qloop_numeric(NumericVector times, NumericVector service, int n_servers);
 RcppExport SEXP _queuecomputer_qloop_numeric(SEXP timesSEXP, SEXP serviceSEXP, SEXP n_serversSEXP) {
