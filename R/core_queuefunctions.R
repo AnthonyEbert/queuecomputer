@@ -29,7 +29,10 @@
 #' @useDynLib queuecomputer, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @export
-queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
+queue <- function(arrivals, service, servers = 1, serveroutput = FALSE, server_effect){
+
+  stopifnot(length(server_effect) == servers)
+  stopifnot(is.numeric(servers))
 
   service = service
   check_queueinput(arrivals, service)
@@ -44,7 +47,7 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
     service <- service[ord]
   }
 
-  output <- queue_pass(arrivals = arrivals, service = service, servers = servers)
+  output <- queue_pass(arrivals = arrivals, service = service, servers = servers, server_effect = server_effect)
 
   departures <- output$times
   queue_vector <- output$server
@@ -65,19 +68,19 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
 }
 
 
-queue_pass <- function(arrivals, service, servers){
+queue_pass <- function(arrivals, service, servers, server_effect){
   UseMethod("queue_pass", servers)
 }
 
-queue_pass.integer <- function(arrivals, service, servers){
+queue_pass.integer <- function(arrivals, service, servers, server_effect){
   servers <- as.numeric(servers)
-  queue_pass.numeric(arrivals, service, servers)
+  queue_pass.numeric(arrivals, service, servers, server_effect)
 }
 
-queue_pass.numeric <- function(arrivals, service, servers){
+queue_pass.numeric <- function(arrivals, service, servers, server_effect){
   stopifnot((servers%%1 == 0) & (servers > 0))
   stopifnot(length(servers) == 1)
-  output <- qloop_numeric(arrivals, service, n_servers = servers)
+  output <- qloop_numeric(arrivals, service, n_servers = servers, server_effect)
   return(output)
 }
 
@@ -169,7 +172,9 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #' @seealso
 #' \code{\link{queue}}, \code{\link{summary.queue_list}}, \code{\link{plot.queue_list}}
 #' @export
-queue_step <- function(arrivals, service, servers = 1, labels = NULL){
+queue_step <- function(arrivals, service, servers = 1, labels = NULL, server_effect){
+
+  warning("for server effects use queue() since I don't trust outputs other than departure times")
 
   arrivals <- depart(arrivals)
   service <- as.numeric(service)
@@ -178,7 +183,7 @@ queue_step <- function(arrivals, service, servers = 1, labels = NULL){
     servers <- as.numeric(servers)
   }
 
-  departures <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE)
+  departures <- queue(arrivals = arrivals, service = service, servers = servers, serveroutput = TRUE, server_effect = server_effect)
 
   server <- attr(departures, "server")
   state <- attr(departures, "state")

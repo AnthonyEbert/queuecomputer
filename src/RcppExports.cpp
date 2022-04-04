@@ -12,15 +12,16 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // qloop_numeric
-List qloop_numeric(NumericVector times, NumericVector service, int n_servers);
-RcppExport SEXP _queuecomputer_qloop_numeric(SEXP timesSEXP, SEXP serviceSEXP, SEXP n_serversSEXP) {
+List qloop_numeric(NumericVector times, NumericVector service, int n_servers, NumericVector server_effect);
+RcppExport SEXP _queuecomputer_qloop_numeric(SEXP timesSEXP, SEXP serviceSEXP, SEXP n_serversSEXP, SEXP server_effectSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type times(timesSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type service(serviceSEXP);
     Rcpp::traits::input_parameter< int >::type n_servers(n_serversSEXP);
-    rcpp_result_gen = Rcpp::wrap(qloop_numeric(times, service, n_servers));
+    Rcpp::traits::input_parameter< NumericVector >::type server_effect(server_effectSEXP);
+    rcpp_result_gen = Rcpp::wrap(qloop_numeric(times, service, n_servers, server_effect));
     return rcpp_result_gen;
 END_RCPP
 }

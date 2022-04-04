@@ -4,7 +4,7 @@
 \alias{queue}
 \title{Compute the departure times for a set of customers in a queue from their arrival and service times.}
 \usage{
-queue(arrivals, service, servers = 1, serveroutput = FALSE)
+queue(arrivals, service, servers = 1, serveroutput = FALSE, server_effect)
 }
 \arguments{
 \item{arrivals}{numeric vector of non-negative arrival times}

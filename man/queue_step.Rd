@@ -4,7 +4,7 @@
 \alias{queue_step}
 \title{Compute the departure times and queue lengths for a queueing system from arrival and service times.}
 \usage{
-queue_step(arrivals, service, servers = 1, labels = NULL)
+queue_step(arrivals, service, servers = 1, labels = NULL, server_effect)
 }
 \arguments{
 \item{arrivals}{numeric vector of non-negative arrival times}

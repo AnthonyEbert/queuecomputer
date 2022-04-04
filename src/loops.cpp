@@ -8,7 +8,7 @@ using namespace Rcpp;
 using namespace arma;
 
 // [[Rcpp::export]]
-List qloop_numeric(NumericVector times, NumericVector service, int n_servers) {
+List qloop_numeric(NumericVector times, NumericVector service, int n_servers, NumericVector server_effect) {
   int n = times.size();
   vec output = vec(n);
   Col<int> server_output = Col<int>(n);
@@ -20,7 +20,7 @@ List qloop_numeric(NumericVector times, NumericVector service, int n_servers) {
   for( int i=0; i < n; ++i)
   {
     queue = index_min(queue_times);
-    queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i];
+    queue_times[queue] = std::max(times[i], queue_times[queue]) + service[i] * server_effect[queue];
     output[i] = queue_times[queue];
     server_output[i] = queue + 1;
     if( i % 512 == 0 )
