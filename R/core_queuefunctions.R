@@ -46,7 +46,7 @@ queue <- function(arrivals, service, servers = 1, serveroutput = FALSE){
 
   output <- queue_pass(arrivals = arrivals, service = service, servers = servers)
 
-  departures <- output$times
+  departures <- as.numeric(output$times)
   queue_vector <- output$server
   state_output <- output$state
 
