@@ -66,7 +66,7 @@ List qloop_qq(NumericVector times, NumericVector service, NumericVector x, Integ
   for( int i=0; i < n; ++i)
   {
 
-    if( all(queue_times >= next_time) | (times[i] >= next_time))
+    if( all(queue_times >= next_time) || (times[i] >= next_time))
     {
       diff_size = next_size - current_size;
 
