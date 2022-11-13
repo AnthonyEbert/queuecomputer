@@ -129,8 +129,20 @@ queue_pass.server.list <- function(arrivals, service, servers){
 #' @param service numeric vector of service times with the same ordering as arrival_df.
 #' @param servers a non-zero natural number, an object of class \code{server.stepfun}
 #' or an object of class \code{server.list}.
-#' @param labels character vector of customer labels.
-#' @return A vector of response times for the input of arrival times and service times.
+#' @param labels character vector of customer labels (deprecated).
+#' @return An list object of class \code{queue_list} with the following components: \cr
+#' \cr
+#' \itemize{
+#'   \item \code{departures} - A vector of response times for the input of arrival times and service times.
+#'   \item \code{server} - A vector of server assignments for the input of arrival times and service times.
+#'   \item \code{departures_df} - A data frame with arrivals, service, departures, waiting, system time, and server assignments for each customer.
+#'   \item \code{queuelength_df} - A data frame describing the evolution of queue length over time
+#'   \item \code{systemlength_df} - A data frame describing the evolution of system length over time
+#'   \item \code{servers_input} - A copy of the server argument
+#'   \item \code{state} - A vector of availability times for the servers
+#' }
+#'
+#' @details If only departure times are needed, the \code{\link{queue}} function is faster.
 #' @examples
 #'
 #' # With two servers
@@ -190,8 +202,8 @@ queue_step <- function(arrivals, service, servers = 1, labels = NULL){
       arrivals = arrivals,
       service = service,
       departures = departures,
-      waiting = departures - arrivals - service,
-      system_time = departures - arrivals,
+      waiting = pmax(departures - arrivals - service, 0),
+      system_time = pmax(departures - arrivals, 0),
       server = server
     )
   } else {
@@ -199,8 +211,8 @@ queue_step <- function(arrivals, service, servers = 1, labels = NULL){
       arrivals = arrivals,
       service = service,
       departures = departures,
-      waiting = departures - arrivals - service,
-      system_time = departures - arrivals,
+      waiting = pmax(departures - arrivals - service, 0),
+      system_time = pmax(departures - arrivals, 0),
       server = server
     )
   }

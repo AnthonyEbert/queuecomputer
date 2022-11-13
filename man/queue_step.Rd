@@ -14,13 +14,26 @@ queue_step(arrivals, service, servers = 1, labels = NULL)
 \item{servers}{a non-zero natural number, an object of class \code{server.stepfun}
 or an object of class \code{server.list}.}
 
-\item{labels}{character vector of customer labels.}
+\item{labels}{character vector of customer labels (deprecated).}
 }
 \value{
-A vector of response times for the input of arrival times and service times.
+An list object of class \code{queue_list} with the following components: \cr
+\cr
+\itemize{
+  \item \code{departures} - A vector of response times for the input of arrival times and service times.
+  \item \code{server} - A vector of server assignments for the input of arrival times and service times.
+  \item \code{departures_df} - A data frame with arrivals, service, departures, waiting, system time, and server assignments for each customer.
+  \item \code{queuelength_df} - A data frame describing the evolution of queue length over time
+  \item \code{systemlength_df} - A data frame describing the evolution of system length over time
+  \item \code{servers_input} - A copy of the server argument
+  \item \code{state} - A vector of availability times for the servers
+}
 }
 \description{
 Compute the departure times and queue lengths for a queueing system from arrival and service times.
+}
+\details{
+If only departure times are needed, the \code{\link{queue}} function is faster.
 }
 \examples{
 
