@@ -8,7 +8,8 @@
 #' @param annotated logical, if \code{TRUE} annotations will be added to the plot.
 #' @param ... other parameters to be passed through to plotting functions.
 #' @examples
-#' if(require(ggplot2, quietly = TRUE)){
+#'
+#' \dontrun{
 #'
 #' n_customers <- 50
 #' arrival_rate <- 1.8
@@ -18,9 +19,7 @@
 #' queue_obj <- queue_step(arrivals, service, servers = 2)
 #' plot(queue_obj)
 #'
-#' }
 #'
-#' \dontrun{
 #'
 #' library(ggplot2)
 #'

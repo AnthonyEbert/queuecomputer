@@ -19,7 +19,8 @@
 ggplot2 method for output from queueing model
 }
 \examples{
-if(require(ggplot2, quietly = TRUE)){
+
+\dontrun{
 
 n_customers <- 50
 arrival_rate <- 1.8
@@ -29,9 +30,7 @@ service <- rexp(n_customers, service_rate)
 queue_obj <- queue_step(arrivals, service, servers = 2)
 plot(queue_obj)
 
-}
 
-\dontrun{
 
 library(ggplot2)
 
