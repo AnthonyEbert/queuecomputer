@@ -37,9 +37,9 @@ deterministically.
 
 The focus on this package is:
 
--   fast computation of departure times given arrival and service times,
-    and
--   a flexible framework to allow for extensions such as server effects.
+- fast computation of departure times given arrival and service times,
+  and
+- a flexible framework to allow for extensions such as server effects.
 
 It is up to the user to provide arrival and service times, and therefore
 very complicated distributions can be simulated (by the user) and tested
@@ -189,26 +189,26 @@ head(arrivals_1)
 #> [1] 100.7552 101.9368 102.0825 102.2223 102.6584 105.5534
 head(queue_1$departures_df)
 #> # A tibble: 6 x 6
-#>   arrivals service departures   waiting system_time server
-#>      <dbl>   <dbl>      <dbl>     <dbl>       <dbl>  <int>
-#> 1     101.   0.189       101. -6.38e-15       0.189      1
-#> 2     102.   2.57        105.  4.44e-15       2.57       2
-#> 3     102.   1.69        104.  0              1.69       1
-#> 4     102.   2.00        106.  1.55e+ 0       3.55       1
-#> 5     103.   0.435       105.  1.84e+ 0       2.28       2
-#> 6     106.   1.68        107.  0              1.68       2
+#>   arrivals service departures  waiting system_time server
+#>      <dbl>   <dbl>      <dbl>    <dbl>       <dbl>  <int>
+#> 1     101.   0.189       101. 0              0.189      1
+#> 2     102.   2.57        105. 4.44e-15       2.57       2
+#> 3     102.   1.69        104. 0              1.69       1
+#> 4     102.   2.00        106. 1.55e+ 0       3.55       1
+#> 5     103.   0.435       105. 1.84e+ 0       2.28       2
+#> 6     106.   1.68        107. 0              1.68       2
 head(arrivals_2)
 #> [1] 120.3923 105.6711 227.5242 175.9008 339.9853 108.7119
 head(queue_2$departures_df)
 #> # A tibble: 6 x 6
-#>   arrivals service departures   waiting system_time server
-#>      <dbl>   <dbl>      <dbl>     <dbl>       <dbl>  <int>
-#> 1     120.   5.16        126. -2.66e-15        5.16      1
-#> 2     106.   1.58        107.  0               1.58      1
-#> 3     228.   0.114       291.  6.32e+ 1       63.3       1
-#> 4     176.   2.35        186.  8.02e+ 0       10.4       1
-#> 5     340.   3.20        404.  6.13e+ 1       64.5       1
-#> 6     109.   1.23        110.  0               1.23      1
+#>   arrivals service departures waiting system_time server
+#>      <dbl>   <dbl>      <dbl>   <dbl>       <dbl>  <int>
+#> 1     120.   5.16        126.    0           5.16      1
+#> 2     106.   1.58        107.    0           1.58      1
+#> 3     228.   0.114       291.   63.2        63.3       1
+#> 4     176.   2.35        186.    8.02       10.4       1
+#> 5     340.   3.20        404.   61.3        64.5       1
+#> 6     109.   1.23        110.    0           1.23      1
 
 summary(queue_1)
 #> Total customers:

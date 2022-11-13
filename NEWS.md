@@ -1,3 +1,9 @@
+# queuecomputer 1.2.0
+
+* Fix CRAN warning of about bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+* Improved documentation of `queue_step()`
+* Waiting times are now forced to be zero since floating-point error can make waiting times slightly negative. 
+
 # queuecomputer 1.1.0
 
 * Fix bug with integer inputs #34, particularly if server input is of class integer. 
