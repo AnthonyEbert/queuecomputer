@@ -1,9 +1,8 @@
 
 <!-- badges: start -->
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
-[![Downloads](http://cranlogs.r-pkg.org/badges/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
-[![R-CMD-check](https://github.com/AnthonyEbert/queuecomputer/workflows/R-CMD-check/badge.svg)](https://github.com/AnthonyEbert/queuecomputer/actions)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
+[![Downloads](https://cranlogs.r-pkg.org/badges/queuecomputer)](https://CRAN.R-project.org/package=queuecomputer)
 [![codecov](https://codecov.io/gh/AnthonyEbert/queuecomputer/branch/master/graph/badge.svg)](https://app.codecov.io/gh/AnthonyEbert/queuecomputer)
 [![DOI](https://img.shields.io/badge/doi-10.18637/jss.v095.i05-informational.svg)](https://doi.org/10.18637/jss.v095.i05)
 <!-- badges: end -->
@@ -83,7 +82,7 @@ by accessing the `departures_df` object from queue_mm2.
 
 ``` r
 queue_mm2$departures_df
-#> # A tibble: 50 x 6
+#> # A tibble: 50 × 6
 #>    arrivals service departures waiting system_time server
 #>       <dbl>   <dbl>      <dbl>   <dbl>       <dbl>  <int>
 #>  1    0.397   0.422      0.820   0           0.422      1
@@ -96,7 +95,7 @@ queue_mm2$departures_df
 #>  8    3.85    0.309      4.87    0.706       1.02       2
 #>  9    4.36    1.11       5.98    0.512       1.62       2
 #> 10    4.43    0.774      6.07    0.856       1.63       1
-#> # ... with 40 more rows
+#> # ℹ 40 more rows
 ```
 
 You can see visualisations of the queueing system.
@@ -188,7 +187,7 @@ queue_2 <- queue_step(arrivals = arrivals_2, service = service_2, servers = 1)
 head(arrivals_1)
 #> [1] 100.7552 101.9368 102.0825 102.2223 102.6584 105.5534
 head(queue_1$departures_df)
-#> # A tibble: 6 x 6
+#> # A tibble: 6 × 6
 #>   arrivals service departures  waiting system_time server
 #>      <dbl>   <dbl>      <dbl>    <dbl>       <dbl>  <int>
 #> 1     101.   0.189       101. 0              0.189      1
@@ -200,7 +199,7 @@ head(queue_1$departures_df)
 head(arrivals_2)
 #> [1] 120.3923 105.6711 227.5242 175.9008 339.9853 108.7119
 head(queue_2$departures_df)
-#> # A tibble: 6 x 6
+#> # A tibble: 6 × 6
 #>   arrivals service departures waiting system_time server
 #>      <dbl>   <dbl>      <dbl>   <dbl>       <dbl>  <int>
 #> 1     120.   5.16        126.    0           5.16      1
